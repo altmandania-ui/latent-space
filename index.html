@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מי כתב את הרשימה</title>
+<style>
+  @font-face{font-family:Atlas;src:url(fonts/atlas-light-aaa.otf) format("opentype");font-weight:300;font-display:swap}
+  @font-face{font-family:Atlas;src:url(fonts/atlas-regular-aaa.otf) format("opentype");font-weight:400;font-display:swap}
+  @font-face{font-family:Atlas;src:url(fonts/atlas-medium-aaa.otf) format("opentype");font-weight:500 700;font-display:swap}
+  :root{--bg:#fff;--ink:#111;--mute:#8a8a8a;--rule:#111;--soft:#e6e6e6}
+  *{box-sizing:border-box}
+  html{background:var(--bg)}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Atlas,"Helvetica Neue",Arial,sans-serif;
+    font-weight:300;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 32px}
+  a{color:inherit}
+  b,strong{font-weight:500}
+  p{margin:0 0 12px}
+  img{display:block;width:100%;height:auto}
+  figure{margin:0}
+  [lang=en]{direction:ltr;unicode-bidi:isolate}
+  .small{font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  .mute{color:var(--mute)}
+  .link{font-size:12px;letter-spacing:.06em;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+
+  /* nav */
+  nav{display:flex;justify-content:space-between;align-items:center;padding:28px 0;font-size:12px;letter-spacing:.06em}
+  nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
+  nav a{text-decoration:none}
+  nav a:hover{text-decoration:underline;text-underline-offset:4px}
+
+  /* hero */
+  .hero{padding:96px 0 0}
+  h1{font-weight:300;font-size:clamp(52px,9vw,104px);line-height:1;letter-spacing:-.01em;margin:0;
+    padding-bottom:28px;border-bottom:1px solid var(--rule);max-width:75%}
+  .intro{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;padding:28px 0 0}
+  .intro p{grid-column:2/4;max-width:44ch;font-size:16px}
+  .intro .by{grid-column:1;font-size:12px;color:var(--mute)}
+
+  /* sections */
+  section{padding-top:120px}
+  .sec-head{display:grid;grid-template-columns:1fr 2fr;gap:24px;align-items:end;margin-bottom:28px}
+  h2{font-weight:300;font-size:clamp(30px,4vw,44px);line-height:1.1;margin:0}
+  .num{font-size:12px;color:var(--mute);letter-spacing:.06em}
+
+  /* the row: label | text | image */
+  .rows{border-bottom:1px solid var(--rule)}
+  .row{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:24px;padding:10px 0 12px;border-top:1px solid var(--rule);min-height:150px}
+  .row > .lab{font-size:12px;color:var(--mute);line-height:1.5}
+  .row > .txt{display:flex;flex-direction:column;font-size:14px}
+  .row > .txt .end{margin-top:auto;padding-top:14px}
+  .row > figure{align-self:start}
+  .row > figure img{aspect-ratio:4/3;object-fit:cover;object-position:center 25%}
+  .row.wide > .txt{grid-column:2/4;max-width:60ch}
+  .row h3{font-weight:400;font-size:14px;margin:0 0 6px}
+  figcaption{font-size:11px;color:var(--mute);margin-top:6px;line-height:1.45}
+  .bw img{filter:grayscale(1) contrast(1.05)}
+
+  /* word lists */
+  .words{list-style:none;margin:0;padding:0;font-size:14px}
+  .words li{padding:3px 0;border-bottom:1px solid var(--soft)}
+  .words li:last-child{border-bottom:0}
+  .words li span{display:block;color:var(--mute);font-size:11px;text-align:right}
+
+  /* results inside a row */
+  .res{margin-bottom:14px}
+  .res .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
+  .res .top{font-size:22px;line-height:1.2;margin:2px 0 6px}
+  .res .top small{font-size:13px;color:var(--mute);margin-inline-start:6px}
+  .meter{height:2px;background:var(--soft);position:relative;margin-bottom:6px}
+  .meter i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--ink)}
+  .res .rest{font-size:11px;color:var(--mute);line-height:1.5}
+
+  .steps{margin:0;padding:0 18px 0 0;font-size:14px}
+  .steps li{margin-bottom:10px;padding-inline-start:4px}
+  .steps b{font-weight:500}
+  .pair{margin-bottom:18px}
+  .pair .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
+  .pair .w{font-size:22px;line-height:1.2;margin-top:2px}
+  .pair .w small{font-size:12px;color:var(--mute);margin-inline-start:8px}
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch;margin:22px 0 22px}
+  .flow > div:not(.arr){border:1px solid var(--ink);padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px}
+  .flow b{font-weight:400;font-size:17px}
+  .flow em{font-style:normal;font-size:12px;color:var(--mute)}
+  .flow .dark{background:var(--ink);color:var(--bg)}
+  .flow .dark em,.flow .dark .small{color:#bbb}
+  .flow .arr{align-self:center;font-size:20px}
+  .truth{font-size:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--soft)}
+  .truth .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
+  .dumbwords{font-size:clamp(20px,2.4vw,26px);line-height:1.4;margin-bottom:12px}
+  .samurai{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:28px}
+  .samurai figure{position:relative}
+  .samurai img{aspect-ratio:4/3;object-fit:cover;filter:grayscale(1)}
+  .samurai .tag{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--ink);margin-top:8px;padding-top:6px}
+  .samurai .tag b{font-weight:300;font-size:28px;line-height:1.1}
+  .samurai .tag span{font-size:13px;color:var(--mute)}
+  .samurai .cap{font-size:11px;color:var(--mute);margin-top:2px}
+  .punch{display:grid;grid-template-columns:1fr 2fr;gap:24px;margin-top:56px;border-top:1px solid var(--rule);padding-top:20px}
+  .punch p{grid-column:2;max-width:52ch;font-size:16px}
+  .punch .big{font-size:clamp(34px,5vw,60px);line-height:1.05;margin-bottom:22px;max-width:none}
+  .punch .big b{font-weight:500}
+  .note{font-size:12px;color:var(--mute);max-width:70ch;margin-top:16px}
+
+  /* last part */
+  .play{padding-top:140px}
+  .play h2{font-size:clamp(36px,5vw,56px)}
+  .play .lead{display:grid;grid-template-columns:1fr 2fr;gap:24px;margin:20px 0 40px}
+  .play .lead p{grid-column:2;max-width:46ch;font-size:15px}
+  .stage{display:grid;grid-template-columns:1fr 1fr;gap:40px;border-top:1px solid var(--rule);padding-top:16px}
+  .strip{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
+  .strip button{padding:0;border:0;background:none;cursor:pointer;aspect-ratio:1;overflow:hidden;opacity:.35;transition:opacity .2s}
+  .strip button img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
+  .strip button[aria-pressed=true],.strip button:hover{opacity:1}
+  .toggle{display:flex;border:1px solid var(--ink);margin:6px 0 34px}
+  .toggle button{flex:1;font:400 13px Atlas,sans-serif;letter-spacing:.04em;padding:12px 8px;background:none;border:0;cursor:pointer;color:var(--ink)}
+  .toggle button+button{border-inline-start:1px solid var(--ink)}
+  .toggle button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+  .verdict .k{font-size:12px;color:var(--mute);letter-spacing:.06em}
+  .verdict .word{font-size:clamp(38px,5.5vw,64px);line-height:1.05;margin:6px 0 8px;min-height:1.1em}
+  .verdict .pc{font-size:14px;color:var(--mute)}
+  .verdict .orig{font-size:12px;color:var(--mute);margin-top:28px;border-top:1px solid var(--soft);padding-top:10px}
+
+  .choices{list-style:none;margin:6px 0 0;padding:0;font-size:14px}
+  .choices li{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--soft);color:var(--mute)}
+  .choices li.on{color:var(--ink);font-weight:500}
+  details{margin-top:56px;border-top:1px solid var(--rule);padding-top:12px}
+  summary{cursor:pointer;font-size:12px;letter-spacing:.06em;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:" ↓"}
+  details[open] summary::after{content:" ↑"}
+  .own{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:20px}
+  textarea{width:100%;min-height:130px;font:300 15px/1.5 Atlas,sans-serif;direction:ltr;text-align:left;
+    background:none;border:0;border-bottom:1px solid var(--ink);padding:6px 0;color:var(--ink);resize:vertical;outline:0}
+  .go{margin-top:14px;font:400 12px Atlas,sans-serif;letter-spacing:.06em;background:none;border:0;padding:0;
+    text-decoration:underline;text-underline-offset:4px;cursor:pointer;color:var(--ink)}
+  .go:disabled{opacity:.4;cursor:wait}
+  #status{font-size:12px;color:var(--mute);margin-top:10px;min-height:1.4em}
+
+  .answer{padding-top:140px}
+  .answer .sec-head > div{grid-column:2}
+  .answer p{font-size:clamp(20px,2.4vw,26px);line-height:1.45;max-width:36ch;margin-bottom:22px}
+  .answer .sec-head{align-items:start}
+
+  footer{margin-top:140px;border-top:1px solid var(--rule);padding:14px 0 64px;
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;font-size:11px;color:var(--mute);line-height:1.6}
+  footer p{margin:0 0 8px}
+
+  @media (max-width:820px){
+    .wrap{padding:0 16px}
+    nav ul{display:none}
+    .hero{padding-top:48px}
+    h1{max-width:100%}
+    .intro,.sec-head,.play .lead,.stage,.own,footer,.punch{grid-template-columns:1fr}
+    .punch p{grid-column:auto}
+    .samurai{grid-template-columns:1fr 1fr;gap:16px}
+    .flow{grid-template-columns:1fr}
+    .flow .arr{justify-self:center;transform:rotate(-90deg)}
+    .intro p,.play .lead p,.answer p,.answer .sec-head > div{grid-column:auto}
+    .row{grid-template-columns:1fr 1fr;min-height:0}
+    .row > .lab{grid-column:1/-1}
+    .row.wide > .txt{grid-column:1/-1}
+    section{padding-top:80px}
+  }
+  @media (max-width:520px){ .row{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <span>מרחב לטנטי</span>
+  <ul>
+    <li><a href="#work">העבודה</a></li>
+    <li><a href="#a">חלק א׳</a></li>
+    <li><a href="#b">חלק ב׳</a></li>
+    <li><a href="#play">נסו</a></li>
+    <li><a href="#answer">סיכום</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <h1>מי כתב את הרשימה</h1>
+  <div class="intro">
+    <span class="by">דניה אלטמן<br>תגובה לאנטוניו סומאיני<br>״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, אוקטובר 196 (2026)</span>
+    <p>לקחתי מודל אחד ושש תמונות ישנות, ונתתי לו שתי רשימות מילים שונות. יצאו שתי היסטוריות שונות.</p>
+  </div>
+</header>
+
+<!-- 01 original work -->
+<section id="work">
+  <div class="sec-head"><span class="num">01 · העבודה המקורית</span><h2>סלף (אבות)</h2></div>
+  <div class="rows">
+    <div class="row">
+      <div class="lab">נוף אלג׳ויסר<br>2020<br>סומאיני, עמ׳ 46–48</div>
+      <div class="txt">
+        <h3>שלב 1: המודל מזהה</h3>
+        <p>היא מריצה מודל זיהוי על צילום של גרטרוד בל, והמודל קורא לגבר הבדואי ״סמוראי״, בביטחון של 58%.</p>
+      </div>
+      <figure><img src="img/salaf-047.jpg" alt="צילום של גרטרוד בל: גבר בדואי, ומעליו מסגרת זיהוי ירוקה עם התווית Samurai 58.52%"></figure>
+    </div>
+    <div class="row">
+      <div class="lab">״המאגר הנעדר״</div>
+      <div class="txt">
+        <h3>שלב 2: היא מוחקת</h3>
+        <p>היא מוחקת את האנשים מהתמונות (בעזרת U2-Net) ונשארות רק צלליות לבנות.</p>
+        <span class="end small mute">התמונות מאתר האמנית</span>
+      </div>
+      <figure><img src="img/salaf-absent.jpg" alt="צילום מזרחני שבו הדמויות נמחקו והוחלפו בצלליות לבנות"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 02 part A -->
+<section id="a">
+  <div class="sec-head"><span class="num">02 · חלק א׳</span><h2>שלוש שאלות על סלף</h2></div>
+  <div class="rows">
+    <div class="row wide">
+      <div class="lab">ארכיון</div>
+      <div class="txt">
+        <h3>איזה ארכיון העבודה משתמשת בו, ומה חסר בו?</h3>
+        <p>היא לוקחת תמונות ישנות של בדואים, שצילמה גרטרוד בל, בריטית שהסתובבה באזור בתחילת המאה ה-20, ועוד אוסף תמונות ״מזרחיות״ מהגטי. כלומר, אלה תמונות שאנשים מבחוץ צילמו. מה שחסר זה האנשים עצמם: לא יודעים איך קראו להם, מה הם חשבו, או אם בכלל רצו שיצלמו אותם.</p>
+      </div>
+    </div>
+    <div class="row wide">
+      <div class="lab">מרחב לטנטי</div>
+      <div class="txt">
+        <h3>מה המרחב הלטנטי חושף, ומה הוא מעלים?</h3>
+        <p>כשהיא מריצה את התמונות דרך תוכנות זיהוי, הן פשוט לא מבינות מה הן רואות. חפץ ביד של ילד הופך ל״סקייטבורד״, והבגדים של גבר בדואי הופכים ל״מדים צבאיים״. זה חושף כמה המודל לא מכיר את העולם הזה. מה שמוסתר זה שהמודל אף פעם לא מודה שהוא לא יודע. הוא תמיד נותן תשובה, גם כשהיא שטות.</p>
+      </div>
+    </div>
+    <div class="row wide">
+      <div class="lab">אסטרטגיה</div>
+      <div class="txt">
+        <h3>גליץ׳, הסתרה או סירוב?</h3>
+        <p>סירוב. היא מוחקת את האנשים מהתמונות ומשאירה במקומם צלליות לבנות, כדי שאף מודל לא יוכל ללמוד מהם. בלשונה: ״סירוב לאפשר לנתונים מסוימים להפוך לחומר אימון״ (עמ׳ 46). מה שמעניין הוא שכשהיא מאמנת מודל על התמונות המחוקות, הוא עדיין מייצר את אותן תנוחות מהצילומים המקוריים. גם בלי האנשים, המבט של הצלם נשאר.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 part B -->
+<section id="b">
+  <div class="sec-head"><span class="num">03 · חלק ב׳</span><h2>המודל לא רואה. הוא בוחר ממה שנתנו לו.</h2></div>
+  <div class="rows">
+    <div class="row wide">
+      <div class="lab">הטענה נגד סומאיני</div>
+      <div class="txt">
+        <p>סומאיני כותב שמה שמארגן את המרחב הלטנטי זה כוח ״לא-אנושי, סטטיסטי״ (עמ׳ 39). אני לא מסכימה איתו. המילה ״סטטיסטי״ עושה פה עבודה פוליטית: היא מעלימה את מי שכתב. מישהו בחר מה ייכנס למודל, מישהו בחר איך לשאול אותו, ומישהו כתב את המילים שמותר לו לבחור מהן. כשקוראים לזה ״סטטיסטיקה״, אף אחד לא אחראי.</p>
+      </div>
+    </div>
+    <div class="row wide">
+      <div class="lab">למה צריך לתת למודל רשימה?</div>
+      <div class="txt">
+        <p>המודל שהשתמשתי בו נקרא CLIP (סומאיני מזכיר אותו במאמר). הוא <b>לא יודע לכתוב מילים בעצמו.</b> הוא לא יכול להסתכל על תמונה ולהגיד ״זה גבר שמכין קפה״. הדבר היחיד שהוא יודע לעשות זה לקבל תמונה ומילה, ולתת ציון כמה הן מתאימות.</p>
+        <div class="flow">
+          <div><span class="small mute">1</span><b>תמונה</b></div>
+          <div class="arr">+</div>
+          <div><span class="small mute">2</span><b>רשימת מילים</b><em>שמישהו כתב</em></div>
+          <div class="arr">←</div>
+          <div class="dark"><span class="small">3</span><b>המודל בוחר אחת</b><em>תמיד. גם אם כולן לא נכונות</em></div>
+        </div>
+        <p>אז אם המילה ״קפה״ לא נמצאת ברשימה, המודל <b>אף פעם</b> לא יגיד ״קפה״, גם אם יש קפה באמצע התמונה. הוא לא יכול להגיד ״אני לא יודע״, והוא לא יכול להגיד ״אף מילה לא מתאימה״. מי שכותב את הרשימה קובע מה המודל יכול ״לראות״.</p>
+        <p>זה בדיוק מה שקרה בסלף: למודל של אלג׳ויסר הייתה רשימה קבועה של קטגוריות שמתכנתים כתבו. ״בדואי״ לא היה ברשימה. ״סמוראי״ כן. מישהו החליט שסמוראי הוא קטגוריה שצריך לזהות, ושבדואי הוא לא.</p>
+        <p>וגם ״הציון״ עצמו לא נופל מהשמיים. CLIP למד מה מתאים למה מכ-400 מיליון תמונות מהאינטרנט, יחד עם הכיתובים שאנשים כתבו להן (רדפורד ואחרים, 2021). כלומר, הוא למד לראות דרך העיניים של מי שצילם, תייג והעלה תמונות לרשת. אם במשך מאה שנה כתבו מתחת לתמונות של ערבים ״שבטיים חמושים״, זה מה שהמודל יחשוב שמתאים.</p>
+      </div>
+    </div>
+    <div class="row wide">
+      <div class="lab">מה עשיתי</div>
+      <div class="txt">
+        <ol class="steps">
+          <li><b>שתי רשימות.</b> כתבתי שתי רשימות מילים לאותן תמונות. אחת במילים שקצין בריטי היה משתמש בהן ב-1920, ואחת במילים של מישהו שמכיר את האנשים. הקצין והמקומי לא אמיתיים, אלה שתי נקודות מבט שדרכן כתבתי. וחשוב להגיד: גם את הרשימה ״הטובה״ כתבתי אני, לא האנשים שבתמונות.</li>
+          <li><b>שש תמונות.</b> נתתי למודל שש תמונות של גרטרוד בל, פעם עם כל רשימה.</li>
+          <li><b>רשימה שלישית, מטופשת.</b> בסוף נתתי לו רשימה של מילים שאין להן שום קשר לתמונות, כדי לראות אם הוא יודה שהוא לא יודע.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="row">
+      <div class="lab">רשימה א׳<br>הקצין</div>
+      <div class="txt"><p class="mute" style="font-size:12px">מילים שקצין בריטי היה כותב בדוח ב-1920</p><ol class="words" id="listOfficer"></ol></div>
+      <div></div>
+    </div>
+    <div class="row">
+      <div class="lab">רשימה ב׳<br>מי שגר שם</div>
+      <div class="txt"><p class="mute" style="font-size:12px">מילים של מישהו שמכיר את האנשים</p><ol class="words" id="listLocal"></ol></div>
+      <div></div>
+    </div>
+  </div>
+
+  <div class="sec-head" style="margin-top:80px"><span class="num">תוצאה 1</span><h2>אותה תמונה, שתי תשובות</h2></div>
+  <p class="note" style="margin:-8px 0 24px">ליד כל תמונה: מה באמת קורה בה (לפי הארכיון), ואיזו מילה המודל בחר מכל רשימה. המספר הקטן הוא כמה המודל היה בטוח.</p>
+  <div class="rows" id="rows"></div>
+
+  <div class="sec-head" style="margin-top:120px"><span class="num">תוצאה 2</span><h2>ואז נתתי לו רשימה מטופשת</h2></div>
+  <div class="rows">
+    <div class="row wide">
+      <div class="lab">הרשימה</div>
+      <div class="txt">
+        <p class="dumbwords">פיצה · חללית · חתול · סמוראי · קבוצת כדורגל · עוגת חתונה</p>
+        <p>אף מילה לא מתאימה. מודל חכם היה אומר ״אף אחת מהן״. אבל CLIP לא יכול. אז מה הוא בחר?</p>
+      </div>
+    </div>
+  </div>
+  <div class="samurai" id="samurai"></div>
+  <div class="punch">
+    <p class="big">כל שש התמונות: <b>סמוראי.</b></p>
+    <p>שש תמונות, שש פעמים אותה מילה. בטוח עד 99%. בדיוק המילה שהמודל בעבודה של אלג׳ויסר בחר לגבר הבדואי. ושייח׳ אל-עסכר, שמכין קפה לאורחים שלו? המודל חשב שיש 21% שהוא <b>חללית</b>.</p>
+    <p>המודל לא ״ראה״ פה כלום. הוא בחר את המילה הכי פחות גרועה מרשימה שמישהו נתן לו, ואמר אותה בביטחון מלא. זה הכוח ה״לא-אנושי, הסטטיסטי״ שסומאיני מדבר עליו.</p>
+    <p><b>והבעיה היא לא שהוא טועה. הבעיה היא שהוא נשמע בטוח.</b> ״סמוראי 99%״ נראה כמו מדע. מספר עם אחוזים מרגיש כמו עובדה, גם כשהוא מגיע מרשימה של פיצה וחללית. עכשיו תחשבו על מערכות כאלה שמסווגות אנשים במצלמות אבטחה, בגבולות או בשדות קרב. שם אף אחד לא רואה את הרשימה. רואים רק את התשובה ואת האחוזים.</p>
+  </div>
+
+  <p class="note">כל מילה נכנסה למודל בתבנית ״תצלום של …״ (באנגלית, כי המודל מבין רק אנגלית). המודל: CLIP, הורץ ב-15.11.2026. התוצאות בדיוק כמו שיצאו, בלי שינוי.</p>
+</section>
+
+<!-- 04 play -->
+<section class="play" id="play">
+  <div class="sec-head"><span class="num">04 · נסו בעצמכם</span><h2>תחליפו את הרשימה</h2></div>
+  <div class="lead"><p>עכשיו אתם מחליטים מה לתת למודל. בוחרים תמונה, בוחרים איזו רשימת מילים לתת לו, ורואים איזו מילה הוא בחר. התמונה לא משתנה והמודל לא משתנה. משתנות רק המילים שהוא יכול לבחור מהן.</p></div>
+
+  <div class="stage">
+    <div>
+      <span class="small mute">1. בחרו תמונה</span>
+      <div class="strip" id="strip"></div>
+      <figure class="bw" style="margin-top:16px"><img id="playImg" src="img/bell-3124.jpg" alt=""></figure>
+    </div>
+    <div>
+      <span class="small mute">2. בחרו איזו רשימה לתת למודל</span>
+      <div class="toggle" id="toggle">
+        <button data-list="officer" aria-pressed="true">רשימה א׳ · מילים של קצין</button>
+        <button data-list="local" aria-pressed="false">רשימה ב׳ · מילים של מקומי</button>
+        <button data-list="dumb" aria-pressed="false">רשימה ג׳ · מטופשת</button>
+      </div>
+      <div class="verdict" aria-live="polite">
+        <div class="k">3. המודל בחר:</div>
+        <div class="word" id="vWord"></div>
+        <div class="pc" id="vPc"></div>
+        <div class="k" style="margin-top:24px">אלה כל המילים שהוא יכול היה לבחור מהן:</div>
+        <ul class="choices" id="vList"></ul>
+        <div class="orig" id="vOrig"></div>
+      </div>
+    </div>
+  </div>
+
+  <details>
+    <summary>רוצים לכתוב רשימה משלכם?</summary>
+    <div class="own">
+      <div>
+        <p style="font-size:14px">כתבו רשימה משלכם: כמה מילים באנגלית (המודל מבין רק אנגלית), כל מילה בשורה. המודל יבחר אחת מהן לתמונה שבחרתם למעלה. בפעם הראשונה זה לוקח כמה שניות, כי הדפדפן מוריד את המודל.</p>
+        <textarea id="labels" spellcheck="false">a sheikh receiving guests
+a man at home
+a criminal
+a tourist attraction</textarea>
+        <button class="go" id="go">להריץ ←</button>
+        <div id="status"></div>
+      </div>
+      <div id="ownOut"></div>
+    </div>
+  </details>
+</section>
+
+<!-- 05 answer -->
+<section class="answer" id="answer">
+  <div class="sec-head"><span class="num">05 · איך העבודה עונה לסלף</span>
+    <div>
+    <p>אלג׳ויסר מוחקת את האנשים כדי שהמודל לא ילמד מהם. אני עשיתי הפוך: השארתי את האנשים ואת המודל כמו שהם, ושיניתי רק את המילים. שייח׳ אל-עסכר מכין קפה באוהל שלו. עם מילים של קצין הוא ״שודד מדבר״. עם מילים של מקומי הוא ״גבר בכאפייה״. עם רשימה מטופשת הוא ״סמוראי״. המודל לא החליט מי האנשים האלה. מי שכתב את המילים החליט.</p>
+    <p>ועכשיו השאלה הקשה: מי כתב את הרשימה הראשונה? גרטרוד בל לא הייתה רק צלמת. היא עבדה בשביל המודיעין הבריטי, ועזרה לשרטט את הגבולות של עיראק (האוול, 2007). הכיתובים שלה, ״בני שבט עם רובים״, ״קבוצת בדואים״, הם גם רשימה. רשימה של מי ששולט, על מי שנשלט. מה שקראתי לו פה ״מה באמת יש בתמונה״ הוא בעצם עוד רשימה של מישהו מבחוץ.</p>
+    <p>האנשים בתמונות אף פעם לא קיבלו לכתוב רשימה. לא ב-1909, לא בארכיון, ולא במודל. גם לא בעבודה הזאת: את הרשימה ״שלהם״ כתבתי אני. סירוב, כמו אצל אלג׳ויסר, זו אולי התשובה היחידה שלא מחייבת לכתוב רשימה בשביל מישהו אחר.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>מרחב לטנטי<br>דניה אלטמן, 2026</p>
+  <p>צילומים: גרטרוד בל, ארכיון גרטרוד בל, ספריית אוניברסיטת ניוקאסל. רישיון CC BY-SA 4.0<br>סלף: נוף אלג׳ויסר, 2020, באדיבות האמנית</p>
+  <p>אנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, <i>אוקטובר</i> 196 (אביב 2026): 18–60.<br><br>
+  <span lang="en">Alec Radford et al., “Learning Transferable Visual Models From Natural Language Supervision,” <i>ICML</i> 2021. arXiv:2103.00020</span> (המאמר שמציג את CLIP ואת 400 מיליון זוגות התמונה-טקסט שעליהם אומן).<br><br>
+  <span lang="en">Georgina Howell, <i>Gertrude Bell: Queen of the Desert, Shaper of Nations</i> (New York: Farrar, Straus and Giroux, 2007)</span> (על עבודתה של בל בלשכה הערבית של המודיעין הבריטי ובשרטוט גבולות עיראק).</p>
+</footer>
+
+</div>
+
+<script>
+const LISTS = {
+  officer: [
+    ["armed tribesmen","שבטיים חמושים"],
+    ["soldiers in military uniform","חיילים במדים צבאיים"],
+    ["primitive natives","ילידים פרימיטיביים"],
+    ["desert raiders","שודדי מדבר"],
+    ["beggars","קבצנים"],
+    ["servants","משרתים"]],
+  local: [
+    ["a family at home in their tent","משפחה בבית, באוהל שלה"],
+    ["hosts making coffee for their guests","מארחים מכינים קפה לאורחים"],
+    ["men wearing a keffiyeh and a cloak","גברים בכאפייה ובעבאיה"],
+    ["a father and his son","אב ובנו"],
+    ["neighbours who came out to see a stranger","שכנים שיצאו לראות זרה"],
+    ["hunters with their rifles","ציידים עם הרובים שלהם"]]
+};
+LISTS.dumb = [["a pizza","פיצה"],["a spaceship","חללית"],["a cat","חתול"],["a samurai","סמוראי"],["a football team","קבוצת כדורגל"],["a wedding cake","עוגת חתונה"]];
+const HE = Object.fromEntries([...LISTS.officer, ...LISTS.local, ...LISTS.dumb]);
+// CLIP ViT-B/32, absurd list, run 15.11.2026, unedited
+const DUMB = {"223":[["a samurai",0.649],["a football team",0.324],["a cat",0.01],["a spaceship",0.007],["a pizza",0.006],["a wedding cake",0.005]],"3124":[["a samurai",0.642],["a spaceship",0.211],["a football team",0.128],["a pizza",0.011],["a cat",0.007],["a wedding cake",0.002]],"6930":[["a samurai",0.672],["a football team",0.258],["a spaceship",0.032],["a cat",0.023],["a pizza",0.013],["a wedding cake",0.001]],"6931":[["a samurai",0.569],["a cat",0.203],["a spaceship",0.147],["a football team",0.065],["a wedding cake",0.013],["a pizza",0.003]],"7095":[["a samurai",0.929],["a football team",0.04],["a spaceship",0.012],["a cat",0.011],["a wedding cake",0.008],["a pizza",0.001]],"8038":[["a samurai",0.991],["a cat",0.009],["a spaceship",0],["a pizza",0],["a football team",0],["a wedding cake",0]]};
+
+const PHOTOS = [
+  {id:"3124", place:"נמרוד, עיראק", date:"27.4.1909",
+   he:"שייח׳ אל-עסכר משבט ג׳בור יושב עם גברים באוהל ומכין קפה.",
+   en:"Sheikh el Askar of the Jebur tribe seated with other men in tent, making coffee."},
+  {id:"6931", place:"א-טובייק, ערב הסעודית", date:"1.1914",
+   he:"שייח׳ חרב מהחווייטאת ובנו קאסם יושבים באוהל.",
+   en:"Sheikh Harb of the Howaitat and his son Qasim seated in tent at encampment of the Howaitat."},
+  {id:"6930", place:"א-טובייק, ערב הסעודית", date:"1.1914",
+   he:"אשתו של חרב ובנו קאסם, עם נשות השבט במחנה.",
+   en:"Harb's wife and son Qasim, with tribeswomen at the encampment of Sheikh Harb of the Howaitat."},
+  {id:"8038", place:"מקום לא מצוין", date:"4.1914",
+   he:"בן שבט הסלובה בגלימה מעור צבי.",
+   en:"Slubba Tribesman dressed in robe made from gazelle skin."},
+  {id:"7095", place:"ליד בטן, ערב הסעודית", date:"17.3.1914",
+   he:"גברים משבט בני חסן עם רובים.",
+   en:"Arab men of the Beni Hassan tribe with guns."},
+  {id:"223", place:"עין מוסא, ירדן", date:"21.3.1900",
+   he:"קבוצת בדואים.",
+   en:"Group of Bedouin people."}
+];
+
+// CLIP ViT-B/32 output, run 15.11.2026, unedited
+const RESULTS = {"223":{"officer":[["armed tribesmen",0.742],["primitive natives",0.175],["beggars",0.068],["desert raiders",0.012],["servants",0.002],["soldiers in military uniform",0.0]],"local":[["men wearing a keffiyeh and a cloak",0.953],["hunters with their rifles",0.037],["hosts making coffee for their guests",0.006],["neighbours who came out to see a stranger",0.003],["a family at home in their tent",0.001],["a father and his son",0.0]]},"3124":{"officer":[["desert raiders",0.413],["armed tribesmen",0.321],["beggars",0.208],["servants",0.043],["primitive natives",0.013],["soldiers in military uniform",0.003]],"local":[["men wearing a keffiyeh and a cloak",0.994],["a family at home in their tent",0.004],["hunters with their rifles",0.001],["neighbours who came out to see a stranger",0.001],["hosts making coffee for their guests",0.0],["a father and his son",0]]},"6930":{"officer":[["desert raiders",0.422],["armed tribesmen",0.325],["beggars",0.221],["primitive natives",0.031],["servants",0.001],["soldiers in military uniform",0.0]],"local":[["men wearing a keffiyeh and a cloak",0.966],["a family at home in their tent",0.019],["hunters with their rifles",0.01],["hosts making coffee for their guests",0.004],["neighbours who came out to see a stranger",0.001],["a father and his son",0]]},"6931":{"officer":[["beggars",0.69],["desert raiders",0.216],["armed tribesmen",0.054],["primitive natives",0.035],["servants",0.003],["soldiers in military uniform",0.003]],"local":[["a family at home in their tent",0.561],["men wearing a keffiyeh and a cloak",0.397],["hunters with their rifles",0.022],["hosts making coffee for their guests",0.018],["a father and his son",0.001],["neighbours who came out to see a stranger",0.001]]},"7095":{"officer":[["armed tribesmen",0.934],["desert raiders",0.058],["beggars",0.004],["primitive natives",0.003],["servants",0.001],["soldiers in military uniform",0.0]],"local":[["men wearing a keffiyeh and a cloak",0.896],["hunters with their rifles",0.102],["hosts making coffee for their guests",0.002],["neighbours who came out to see a stranger",0.0],["a family at home in their tent",0.0],["a father and his son",0]]},"8038":{"officer":[["beggars",0.491],["armed tribesmen",0.334],["desert raiders",0.138],["primitive natives",0.033],["servants",0.004],["soldiers in military uniform",0.001]],"local":[["men wearing a keffiyeh and a cloak",0.998],["hunters with their rifles",0.001],["a father and his son",0.001],["a family at home in their tent",0.0],["neighbours who came out to see a stranger",0.0],["hosts making coffee for their guests",0.0]]}};
+
+for (const id in DUMB) RESULTS[id].dumb = DUMB[id];
+const pct = s => (s*100 < 1 && s > 0) ? "<1%" : Math.round(s*100) + "%";
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const word = en => HE[en] ? esc(HE[en]) : `<span lang="en">${esc(en)}</span>`;
+
+document.getElementById("listOfficer").innerHTML = LISTS.officer.map(([en,he]) => `<li>${he}</li>`).join("");
+document.getElementById("listLocal").innerHTML = LISTS.local.map(([en,he]) => `<li>${he}</li>`).join("");
+
+function resHTML(title, rows){
+  const [topEn, topS] = rows[0];
+  const rest = rows.slice(1, 3).map(([en,s]) => `${word(en)} ${pct(s)}`).join(" · ");
+  return `<div class="res">
+    <div class="k">${title}</div>
+    <div class="top">${word(topEn)}<small>${pct(topS)}</small></div>
+    <div class="meter"><i style="width:${(topS*100).toFixed(1)}%"></i></div>
+    <div class="rest">אחריה: ${rest}</div>
+  </div>`;
+}
+
+function pairHTML(title, [en, sc]){
+  return `<div class="pair"><div class="k">${title}</div><div class="w">${word(en)}<small>${pct(sc)}</small></div></div>`;
+}
+
+document.getElementById("rows").innerHTML = PHOTOS.map(p => `
+  <div class="row">
+    <div class="lab">${p.place}<br>${p.date}<br>צילום: גרטרוד בל</div>
+    <div class="txt">
+      <div class="truth"><div class="k">מה באמת קורה בתמונה (לפי הארכיון):</div>${p.he}</div>
+      ${pairHTML("המודל בחר מתוך רשימה א׳ (מילים של קצין):", RESULTS[p.id].officer[0])}
+      ${pairHTML("המודל בחר מתוך רשימה ב׳ (מילים של מקומי):", RESULTS[p.id].local[0])}
+    </div>
+    <figure class="bw"><img src="img/bell-${p.id}.jpg" alt="${esc(p.en)}" loading="lazy">
+      <figcaption>בארכיון: ״${esc(p.he)}״</figcaption></figure>
+  </div>`).join("");
+
+document.getElementById("samurai").innerHTML = PHOTOS.map(p => `
+  <figure><img src="img/bell-${p.id}.jpg" alt="${esc(p.he)}" loading="lazy">
+    <div class="tag"><b>${word(DUMB[p.id][0][0])}</b><span>${pct(DUMB[p.id][0][1])}</span></div>
+    <div class="cap">במקום השני: ${word(DUMB[p.id][1][0])} ${pct(DUMB[p.id][1][1])} · בארכיון: ${esc(p.he)}</div>
+  </figure>`).join("");
+
+// play: pick a photo, flip the list
+let current = "3124", list = "officer", clf = null;
+const strip = document.getElementById("strip"), toggle = document.getElementById("toggle");
+strip.innerHTML = PHOTOS.map(p => `<button aria-pressed="${p.id===current}" data-id="${p.id}" aria-label="${esc(p.he)}"><img src="img/bell-${p.id}.jpg" alt=""></button>`).join("");
+
+function render(){
+  const p = PHOTOS.find(x => x.id === current);
+  const [en, s] = RESULTS[current][list][0];
+  document.getElementById("playImg").src = `img/bell-${current}.jpg`;
+  document.getElementById("vWord").innerHTML = word(en);
+  document.getElementById("vPc").textContent = `המודל בטוח ב-${pct(s)}`;
+  document.getElementById("vList").innerHTML = RESULTS[current][list].map(([w,sc],i) => `<li class="${i?"":"on"}"><span>${word(w)}</span><span>${pct(sc)}</span></li>`).join("");
+  document.getElementById("vOrig").innerHTML = `ומה באמת יש בתמונה, לפי הארכיון: ${esc(p.he)}`;
+}
+strip.addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  current = b.dataset.id;
+  strip.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x===b));
+  document.getElementById("ownOut").innerHTML = "";
+  render();
+});
+toggle.addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  list = b.dataset.list;
+  toggle.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x===b));
+  render();
+});
+render();
+
+// own list (live model)
+const go = document.getElementById("go"), status = document.getElementById("status");
+go.addEventListener("click", async () => {
+  const labels = document.getElementById("labels").value.split("\n").map(s => s.trim()).filter(Boolean);
+  if (labels.length < 2) { status.textContent = "צריך לפחות שתי מילים. המודל רק בוחר, הוא לא ממציא."; return; }
+  go.disabled = true;
+  try {
+    if (!clf) {
+      status.textContent = "מוריד את המודל, זה לוקח רגע…";
+      const { pipeline } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2");
+      clf = await pipeline("zero-shot-image-classification", "Xenova/clip-vit-base-patch32");
+    }
+    status.textContent = "מריץ…";
+    const img = new URL(`img/bell-${current}.jpg`, location.href).href;
+    const r = await clf(img, labels, { hypothesis_template: "a photograph of {}" });
+    document.getElementById("ownOut").innerHTML = `<div class="verdict"><div class="k">המודל בחר מתוך הרשימה שלכם:</div><div class="word" lang="en">${esc(r[0].label)}</div><div class="pc">בטוח ב-${pct(r[0].score)}</div><ul class="choices">${r.map((x,i)=>`<li class="${i?"":"on"}"><span lang="en">${esc(x.label)}</span><span>${pct(x.score)}</span></li>`).join("")}</ul></div>`;
+    status.textContent = "";
+  } catch (err) {
+    status.textContent = "לא הצליח לטעון את המודל. צריך חיבור לאינטרנט, ולפתוח את הדף משרת (GitHub Pages), לא מקובץ מקומי.";
+    console.error(err);
+  } finally { go.disabled = false; }
+});
+</script>
+</body>
+</html>

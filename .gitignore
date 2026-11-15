@@ -1,0 +1,8 @@
+.playwright-mcp/
+.idea/
+node_modules/
+.DS_Store
+# unused / not for publishing
+fonts/bamberger-*
+fonts/haim-*
+img/salaf-020.jpg
