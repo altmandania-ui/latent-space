@@ -8,643 +8,435 @@
   @font-face{font-family:Atlas;src:url(fonts/f-300.woff2) format("woff2");font-weight:300;font-display:swap}
   @font-face{font-family:Atlas;src:url(fonts/f-400.woff2) format("woff2");font-weight:400;font-display:swap}
   @font-face{font-family:Atlas;src:url(fonts/f-500.woff2) format("woff2");font-weight:500 700;font-display:swap}
-  :root{--bg:#fff;--ink:#111;--mute:#8a8a8a;--rule:#111;--soft:#e6e6e6;--machine:#22e11f}
+
+  /* Blue is only ever the machine: its numbers and its words. Black is people. */
+  :root{
+    --paper:#fff; --ink:#000; --grey:#767676;
+    --blue:#8193e5; --blue-ink:#4d5fc6;
+    --cap:12.5px; --body:16px; --mid:clamp(22px,2.4vw,30px); --big:clamp(44px,7vw,104px);
+    --gut:28px;
+  }
   *{box-sizing:border-box}
-  html{background:var(--bg)}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:Atlas,"Helvetica Neue",Arial,sans-serif;
-    font-weight:300;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 32px}
-  a{color:inherit}
-  b,strong{font-weight:500}
-  p{margin:0 0 12px}
-  img{display:block;width:100%;height:auto}
+  html{background:var(--paper);overflow-x:clip}
+  body{margin:0;background:var(--paper);color:var(--ink);font:300 var(--body)/1.6 Atlas,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  img{display:block;width:100%;height:auto;filter:grayscale(1)}
   figure{margin:0}
+  p{margin:0 0 1em}
+  b{font-weight:500}
+  a{color:inherit;text-underline-offset:4px;text-decoration-thickness:1px}
   [lang=en]{direction:ltr;unicode-bidi:isolate}
-  .small{font-size:12px;letter-spacing:.06em;text-transform:uppercase}
-  .mute{color:var(--mute)}
-  .link{font-size:12px;letter-spacing:.06em;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+  h1,h2{font-weight:300;margin:0;line-height:1.05;letter-spacing:-.01em}
+  h1{font-size:var(--big)}
+  h2{font-size:var(--mid);line-height:1.2;margin-bottom:.8em}
+  .cap{font-size:var(--cap);line-height:1.45;color:var(--grey);margin-top:8px}
+  .blue{color:var(--blue)}
+  .n{color:var(--blue)}
+  .text{max-width:560px}
+  section{margin-top:200px}
 
-  /* nav */
-  nav{display:flex;justify-content:space-between;align-items:center;padding:28px 0;font-size:12px;letter-spacing:.06em}
-  nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
-  nav a{text-decoration:none}
-  nav a:hover{text-decoration:underline;text-underline-offset:4px}
+  .top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:24px 0;font-size:var(--cap);color:var(--grey)}
+  .top nav{display:flex;gap:20px;flex-wrap:wrap}
+  .top a{text-decoration:none}
+  .top a:hover,.top a:focus-visible{color:var(--ink)}
 
-  /* hero */
-  .hero{padding:72px 0 0;display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:end}
-  h1{font-weight:300;font-size:clamp(52px,7vw,88px);line-height:.98;letter-spacing:-.01em;margin:0;
-    padding-bottom:28px;border-bottom:1px solid var(--rule)}
-  .intro{padding:22px 0 0}
-  .intro p{max-width:30ch;font-size:20px;line-height:1.4;margin-bottom:28px}
-  .intro .by{display:block;font-size:12px;color:var(--mute);max-width:40ch}
-  .hero-pic figure img{aspect-ratio:4/3;object-fit:cover}
-  .heroLists{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12px}
-  .heroLists li{border-top:2px solid var(--soft);padding-top:6px;color:var(--mute);transition:border-color .3s,color .3s}
-  .heroLists li.on{border-color:var(--ink);color:var(--ink)}
-  .heroCap{font-size:12px;color:var(--mute);margin-top:10px}
+  /* opening */
+  .open{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;padding-top:80px}
+  .open .said{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+  .open .said span:first-child{font-size:var(--mid);color:var(--blue)}
+  .open .said .n{font-size:var(--mid)}
+  .open p.lede{font-size:var(--mid);line-height:1.3;max-width:20ch;margin:28px 0 0}
 
-  /* the machine's voice: Salaf-style detection box. Green is used ONLY for what the model says. */
-  .det{position:relative}
-  .det .box{position:absolute;border:2px solid var(--machine);pointer-events:none}
-  .det .tag{position:absolute;top:-2px;inset-inline-start:-2px;transform:translateY(-100%);
-    background:var(--machine);color:#000;font:500 13px/1.3 Atlas,sans-serif;padding:3px 7px 2px;white-space:nowrap}
-  .det .tag small{font-weight:400;margin-inline-start:6px;font-size:12px}
-  .det .tag.blink{animation:blink .35s steps(2,end)}
-  @keyframes blink{0%{opacity:0}100%{opacity:1}}
-  @media (prefers-reduced-motion:reduce){.det .tag.blink{animation:none}.heroLists li{transition:none}}
+  /* salaf */
+  .pair{display:grid;grid-template-columns:1.25fr 1fr;gap:56px;align-items:end;margin-top:48px}
 
-  /* sections */
-  section{padding-top:120px}
-  .sec-head{display:grid;grid-template-columns:1fr 2fr;gap:24px;align-items:end;margin-bottom:28px}
-  h2{font-weight:300;font-size:clamp(30px,4vw,44px);line-height:1.1;margin:0}
-  .num{font-size:12px;color:var(--mute);letter-spacing:.06em}
+  /* opening the box: one step per row, numbered like the penguins */
+  .step{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:start;margin-top:150px}
+  .step .k{font-size:var(--mid);line-height:1.25}
+  .step .k .n{margin-inline-start:10px}
+  .step .k + p{color:var(--grey);margin-top:14px;max-width:38ch}
+  .nums{direction:ltr;text-align:left;font-size:9.5px;line-height:1.5;color:var(--blue);word-spacing:3px;font-feature-settings:"tnum" 1;margin:0;
+    overflow-wrap:anywhere}
+  .nums.ink{color:var(--ink)}
+  .vec{margin-bottom:28px}
+  .vec .cap{direction:rtl;text-align:right;margin:0 0 8px}
 
-  /* the row: label | text | image */
-  .rows{border-bottom:1px solid var(--rule)}
-  .row{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:24px;padding:10px 0 12px;border-top:1px solid var(--rule);min-height:150px}
-  .row > .lab{font-size:12px;color:var(--mute);line-height:1.5}
-  .row > .txt{display:flex;flex-direction:column;font-size:14px}
-  .row > .txt .end{margin-top:auto;padding-top:14px}
-  .row > figure{align-self:start}
-  .row > figure img{aspect-ratio:4/3;object-fit:cover;object-position:center 25%}
-  .row.wide > .txt{grid-column:2/4;max-width:60ch}
-  .row h3{font-weight:400;font-size:14px;margin:0 0 6px}
-  figcaption{font-size:11px;color:var(--mute);margin-top:6px;line-height:1.45}
-  .bw img{filter:grayscale(1) contrast(1.05)}
+  .sum{direction:ltr;text-align:left;font-size:13px;line-height:1.9;color:var(--grey);font-feature-settings:"tnum" 1}
+  .sum .t{color:var(--ink)}
+  .result{display:flex;gap:56px;flex-wrap:wrap;margin-top:24px}
+  .result div{font-size:var(--big);line-height:1;color:var(--blue);font-feature-settings:"tnum" 1}
+  .result div span{display:block;font-size:var(--cap);color:var(--grey);margin-top:10px}
 
-  /* word lists */
-  .words{list-style:none;margin:0;padding:0;font-size:14px}
-  .words li{padding:3px 0;border-bottom:1px solid var(--soft)}
-  .words li:last-child{border-bottom:0}
-  .words li span{display:block;color:var(--mute);font-size:11px;text-align:right}
+  .lists{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+  .lists table{width:100%;border-collapse:collapse;font-size:var(--body)}
+  .lists caption{text-align:right;font-size:var(--cap);color:var(--grey);padding-bottom:10px}
+  .lists td{padding:7px 0;border-top:1px solid #ececec;vertical-align:baseline}
+  .lists td.r{direction:ltr;text-align:left;color:var(--grey);font-feature-settings:"tnum" 1;white-space:nowrap;padding-inline:12px}
+  .lists td.p{direction:ltr;text-align:left;color:var(--blue-ink);font-feature-settings:"tnum" 1;white-space:nowrap;width:4.5em}
+  .lists tr.mark td{color:var(--ink);font-weight:400}
+  .lists tr.mark td.p{color:var(--blue);font-weight:500}
 
-  /* results inside a row */
-  .res{margin-bottom:14px}
-  .res .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
-  .res .top{font-size:22px;line-height:1.2;margin:2px 0 6px}
-  .res .top small{font-size:13px;color:var(--mute);margin-inline-start:6px}
-  .meter{height:2px;background:var(--soft);position:relative;margin-bottom:6px}
-  .meter i{position:absolute;inset-block:0;inset-inline-start:0;background:var(--ink)}
-  .res .rest{font-size:11px;color:var(--mute);line-height:1.5}
+  .verdict{margin-top:160px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end}
+  .verdict .pair2{font-size:var(--big);line-height:1.05;color:var(--blue);font-feature-settings:"tnum" 1}
+  .verdict .pair2 small{display:block;font-size:var(--cap);color:var(--grey);margin:6px 0 22px}
+  .verdict p.close{font-size:var(--mid);line-height:1.3;max-width:20ch;margin:0}
 
-  .steps{margin:0;padding:0 18px 0 0;font-size:14px}
-  .steps li{margin-bottom:10px;padding-inline-start:4px}
-  .steps b{font-weight:500}
-  .pair{margin-bottom:18px}
-  .pair .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
-  .pair .w{font-size:22px;line-height:1.2;margin-top:2px}
-  .pair .w small{font-size:12px;color:var(--mute);margin-inline-start:8px}
-  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:stretch;margin:22px 0 22px}
-  .flow > div:not(.arr){border:1px solid var(--ink);padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px}
-  .flow b{font-weight:400;font-size:17px}
-  .flow em{font-style:normal;font-size:12px;color:var(--mute)}
-  .flow .dark{background:var(--ink);color:var(--bg)}
-  .flow .dark em,.flow .dark .small{color:#bbb}
-  .flow .arr{align-self:center;font-size:20px}
-  .truth{font-size:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--soft)}
-  .truth .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
-  /* the samurai band: the one dark moment on the page */
-  html{overflow-x:clip}
-  .band{background:#000;color:#fff;margin:140px calc(50% - 50vw) 0;padding:110px max(16px,calc(50vw - 488px)) 120px}
-  .band .num{color:#8a8a8a}
-  .band h2{font-size:clamp(36px,5vw,60px);margin:10px 0 40px}
-  .dumb{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 14px;font-size:clamp(26px,3.6vw,44px);line-height:1.2}
-  .dumb li{padding:2px 10px 4px;border:2px solid transparent;transition:color .5s,border-color .3s}
-  .band.done .dumb li{color:#3a3a3a}
-  .band.done .dumb li.hit{color:#fff;border-color:var(--machine)}
-  .band-q{color:#bdbdbd;font-size:17px;max-width:48ch;margin:28px 0 56px}
-  .counter{font-size:14px;color:#bdbdbd;border-top:1px solid #333;padding-top:12px;margin:0}
-  .counter b{color:var(--machine);font-weight:500;font-size:18px}
-  .samurai{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 24px;margin-top:28px}
-  .samurai img{aspect-ratio:4/3;object-fit:cover;filter:grayscale(1) brightness(.35);transition:filter .5s}
-  .samurai .box{opacity:0;transform:scale(1.3);transition:opacity .12s,transform .28s cubic-bezier(.2,.9,.25,1)}
-  .samurai figure.hit img{filter:grayscale(1) brightness(1)}
-  .samurai figure.hit .box{opacity:1;transform:none}
-  .samurai .cap{font-size:12px;color:#8a8a8a;margin-top:10px;line-height:1.5}
-  .huge{font-size:clamp(84px,17vw,230px);font-weight:300;line-height:.9;letter-spacing:-.02em;margin:110px 0 0}
-  .huge span{display:block;font-size:clamp(22px,2.6vw,32px);letter-spacing:0;color:#bdbdbd;margin-top:18px}
-  .punch{display:grid;grid-template-columns:1fr 2fr;gap:24px;margin-top:72px;border-top:1px solid #333;padding-top:22px}
-  .punch p{grid-column:2;max-width:52ch;font-size:17px;color:#d6d6d6}
-  .punch b{color:#fff;font-weight:500}
-  @media (prefers-reduced-motion:reduce){.samurai img,.samurai .box,.dumb li{transition:none}}
-  .note{font-size:12px;color:var(--mute);max-width:70ch;margin-top:16px}
+  .step.full{grid-template-columns:1fr}
+  .step.full > div:first-child{max-width:560px}
+  .tabs{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px}
+  .tabs button{font:400 var(--body) Atlas,sans-serif;background:none;border:0;padding:4px 0;color:var(--grey);cursor:pointer;border-bottom:1px solid transparent}
+  .tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ink)}
+  .tabs button:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+  .legend{list-style:none;margin:28px 0 0;padding:0;font-size:var(--cap);display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}
+  .legend li{display:flex;align-items:center;gap:8px}
+  .legend i{width:12px;height:12px;flex:none}
+  .mapwrap{overflow-x:auto}
+  .models{margin-top:40px;overflow-x:auto}
+  .models table{width:100%;border-collapse:collapse;font-size:var(--cap);line-height:1.45}
+  .models th{font-weight:400;color:var(--grey);text-align:right;padding:0 0 8px 16px;vertical-align:bottom}
+  .models td{padding:10px 16px 10px 0;border-top:1px solid #ececec;vertical-align:top}
+  .models td:first-child,.models th:first-child{padding-right:0}
+  .models td.nm{font-size:var(--body);color:var(--blue);white-space:nowrap}
+  .stage{display:grid;grid-template-columns:5fr 7fr;gap:56px;margin-top:56px;align-items:start}
+  .stage figure img{aspect-ratio:4/3;object-fit:cover}
+  .stage .bell{font-size:var(--mid);line-height:1.3;margin:14px 0 4px}
+  .stage .tally{display:flex;flex-wrap:wrap;gap:10px 28px;margin:0 0 28px}
+  .stage .tally div{font-size:var(--mid);line-height:1.1}
+  .stage .tally div span{display:block;font-size:var(--cap);color:var(--grey);margin-top:4px}
+  .runs{width:100%;border-collapse:collapse;font-size:var(--cap)}
+  .runs th{font-weight:400;color:var(--grey);text-align:right;padding:6px 8px 6px 0;white-space:nowrap}
+  .runs td{padding:5px 6px;border-top:1px solid #f0f0f0;vertical-align:middle}
+  .runs td.w i{display:inline-block;width:10px;height:10px;margin-inline-end:8px;vertical-align:-1px}
+  .runs td.r{direction:ltr;text-align:left;color:var(--grey);font-feature-settings:"tnum" 1}
+  .map tr.row{cursor:pointer}
+  .map tr.row:hover td{filter:brightness(.95)}
+  .map tr.row:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  .map tr.row.sel td.ph{outline:3px solid var(--ink);outline-offset:-3px}
+  .map tr.row.sel td{box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+  .map{border-collapse:separate;border-spacing:3px;font-size:11px;line-height:1.25;width:100%}
+  .map th{font-weight:400;color:var(--grey);text-align:center;padding:2px;vertical-align:bottom}
+  .map th.m{color:var(--ink);font-size:var(--cap);padding-bottom:6px}
+  .map th.t{font-size:10px;direction:ltr;writing-mode:vertical-rl;transform:rotate(180deg);height:92px;white-space:nowrap}
+  .map td{height:54px;min-width:44px;text-align:center;vertical-align:middle;padding:3px;color:#000}
+  .map td.ph{width:72px;padding:0}
+  .map td.ph img{width:72px;height:54px;object-fit:cover}
+  .map tr.gap th{height:0}
+  .answer p{font-size:var(--mid);line-height:1.35;max-width:30ch}
 
-  /* last part */
-  .play{padding-top:140px}
-  .play h2{font-size:clamp(36px,5vw,56px)}
-  .play .lead{display:grid;grid-template-columns:1fr 2fr;gap:24px;margin:20px 0 40px}
-  .play .lead p{grid-column:2;max-width:46ch;font-size:15px}
-  .stage{display:grid;grid-template-columns:1fr 1fr;gap:40px;border-top:1px solid var(--rule);padding-top:16px}
-  .strip{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
-  .strip button{padding:0;border:0;background:none;cursor:pointer;aspect-ratio:1;overflow:hidden;opacity:.35;transition:opacity .2s}
-  .strip button img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
-  .strip button[aria-pressed=true],.strip button:hover{opacity:1}
-  .toggle{display:flex;border:1px solid var(--ink);margin:6px 0 34px}
-  .toggle button{flex:1;font:400 13px Atlas,sans-serif;padding:12px 6px;white-space:nowrap;background:none;border:0;cursor:pointer;color:var(--ink)}
-  .toggle button+button{border-inline-start:1px solid var(--ink)}
-  .toggle button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
-  .verdict .k{font-size:12px;color:var(--mute);letter-spacing:.06em}
-  .verdict .word{font-size:clamp(38px,5.5vw,64px);line-height:1.05;margin:6px 0 8px;min-height:1.1em}
-  .verdict .pc{font-size:14px;color:var(--mute)}
-  .verdict .orig{font-size:12px;color:var(--mute);margin-top:28px;border-top:1px solid var(--soft);padding-top:10px}
-
-  .choices{list-style:none;margin:6px 0 0;padding:0;font-size:14px}
-  .choices li{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--soft);color:var(--mute)}
-  .choices li.on{color:var(--ink);font-weight:500}
-  details{margin-top:56px;border-top:1px solid var(--rule);padding-top:12px}
-  summary{cursor:pointer;font-size:12px;letter-spacing:.06em;list-style:none}
-  summary::-webkit-details-marker{display:none}
-  summary::after{content:" ↓"}
-  details[open] summary::after{content:" ↑"}
-  .own{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:20px}
-  textarea{width:100%;min-height:130px;font:300 15px/1.5 Atlas,sans-serif;direction:ltr;text-align:left;
-    background:none;border:0;border-bottom:1px solid var(--ink);padding:6px 0;color:var(--ink);resize:vertical;outline:0}
-  .go{margin-top:14px;font:400 12px Atlas,sans-serif;letter-spacing:.06em;background:none;border:0;padding:0;
-    text-decoration:underline;text-underline-offset:4px;cursor:pointer;color:var(--ink)}
+  .try{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+  .try img{aspect-ratio:4/3;object-fit:cover}
+  textarea{display:block;width:100%;min-height:140px;font:300 var(--body)/1.6 Atlas,sans-serif;direction:ltr;text-align:left;
+    background:none;border:0;border-bottom:1px solid var(--ink);padding:6px 0;color:var(--ink);resize:vertical;outline:0;margin-top:14px}
+  textarea:focus-visible{border-bottom:2px solid var(--blue)}
+  .go{margin-top:14px;font:400 var(--body) Atlas,sans-serif;background:none;border:0;padding:6px 0;text-decoration:underline;text-underline-offset:5px;cursor:pointer;color:var(--ink)}
   .go:disabled{opacity:.4;cursor:wait}
-  #status{font-size:12px;color:var(--mute);margin-top:10px;min-height:1.4em}
+  .go:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+  #ownWord{font-size:var(--big);line-height:1.05;color:var(--blue);margin:28px 0 8px;min-height:1em}
+  #ownPc{color:var(--blue-ink)}
 
-  .answer{padding-top:140px}
-  .answer .sec-head > div{grid-column:2}
-  .answer p{font-size:clamp(20px,2.4vw,26px);line-height:1.45;max-width:36ch;margin-bottom:22px}
-  .answer .sec-head{align-items:start}
-
-  footer{margin-top:140px;border-top:1px solid var(--rule);padding:14px 0 64px;
-    display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;font-size:11px;color:var(--mute);line-height:1.6}
-  footer p{margin:0 0 8px}
+  footer{margin-top:200px;padding:28px 0 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gut);border-top:1px solid var(--ink)}
+  footer p{font-size:var(--cap);color:var(--grey);line-height:1.6}
 
   @media (max-width:820px){
-    .wrap{padding:0 16px}
-    nav ul{display:none}
-    .hero{padding-top:48px}
-    h1{max-width:100%}
-    .hero{grid-template-columns:1fr;gap:36px;padding-top:36px}
-    .intro p{font-size:18px}
-    .det .tag{font-size:12px}
-    .intro,.sec-head,.play .lead,.stage,.own,footer,.punch{grid-template-columns:1fr}
-    .punch p{grid-column:auto}
-    .samurai{grid-template-columns:1fr 1fr;gap:20px 12px}
-    .band{padding:72px 16px 80px;margin-top:96px}
-    .huge{margin-top:72px}
-    .band-q{margin-bottom:40px}
-    .flow{grid-template-columns:1fr}
-    .flow .arr{justify-self:center;transform:rotate(-90deg)}
-    .intro p,.play .lead p,.answer p,.answer .sec-head > div{grid-column:auto}
-    .row{grid-template-columns:1fr 1fr;min-height:0}
-    .row > .lab{grid-column:1/-1}
-    .row.wide > .txt{grid-column:1/-1}
-    section{padding-top:80px}
+    :root{--gut:18px}
+    section{margin-top:130px}
+    .open,.pair,.step,.lists,.verdict,.try,footer{grid-template-columns:1fr;gap:28px}
+    .open{padding-top:40px}
+    .step{margin-top:100px}
+    .nums{font-size:8.5px}
+    .result{gap:28px}
+    .stage{grid-template-columns:1fr;gap:20px}
+    .models table{min-width:640px}
+    .map td.ph img{width:52px;height:44px}
+    .map td{height:44px;min-width:38px;font-size:10px}
   }
-  @media (max-width:820px){
-    /* menu: scrollable row instead of hidden */
-    nav{flex-direction:column;align-items:flex-start;gap:10px;padding:18px 0 0}
-    nav ul{display:flex;gap:18px;overflow-x:auto;width:100%;padding-bottom:6px;-webkit-overflow-scrolling:touch}
-    nav li{white-space:nowrap}
-    nav a{display:inline-block;padding:6px 0}
-    /* readable small text */
-    .row > .lab,.res .k,.pair .k,.truth .k,.note,figcaption,.samurai .cap,.verdict .k,.num,.intro .by{font-size:13px}
-    .row > .txt,.steps,.words,.truth{font-size:16px}
-    .row h3{font-size:16px}
-    /* photos first in rows */
-    .row > figure{order:-1;grid-column:1/-1}
-    .row{gap:12px;padding:14px 0 18px}
-    .row > .lab{margin-bottom:-4px}
-    /* flow diagram compact */
-    .flow{gap:6px;margin:18px 0}
-    .flow > div:not(.arr){flex-direction:row;align-items:baseline;gap:10px;flex-wrap:wrap;padding:10px 12px}
-    .flow .arr{font-size:16px;line-height:1}
-    /* samurai grid */
-    /* play section: buttons stacked, controls before the big photo */
-    .stage{gap:28px}
-    .stage > div:first-child{display:flex;flex-direction:column}
-    #playImg{max-height:260px;object-fit:cover}
-    .strip{gap:4px}
-    .toggle{flex-direction:column}
-    .toggle button{padding:14px 12px;font-size:15px;text-align:right}
-    .toggle button+button{border-inline-start:0;border-top:1px solid var(--ink)}
-    .verdict .word{font-size:40px}
-    .choices{font-size:15px}
-    .choices li{padding:8px 0}
-    summary{font-size:15px;padding:8px 0}
-    .go{font-size:15px;padding:8px 0}
-    textarea{font-size:16px}
-    footer{font-size:12px;margin-top:80px}
-    .answer p{font-size:20px}
-  }
-  @media (max-width:520px){ .row{grid-template-columns:1fr} .row > .lab{grid-column:auto} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<nav>
-  <span>מרחב לטנטי</span>
-  <ul>
-    <li><a href="#work">העבודה</a></li>
-    <li><a href="#a">חלק א׳</a></li>
-    <li><a href="#b">חלק ב׳</a></li>
-    <li><a href="#play">נסו</a></li>
-    <li><a href="#answer">סיכום</a></li>
-  </ul>
-</nav>
+<div class="top">
+  <span>דניה אלטמן ועידן ירחי</span>
+  <nav><a href="#salaf">סלף</a><a href="#a">חלק א׳</a><a href="#b">חלק ב׳</a><a href="#answer">התשובה לסלף</a><a href="#try">נסו</a></nav>
+</div>
 
-<header class="hero">
-  <div class="hero-text">
+<header class="open">
+  <div>
     <h1>מי כתב את הרשימה</h1>
-    <div class="intro">
-      <p>לקחנו מודל אחד ושש תמונות ישנות, ונתנו לו רשימות מילים שונות. יצאו היסטוריות שונות.</p>
-      <span class="by">דניה אלטמן ועידן ירחי<br>תגובה לאנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, אוקטובר 196 (2026)</span>
-    </div>
+    <p class="lede">מה קורה בתוך המודל כשהוא ״רואה״ תמונה.</p>
+    <p class="cap">תגובה לאנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, אוקטובר 196 (2026)</p>
   </div>
-  <div class="hero-pic">
-    <figure class="det bw">
-      <img src="img/bell-3124.jpg" alt="שייח׳ אל-עסכר יושב עם גברים באוהל ומכין קפה. גרטרוד בל, 1909">
-      <div class="box" style="inset:8% 30% 20% 25%"><span class="tag" id="heroTag"></span></div>
-    </figure>
-    <ul class="heroLists" id="heroLists"></ul>
-    <p class="heroCap">אותו שייח׳, אותו מודל. רק הרשימה מתחלפת.</p>
-  </div>
+  <figure>
+    <img src="img/bell-6930.jpg" alt="אשתו של שייח׳ חרב ובנו קאסם, עם נשות השבט במחנה. צילום: גרטרוד בל, 1914">
+    <div class="said"><span>סמוראי</span><span class="n">80%</span></div>
+    <figcaption class="cap">גרטרוד בל כתבה: ״אשתו של חרב ובנו קאסם, עם נשות השבט במחנה״. ‏<span lang="en">GB/3/1/25/1/202</span>, 1914</figcaption>
+  </figure>
 </header>
 
-<!-- 01 original work -->
-<section id="work">
-  <div class="sec-head"><span class="num">01 · העבודה המקורית</span><h2>סלף (אבות)</h2></div>
-  <div class="rows">
-    <div class="row">
-      <div class="lab">נוף אלג׳ויסר<br>2020<br>סומאיני, עמ׳ 46–48</div>
-      <div class="txt">
-        <h3>שלב 1: המודל מזהה</h3>
-        <p>היא מריצה מודל זיהוי על צילום של גרטרוד בל, והמודל קורא לגבר הבדואי ״סמוראי״, בביטחון של 58%.</p>
-      </div>
-      <figure><img src="img/salaf-047.jpg" alt="צילום של גרטרוד בל: גבר בדואי, ומעליו מסגרת זיהוי ירוקה עם התווית Samurai 58.52%"><figcaption>מקור: סומאיני, אוקטובר 196 (2026), עמ׳ 47</figcaption></figure>
-    </div>
-    <div class="row">
-      <div class="lab">״המאגר הנעדר״</div>
-      <div class="txt">
-        <h3>שלב 2: היא מוחקת</h3>
-        <p>היא מוחקת את האנשים מהתמונות (בעזרת U2-Net) ונשארות רק צלליות לבנות.</p>
-      </div>
-      <figure><img src="img/salaf-absent.jpg" alt="צילום מזרחני שבו הדמויות נמחקו והוחלפו בצלליות לבנות"><figcaption>מקור: סומאיני, אוקטובר 196 (2026)</figcaption></figure>
-    </div>
+<section id="salaf">
+  <div class="text">
+    <h2>סלף (אבות). נוף אלג׳ויסר, 2020</h2>
+    <p>אלג׳ויסר מריצה מודל זיהוי על צילומים של גרטרוד בל. המודל קורא לגבר בדואי ״סמוראי״, בביטחון של 58%. אחר כך היא מוחקת את האנשים מהתמונות (בעזרת U2-Net), ונשארות רק צלליות לבנות.</p>
+  </div>
+  <div class="pair">
+    <figure><img src="img/salaf-047.jpg" alt="צילום של גרטרוד בל: גבר בדואי, ומעליו מסגרת זיהוי ירוקה עם התווית Samurai 58.52%"><figcaption class="cap">המודל מזהה. מקור: סומאיני, אוקטובר 196 (2026), עמ׳ 47</figcaption></figure>
+    <figure><img src="img/salaf-absent.jpg" alt="צילום מזרחני שבו הדמויות נמחקו והוחלפו בצלליות לבנות"><figcaption class="cap">״המאגר הנעדר״: היא מוחקת. מקור: סומאיני, אוקטובר 196 (2026)</figcaption></figure>
   </div>
 </section>
 
-<!-- 02 part A -->
-<section id="a">
-  <div class="sec-head"><span class="num">02 · חלק א׳</span><h2>שלוש שאלות על סלף</h2></div>
-  <div class="rows">
-    <div class="row wide">
-      <div class="lab">ארכיון</div>
-      <div class="txt">
-        <h3>איזה ארכיון העבודה משתמשת בו, ומה חסר בו?</h3>
-        <p>היא לוקחת תמונות ישנות של בדואים, שצילמה גרטרוד בל, בריטית שהסתובבה באזור בתחילת המאה ה-20, ועוד אוסף תמונות ״מזרחיות״ מהגטי. כלומר, אלה תמונות שאנשים מבחוץ צילמו. מה שחסר זה האנשים עצמם: לא יודעים איך קראו להם, מה הם חשבו, או אם בכלל רצו שיצלמו אותם.</p>
-      </div>
-    </div>
-    <div class="row wide">
-      <div class="lab">מרחב לטנטי</div>
-      <div class="txt">
-        <h3>מה המרחב הלטנטי חושף, ומה הוא מעלים?</h3>
-        <p>כשהיא מריצה את התמונות דרך תוכנות זיהוי, הן פשוט לא מבינות מה הן רואות. חפץ ביד של ילד הופך ל״סקייטבורד״, והבגדים של גבר בדואי הופכים ל״מדים צבאיים״. זה חושף כמה המודל לא מכיר את העולם הזה. מה שמוסתר זה שהמודל אף פעם לא מודה שהוא לא יודע. הוא תמיד נותן תשובה, גם כשהיא שטות.</p>
-      </div>
-    </div>
-    <div class="row wide">
-      <div class="lab">אסטרטגיה</div>
-      <div class="txt">
-        <h3>גליץ׳, הסתרה או סירוב?</h3>
-        <p>סירוב. היא מוחקת את האנשים מהתמונות ומשאירה במקומם צלליות לבנות, כדי שאף מודל לא יוכל ללמוד מהם. בלשונה: ״סירוב לאפשר לנתונים מסוימים להפוך לחומר אימון״ (<span lang="en">“a refusal to allow certain data to become training material”</span>) (עמ׳ 46). מה שמעניין הוא שכשהיא מאמנת מודל על התמונות המחוקות, הוא עדיין מייצר את אותן תנוחות מהצילומים המקוריים. גם בלי האנשים, המבט של הצלם נשאר.</p>
-      </div>
-    </div>
-  </div>
+<section id="a" class="text" style="margin-inline:auto">
+  <h2>חלק א׳. שלוש שאלות על סלף</h2>
+  <p><b>איזה ארכיון, ומה חסר בו?</b> תמונות של בדואים שצילמה גרטרוד בל, בריטית שהסתובבה באזור בתחילת המאה ה-20, ועוד תמונות ״מזרחיות״ מגטי. אנשים מבחוץ צילמו אותן. מה שחסר זה האנשים עצמם: איך קראו להם, מה הם חשבו, אם בכלל רצו שיצלמו אותם.</p>
+  <p><b>מה המרחב הלטנטי חושף, ומה הוא מעלים?</b> חפץ ביד של ילד הופך ל״סקייטבורד״, בגדים של גבר בדואי הופכים ל״מדים צבאיים״. זה חושף כמה המודל לא מכיר את העולם הזה. מה שמוסתר: המודל אף פעם לא מודה שהוא לא יודע.</p>
+  <p><b>גליץ׳, הסתרה או סירוב?</b> סירוב. היא מוחקת את האנשים כדי שאף מודל לא ילמד מהם. בלשונה: ״סירוב לאפשר לנתונים מסוימים להפוך לחומר אימון״ (<span lang="en">“a refusal to allow certain data to become training material”</span>, עמ׳ 46). וגם על התמונות המחוקות, מודל עדיין מייצר את אותן תנוחות. המבט של הצלם נשאר.</p>
 </section>
 
-<!-- 03 part B -->
 <section id="b">
-  <div class="sec-head"><span class="num">03 · חלק ב׳</span><h2>המודל לא רואה. הוא בוחר ממה שנתנו לו.</h2></div>
-  <div class="rows">
-    <div class="row wide">
-      <div class="lab">הטענה נגד סומאיני</div>
-      <div class="txt">
-        <p>סומאיני כותב שמה שמארגן את המרחב הלטנטי זה כוח ״לא-אנושי, סטטיסטי״ (עמ׳ 39). אנחנו לא מסכימים איתו. המילה ״סטטיסטי״ עושה פה עבודה פוליטית: היא מעלימה את מי שכתב. מישהו בחר מה ייכנס למודל, מישהו בחר איך לשאול אותו, ומישהו כתב את המילים שמותר לו לבחור מהן. כשקוראים לזה ״סטטיסטיקה״, אף אחד לא אחראי.</p>
-      </div>
-    </div>
-    <div class="row wide">
-      <div class="lab">למה צריך לתת למודל רשימה?</div>
-      <div class="txt">
-        <p>המודל שהשתמשנו בו נקרא CLIP (סומאיני מזכיר אותו במאמר). הוא <b>לא יודע לכתוב מילים בעצמו.</b> הוא לא יכול להסתכל על תמונה ולהגיד ״זה גבר שמכין קפה״. הדבר היחיד שהוא יודע לעשות זה לקבל תמונה ומילה, ולתת ציון כמה הן מתאימות.</p>
-        <div class="flow">
-          <div><span class="small mute">1</span><b>תמונה</b></div>
-          <div class="arr">+</div>
-          <div><span class="small mute">2</span><b>רשימת מילים</b><em>שמישהו כתב</em></div>
-          <div class="arr">←</div>
-          <div class="dark"><span class="small">3</span><b>המודל בוחר אחת</b><em>תמיד. גם אם כולן לא נכונות</em></div>
-        </div>
-        <p>אז אם המילה ״קפה״ לא נמצאת ברשימה, המודל <b>אף פעם</b> לא יגיד ״קפה״, גם אם יש קפה באמצע התמונה. הוא לא יכול להגיד ״אני לא יודע״, והוא לא יכול להגיד ״אף מילה לא מתאימה״. מי שכותב את הרשימה קובע מה המודל יכול ״לראות״.</p>
-        <p>זה כנראה מה שקרה בסלף: למודלים כאלה יש רשימה קבועה של קטגוריות שמתכנתים כתבו. ״סמוראי״ היה ברשימה. ״בדואי״, כנראה, לא.</p>
-        <p>וגם ״הציון״ עצמו לא נופל מהשמיים. CLIP למד מה מתאים למה מכ-400 מיליון תמונות מהאינטרנט, יחד עם הכיתובים שאנשים כתבו להן (רדפורד ואחרים, 2021). כלומר, הוא למד לראות דרך העיניים של מי שצילם, תייג והעלה תמונות לרשת. אם במשך מאה שנה כתבו מתחת לתמונות של ערבים ״שבטיים חמושים״, זה מה שהמודל יחשוב שמתאים.</p>
-      </div>
-    </div>
-    <div class="row wide">
-      <div class="lab">מה עשינו</div>
-      <div class="txt">
-        <p><b>המהלך:</b> מערכת סיווג משלנו. <b>הכלי:</b> CLIP (ViT-B/32).</p>
-        <ol class="steps">
-          <li><b>שתי רשימות.</b> כתבנו שתי רשימות מילים לאותן תמונות. אחת במילים שקצין בריטי היה משתמש בהן ב-1920, ואחת במילים של מישהו שמכיר את האנשים. הקצין והמקומי לא אמיתיים, אלה שתי נקודות מבט שדרכן כתבנו. וחשוב להגיד: גם את הרשימה ״הטובה״ כתבנו אנחנו, לא האנשים שבתמונות.</li>
-          <li><b>שש תמונות.</b> נתנו למודל שש תמונות של גרטרוד בל, פעם עם כל רשימה.</li>
-          <li><b>רשימה שלישית, מטופשת.</b> בסוף נתנו לו רשימה של מילים שאין להן שום קשר לתמונות, כדי לראות אם הוא יודה שהוא לא יודע.</li>
-        </ol>
-      </div>
-    </div>
-    <div class="row">
-      <div class="lab">רשימה א׳<br>הקצין</div>
-      <div class="txt"><p class="mute" style="font-size:12px">מילים שקצין בריטי היה כותב בדוח ב-1920</p><ol class="words" id="listOfficer"></ol></div>
-      <div></div>
-    </div>
-    <div class="row">
-      <div class="lab">רשימה ב׳<br>מי שגר שם</div>
-      <div class="txt"><p class="mute" style="font-size:12px">מילים של מישהו שמכיר את האנשים</p><ol class="words" id="listLocal"></ol></div>
-      <div></div>
-    </div>
+  <div class="text">
+    <h2>חלק ב׳. פותחים את הקופסה</h2>
+    <p>סומאיני כותב שמה שמארגן את המרחב הלטנטי זה כוח ״לא-אנושי, סטטיסטי״ (עמ׳ 39). פתחנו את המודל כדי לראות מה הכוח הזה עושה בפועל: קודם בתמונה אחת, ואז בארבעה מודלים ובארבעה ניסוחים.</p>
+    <p><b>המהלך:</b> מערכת סיווג משלנו. <b>הכלי:</b> CLIP (ViT-B/32), מודל שמתאים בין תמונות לטקסט, ושסומאיני מזכיר במאמר.</p>
   </div>
 
-  <div class="sec-head" style="margin-top:80px"><span class="num">תוצאה 1</span><h2>אותה תמונה, שתי תשובות</h2></div>
-  <p class="note" style="margin:-8px 0 24px">ליד כל תמונה: מה באמת קורה בה (לפי הארכיון), ואיזו מילה המודל בחר מכל רשימה. המספר הקטן הוא כמה המודל היה בטוח.</p>
-  <div class="rows" id="rows"></div>
-  <div class="rows" style="border-bottom:0;margin-top:48px">
-    <div class="row wide">
-      <div class="lab">מה הרשימה לא מכריעה</div>
-      <div class="txt">
-        <p>אבל הרשימה לא מכריעה הכול. גם עם המילים של המקומי, המודל בחר בחמש מתוך שש תמונות ״גברים בכאפייה ובעבאיה״. בתמונה של הקפה, ״מארחים מכינים קפה״ קיבל 0%. הוא רואה בגדים, לא מה שאנשים עושים. בתמונה של אשתו של חרב ונשות השבט, הוא קרא להן ״שודדי מדבר״ ו״גברים בכאפייה״. נשים הפכו לגברים. הרשימה קובעת מה אפשר להגיד. הדאטה שהמודל אומן עליו קובע מה ייבחר.</p>
-        <p>ו״חיילים במדים צבאיים״ קיבל כמעט 0% בכל התמונות. המודל הזה לא חוזר על הטעות מסלף.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="band" id="band">
-    <span class="num">תוצאה 2</span>
-    <h2>ואז נתנו לו רשימה מטופשת</h2>
-    <ul class="dumb" id="dumbList"></ul>
-    <p class="band-q">אף מילה לא מתאימה. מודל חכם היה אומר ״אף אחת מהן״. CLIP לא יכול להגיד את זה. הוא חייב לבחור.</p>
-    <p class="counter" aria-live="polite">המודל בחר ״סמוראי״ ב-<b id="cnt">0</b> מתוך 6 תמונות</p>
-    <div class="samurai" id="samurai"></div>
-    <p class="huge">סמוראי.<span>שש תמונות. שש פעמים.</span></p>
-    <div class="punch">
-    <p>בטוח עד 99%. בדיוק המילה שהמודל בעבודה של אלג׳ויסר בחר לגבר הבדואי. ושייח׳ אל-עסכר, שמכין קפה לאורחים שלו? המודל חשב שיש 21% שהוא <b>חללית</b>.</p>
-    <p>המודל לא ״ראה״ פה כלום. הוא בחר את המילה הכי פחות גרועה מרשימה שמישהו נתן לו, ואמר אותה בביטחון מלא. זה הכוח ה״לא-אנושי, הסטטיסטי״ שסומאיני מדבר עליו.</p>
-    <p><b>והבעיה היא לא שהוא טועה. הבעיה היא שהוא נשמע בטוח.</b> ״סמוראי 99%״ נראה כמו מדע. מספר עם אחוזים מרגיש כמו עובדה, גם כשהוא מגיע מרשימה של פיצה וחללית. עכשיו תחשבו על מערכות כאלה שמסווגות אנשים במצלמות אבטחה, בגבולות או בשדות קרב. שם אף אחד לא רואה את הרשימה. רואים רק את התשובה ואת האחוזים.</p>
-</div>
-  </div>
-
-  <div class="rows" style="margin-top:96px">
-    <div class="row wide">
-      <div class="lab">ומי כתב את הרשימה הראשונה?</div>
-      <div class="txt">
-        <p>ועכשיו השאלה הקשה: מי כתב את הרשימה הראשונה? גרטרוד בל לא הייתה רק צלמת. היא עבדה בשביל המודיעין הבריטי, ועזרה לשרטט את הגבולות של עיראק (האוול, 2007). הכיתובים שלה, ״בני שבט עם רובים״, ״קבוצת בדואים״, הם גם רשימה. רשימה של מי ששולט, על מי שנשלט. מה שקראנו לו פה ״מה באמת יש בתמונה״ הוא בעצם עוד רשימה של מישהו מבחוץ.</p>
-        <p>האנשים בתמונות אף פעם לא קיבלו לכתוב רשימה. לא ב-1909, לא בארכיון, ולא במודל. גם לא בעבודה הזאת: את הרשימה ״שלהם״ כתבנו אנחנו. סירוב, כמו אצל אלג׳ויסר, זו אולי התשובה היחידה שלא מחייבת לכתוב רשימה בשביל מישהו אחר.</p>
-      </div>
-    </div>
-  </div>
-
-  <p class="note">כל מילה נכנסה למודל בתבנית ״תצלום של …״ (באנגלית, כי המודל מבין רק אנגלית). המודל: CLIP, הורץ ב-15.11.2026. התוצאות בדיוק כמו שיצאו, בלי שינוי.</p>
-</section>
-
-<!-- 04 play -->
-<section class="play" id="play">
-  <div class="sec-head"><span class="num">04 · נסו בעצמכם</span><h2>תחליפו את הרשימה</h2></div>
-  <div class="lead"><p>עכשיו אתם מחליטים מה לתת למודל. בוחרים תמונה, בוחרים איזו רשימת מילים לתת לו, ורואים איזו מילה הוא בחר. התמונה לא משתנה והמודל לא משתנה. משתנות רק המילים שהוא יכול לבחור מהן.</p></div>
-
-  <div class="stage">
+  <div class="step">
     <div>
-      <span class="small mute">1. בחרו תמונה</span>
-      <div class="strip" id="strip"></div>
-      <figure class="bw det" style="margin-top:28px"><img id="playImg" src="img/bell-3124.jpg" alt=""><div class="box" style="inset:12% 16% 8% 16%"><span class="tag" id="playTag"></span></div></figure>
+      <p class="k">התמונה<span class="n">(1)</span></p>
+      <p>המודל לא רואה נשים, אוהל או ילד. הוא הופך את התמונה ל-512 מספרים. את הדרך לעשות את זה הוא למד מ-400 מיליון תמונות מהרשת והכיתובים שאנשים כתבו להן (רדפורד ואחרים, 2021).</p>
+      <figure style="margin-top:28px;max-width:360px"><img src="img/bell-6930.jpg" alt="אשתו של שייח׳ חרב ובנו קאסם, עם נשות השבט במחנה" loading="lazy"></figure>
+    </div>
+    <div class="vec"><p class="cap">התמונה, כמו שהמודל ״רואה״ אותה</p><p class="nums" id="vImg"></p></div>
+  </div>
+
+  <div class="step">
+    <div>
+      <p class="k">שתי מילים<span class="n">(2)</span></p>
+      <p>גם כל משפט הופך ל-512 מספרים. אחד מהרשימה של שש דמויות, ואחד מתוך הכיתוב של בל עצמה לתמונה הזאת.</p>
     </div>
     <div>
-      <span class="small mute">2. בחרו איזו רשימה לתת למודל</span>
-      <div class="toggle" id="toggle">
-        <button data-list="officer" aria-pressed="true">א׳ · מילים של קצין</button>
-        <button data-list="local" aria-pressed="false">ב׳ · מילים של מקומי</button>
-        <button data-list="dumb" aria-pressed="false">ג׳ · רשימה מטופשת</button>
-      </div>
-      <div class="verdict" aria-live="polite">
-        <div class="k">3. המודל בחר:</div>
-        <div class="word" id="vWord"></div>
-        <div class="pc" id="vPc"></div>
-        <div class="k" style="margin-top:24px">אלה כל המילים שהוא יכול היה לבחור מהן:</div>
-        <ul class="choices" id="vList"></ul>
-        <div class="orig" id="vOrig"></div>
-      </div>
+      <div class="vec"><p class="cap"><span lang="en">“a photograph of a samurai”</span></p><p class="nums" id="vSam"></p></div>
+      <div class="vec"><p class="cap"><span lang="en">“a photograph of tribeswomen at an encampment”</span>, המילים של בל</p><p class="nums ink" id="vBell"></p></div>
     </div>
   </div>
 
-  <details>
-    <summary>רוצים לכתוב רשימה משלכם?</summary>
-    <div class="own">
-      <div>
-        <p style="font-size:14px">כתבו רשימה משלכם: כמה מילים באנגלית (המודל מבין רק אנגלית), כל מילה בשורה. המודל יבחר אחת מהן לתמונה שבחרתם למעלה. בפעם הראשונה זה לוקח כמה שניות, כי הדפדפן מוריד את המודל.</p>
-        <textarea id="labels" spellcheck="false">a sheikh receiving guests
-a man at home
-a criminal
-a tourist attraction</textarea>
-        <p class="note" style="margin-top:8px">הרשימה שלכם רצה בדפדפן על גרסה מכווצת של אותו מודל, אז המספרים יכולים לצאת קצת שונים מהתוצאות למעלה.</p>
-        <button class="go" id="go">להריץ ←</button>
-        <div id="status"></div>
-      </div>
-      <div id="ownOut"></div>
+  <div class="step">
+    <div>
+      <p class="k">כפל וחיבור<span class="n">(3)</span></p>
+      <p>מכפילים את המספר הראשון של התמונה במספר הראשון של המשפט, את השני בשני, וכך 512 פעם, ומחברים. זה כל ה״התאמה״. אפשר לבדוק עם מחשבון: המספרים למעלה נותנים בדיוק את התוצאות האלה.</p>
     </div>
-  </details>
+    <div>
+      <p class="sum" id="sumSam"></p>
+      <p class="sum" id="sumBell"></p>
+      <div class="result">
+        <div id="resSam">0.23<span>תמונה × ״סמוראי״</span></div>
+        <div id="resBell" style="color:var(--ink)">0.30<span>תמונה × המילים של בל</span></div>
+      </div>
+      <p class="cap" style="margin-top:22px">הכיתוב של בל מתאים לתמונה יותר מ״סמוראי״.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div>
+      <p class="k">מאה אחוז<span class="n">(4)</span></p>
+      <p>ואז אנשים כתבו כלל: כל ציון מושווה רק לשאר המילים ברשימה שלו, וההפרשים מוגדלים עד שהכול מסתכם ל-100%. ״סמוראי״ ניצח רשימה חלשה. הכיתוב של בל הפסיד לרשימה חזקה.</p>
+    </div>
+    <div class="lists" id="lists"></div>
+  </div>
+
+  <div class="verdict">
+    <div class="pair2">
+      <div>0.23 ← 80%<small>״סמוראי״</small></div>
+      <div style="color:var(--ink)">0.30 ← 0.1%<small>״נשות שבט במחנה״, המילים של בל</small></div>
+    </div>
+    <p class="close">אין פה בחירה, ואין פה ראייה. יש כפל, חיבור, וכלל של מאה אחוז, וכל השאר זו רשימה שמישהו כתב.</p>
+  </div>
+
+  <div class="step full" style="margin-top:200px">
+    <div>
+      <p class="k">מודל אחר, ניסוח אחר<span class="n">(5)</span></p>
+      <p>עד עכשיו: מודל אחד, ניסוח אחד. אז שאלנו את אותה שאלה, על אותן שש תמונות, בארבעה מודלים ובארבעה ניסוחים. כל משבצת במפה היא התשובה של ריצה אחת.</p>
+    </div>
+    <div class="models">
+      <p class="cap" style="margin:0 0 10px">ארבעת המודלים. כולם עושים אותו דבר: הופכים תמונה ומשפט למספרים ומודדים כמה הם קרובים. ההבדל הוא במה הם למדו ואיך הם מסתכלים.</p>
+      <table>
+        <tr><th></th><th>מי ומתי</th><th>ממה למד</th><th>איך הוא מסתכל על התמונה</th><th>גודל</th></tr>
+        <tr><td class="nm">CLIP B/32</td><td>OpenAI, 2021</td><td>400 מיליון תמונות מהרשת עם הכיתובים שלהן</td><td>חותך אותה ל-49 ריבועים גדולים (32×32 פיקסלים). זה המודל מהשלבים (1)–(4).</td><td>151 מיליון פרמטרים, 512 מספרים לתמונה</td></tr>
+        <tr><td class="nm">CLIP B/16</td><td>OpenAI, 2021</td><td>אותן 400 מיליון</td><td>196 ריבועים קטנים יותר (16×16), אז הוא רואה פרטים קטנים יותר</td><td>150 מיליון, 512</td></tr>
+        <tr><td class="nm">CLIP L/14</td><td>OpenAI, 2021</td><td>אותן 400 מיליון</td><td>256 ריבועים (14×14), במודל גדול בערך פי שלושה</td><td>428 מיליון, 768</td></tr>
+        <tr><td class="nm">SigLIP</td><td>Google, 2023</td><td>מאגר אחר, של גוגל (WebLI)</td><td>196 ריבועים (16×16), ושיטת אימון אחרת: כל זוג של תמונה ומשפט נבדק לבד, בלי שהמשפטים יתחרו על 100%</td><td>203 מיליון, 768</td></tr>
+      </table>
+      <p class="cap" style="margin-top:12px">״פרמטרים״ הם המספרים שהמודל כיוונן בזמן האימון. שלושה מודלים למדו מאותם נתונים בדיוק, ועדיין לא מסכימים ביניהם. הרביעי למד מנתונים אחרים. אין ״המודל״: יש הרבה מודלים, וכל אחד מהם הוא שורה של החלטות של אנשים: ממה ללמוד, כמה גדול, איך לחתוך את התמונה.</p>
+    </div>
+    <div>
+      <div class="tabs" id="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-k="dumb">שש דמויות</button>
+        <button role="tab" aria-selected="false" data-k="bell">המילים של בל</button>
+        <button role="tab" aria-selected="false" data-k="local">מילים של מקומי</button>
+      </div>
+      <ul class="legend" id="legend"></ul>
+    </div>
+    <div class="stage" id="stage" aria-live="polite"></div>
+    <p class="cap" style="margin:40px 0 10px">לחצו על שורה במפה כדי לראות אותה למעלה.</p>
+    <div class="mapwrap"><table class="map" id="map"></table></div>
+  </div>
+
+  <div class="verdict" style="margin-top:120px">
+    <div class="pair2">
+      <div><span dir="ltr">17/18</span><small>פעמים שהתשובה השתנתה כשהחלפנו מודל או ניסוח. רק ״בן שבט לבוש גלימה״ לא זז.</small></div>
+      <div style="color:var(--ink)"><span dir="ltr">0–5</span><small>תמונות ש״סמוראי״ ניצח בהן, תלוי במודל ובניסוח</small></div>
+    </div>
+    <p class="close">תשובה שמשתנה כשמשנים את הניסוח היא לא ידיעה על התמונה. אי אפשר לסמוך עליה: היא תלויה במי ששאל, באיזה מודל, ובאילו מילים.</p>
+  </div>
+
+  <p class="cap" style="margin-top:80px;max-width:70ch">‏CLIP ViT-B/32 (<span lang="en">openai/clip-vit-base-patch32</span> דרך <span lang="en">Xenova/clip-vit-base-patch32</span>, fp32), תבנית <span lang="en">“a photograph of {}”</span>, הורץ ב-15.11.2026. במפה: ‏CLIP ViT-B/32, ViT-B/16, ViT-L/14 של OpenAI ו-SigLIP base של גוגל (גרסאות <span lang="en">Xenova</span>, fp32), ארבע תבניות, והתשובה היא המילה עם ההתאמה הגבוהה ביותר. המספרים מעוגלים ל-4 ספרות, ועדיין נותנים את אותה תוצאה. ״התאמה״ היא דמיון קוסינוס. האחוזים הם softmax על 100 × ההתאמה, בתוך כל רשימה. התוצאות כמו שיצאו, בלי עריכה.</p>
 </section>
 
-<!-- 05 answer -->
 <section class="answer" id="answer">
-  <div class="sec-head"><span class="num">05 · איך העבודה עונה לסלף</span>
+  <p class="cap" style="margin-bottom:16px">איך העבודה עונה לסלף</p>
+  <p>אלג׳ויסר מוחקת את האנשים כדי שהמודל לא ילמד מהם. אנחנו השארנו אותם ופתחנו את המודל: בפנים אין ״כוח לא-אנושי״, יש כפל וחיבור, רשימה שמישהו כתב וכלל של מאה אחוז. וכשמחליפים מודל או ניסוח, התשובה משתנה ב-17 מתוך 18 מקרים, כך שגם ״סמוראי״ של סלף הוא לא מה שהמודל ראה, אלא מה שההגדרות הוציאו.</p>
+</section>
+
+<section id="try">
+  <div class="try">
+    <figure>
+      <img src="img/bell-6930.jpg" alt="אשתו של שייח׳ חרב ובנו קאסם, עם נשות השבט במחנה">
+      <figcaption class="cap">המילים שלכם</figcaption>
+    </figure>
     <div>
-    <p>אלג׳ויסר מוחקת את האנשים כדי שהמודל לא ילמד מהם. אנחנו השארנו את האנשים ואת המודל ושינינו רק את המילים: אותו שייח׳ שמכין קפה הוא ״שודד מדבר״, ״גבר בכאפייה״ או ״סמוראי״, לפי מי שכתב את הרשימה. וגם את הרשימה ״שלהם״ כתב מישהו מבחוץ: אנחנו.</p>
+      <h2>כתבו רשימה משלכם</h2>
+      <p class="cap">כמה מילים באנגלית, כל אחת בשורה, על אותה תמונה. תראו גם את האחוז וגם את ההתאמה בפועל. רץ בדפדפן על גרסה מכווצת של אותו מודל, אז המספרים יכולים לצאת קצת שונים.</p>
+      <label for="labels" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">רשימת מילים באנגלית</label>
+      <textarea id="labels" spellcheck="false">tribeswomen at an encampment
+a family at home
+a samurai
+a pizza</textarea>
+      <button class="go" id="go">להריץ</button>
+      <p class="cap" id="status" aria-live="polite"></p>
+      <p id="ownWord" lang="en"></p>
+      <p id="ownPc" class="cap"></p>
     </div>
   </div>
 </section>
 
 <footer>
   <p>מרחב לטנטי<br>דניה אלטמן ועידן ירחי, 2026<br><br>עבודת סטודנטים, לצורכי לימוד בלבד. לא למטרות מסחריות.<br>הפונטים משמשים במסגרת עבודה אקדמית בלבד.</p>
-  <p>צילומים: גרטרוד בל, ארכיון גרטרוד בל, ספריית אוניברסיטת ניוקאסל. רישיון CC BY-SA 4.0<br>סלף: נוף אלג׳ויסר, 2020. מתוך: סומאיני, אוקטובר 196 (2026), עמ׳ 47</p>
+  <p>צילומים: גרטרוד בל. ארכיון גרטרוד בל, ספריית אוניברסיטת ניוקאסל. רישיון CC BY-SA 4.0<br><span lang="en">GB/3/1/12/1/205, GB/3/1/25/1/203, GB/3/1/25/1/202, GB/PERS/S/010, GB/3/1/25/1/367–373, GB/3/1/1/1/219</span><br><br>סלף: נוף אלג׳ויסר, 2020. מתוך: סומאיני, אוקטובר 196 (2026), עמ׳ 47</p>
   <p>אנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, <i>אוקטובר</i> 196 (אביב 2026): 18–60.<br><br>
-  <span lang="en">Alec Radford et al., “Learning Transferable Visual Models From Natural Language Supervision,” <i>ICML</i> 2021. arXiv:2103.00020</span> (המאמר שמציג את CLIP ואת 400 מיליון זוגות התמונה-טקסט שעליהם אומן).<br><br>
-  <span lang="en">Georgina Howell, <i>Gertrude Bell: Queen of the Desert, Shaper of Nations</i> (New York: Farrar, Straus and Giroux, 2007)</span> (על עבודתה של בל בלשכה הערבית של המודיעין הבריטי ובשרטוט גבולות עיראק).</p>
+  <span lang="en">Alec Radford et al., “Learning Transferable Visual Models From Natural Language Supervision,” <i>ICML</i> 2021. arXiv:2103.00020</span><br><br>
+  <span lang="en">Xiaohua Zhai et al., “Sigmoid Loss for Language Image Pre-Training,” <i>ICCV</i> 2023. arXiv:2303.15343</span></p>
 </footer>
 
 </div>
 
 <script>
-const LISTS = {
-  officer: [
-    ["armed tribesmen","שבטיים חמושים"],
-    ["soldiers in military uniform","חיילים במדים צבאיים"],
-    ["primitive natives","ילידים פרימיטיביים"],
-    ["desert raiders","שודדי מדבר"],
-    ["beggars","קבצנים"],
-    ["servants","משרתים"]],
-  local: [
-    ["a family at home in their tent","משפחה בבית, באוהל שלה"],
-    ["hosts making coffee for their guests","מארחים מכינים קפה לאורחים"],
-    ["men wearing a keffiyeh and a cloak","גברים בכאפייה ובעבאיה"],
-    ["a father and his son","אב ובנו"],
-    ["neighbours who came out to see a stranger","שכנים שיצאו לראות זרה"],
-    ["hunters with their rifles","ציידים עם הרובים שלהם"]]
-};
-LISTS.dumb = [["a pizza","פיצה"],["a spaceship","חללית"],["a cat","חתול"],["a samurai","סמוראי"],["a football team","קבוצת כדורגל"],["a wedding cake","עוגת חתונה"]];
-const HE = Object.fromEntries([...LISTS.officer, ...LISTS.local, ...LISTS.dumb]);
-// CLIP ViT-B/32, absurd list, run 15.11.2026, unedited
-const DUMB = {"223":[["a samurai",0.649],["a football team",0.324],["a cat",0.01],["a spaceship",0.007],["a pizza",0.006],["a wedding cake",0.005]],"3124":[["a samurai",0.642],["a spaceship",0.211],["a football team",0.128],["a pizza",0.011],["a cat",0.007],["a wedding cake",0.002]],"6930":[["a samurai",0.672],["a football team",0.258],["a spaceship",0.032],["a cat",0.023],["a pizza",0.013],["a wedding cake",0.001]],"6931":[["a samurai",0.569],["a cat",0.203],["a spaceship",0.147],["a football team",0.065],["a wedding cake",0.013],["a pizza",0.003]],"7095":[["a samurai",0.929],["a football team",0.04],["a spaceship",0.012],["a cat",0.011],["a wedding cake",0.008],["a pizza",0.001]],"8038":[["a samurai",0.991],["a cat",0.009],["a spaceship",0],["a pizza",0],["a football team",0],["a wedding cake",0]]};
+// Real CLIP ViT-B/32 embeddings (unit length, 512 numbers each), rounded to 4 decimals. Run 15.11.2026.
+const BOX = {"img":[-0.0032,0.0065,-0.0198,0.0045,-0.0378,-0.0362,0.0264,0.0358,0.0411,-0.0048,0.0186,0.0065,0.038,-0.0624,-0.0057,-0.0538,0.0063,-0.0312,-0.0082,0.0094,0.0802,0.0458,-0.0273,-0.096,0.0093,-0.0075,-0.0582,0.0087,0.0098,0.0259,-0.0281,-0.0315,-0.0415,-0.0043,-0.0274,-0.0094,-0.0058,0.0035,0.0281,0.0228,0.0053,0.0213,0.0368,-0.0651,0.0179,-0.0047,-0.0671,0.0003,0.0101,-0.0148,0.0096,-0.0015,0.0143,-0.0234,-0.0067,-0.022,-0.0324,0.0268,0.0149,-0.041,-0.0644,-0.0093,0.005,0.0008,-0.0035,-0.041,0.0118,0.0421,-0.0287,-0.0082,0.0038,-0.0165,0.018,0.0447,-0.048,0.027,0.039,0.0036,0.0085,-0.0658,0.0053,-0.0176,0.0173,-0.0365,0.0156,0.0028,-0.0351,-0.0036,-0.0681,-0.0014,0.0193,0.0179,-0.5315,0.0577,0.056,0.0392,0.0132,0.0206,-0.0197,0.02,-0.0046,0.0056,-0.0229,0,-0.0555,-0.029,-0.2065,-0.0168,0.0089,-0.0244,-0.0667,-0.0293,-0.0058,0.0355,0.0122,0.0011,-0.005,0.0258,-0.0346,-0.0035,0.0127,0.0236,-0.0113,0.0306,-0.04,0.0027,0.0256,0.0082,-0.0536,-0.0226,0.0044,0.0408,-0.029,0.0764,0.0492,0.034,-0.0159,0.1096,-0.0018,0.0403,0.0076,0.0059,-0.0813,0.0079,-0.0442,-0.0129,-0.0179,-0.0419,-0.0112,0.0294,-0.0419,-0.0074,0.0261,0.0521,0.0306,-0.0271,0.0241,0.0047,0.0413,0.0587,0.0604,0.0239,-0.0367,-0.0084,-0.0052,0.041,0.0204,-0.0118,-0.0213,0.0365,-0.0117,0.0238,-0.0584,0.0392,-0.0206,-0.0196,-0.0585,0.0172,0.0946,0.0159,-0.0269,0.0338,-0.0135,-0.0261,-0.0181,-0.0459,0.0383,-0.0135,-0.0352,0.0156,0.0239,0.0097,-0.0226,-0.0031,0.08,0.001,0.032,0.0123,-0.044,-0.0104,0.018,-0.0002,0.0143,0.0119,0.0152,0.0065,0.0125,0.0092,-0.0241,-0.0066,-0.0336,0.0047,0.017,-0.0059,0.0082,-0.0004,0.0056,0.0242,-0.0908,0.0251,0.0138,-0.0403,0.0226,0.0174,-0.0252,0.0029,0.0116,0.014,0.0109,0.0418,-0.0326,0.0412,0.0444,0.0025,0.0129,-0.0783,-0.009,0.0075,-0.025,-0.0132,0.0196,0.0242,0.0458,-0.0254,-0.0086,-0.0606,0.027,0.0329,0.0082,-0.0362,-0.0101,-0.0261,-0.0452,0.0037,0.0103,0.0013,-0.0076,0.0079,0.18,0.0102,-0.0113,0.0135,-0.0107,-0.0584,0.0458,-0.0015,-0.0001,-0.0384,-0.0155,0.0506,-0.0288,0.0099,0.0483,0.0296,0.0058,0.0664,-0.0251,-0.0145,0.023,0.0315,-0.0044,-0.0307,0.029,-0.0362,-0.0058,-0.044,-0.1393,0.0037,-0.0016,0.0003,-0.0077,0.006,-0.0275,-0.0121,-0.0016,0.0169,0.1353,-0.0334,-0.0247,0.0063,0.0413,-0.0096,0.034,-0.0139,-0.0165,0.0033,0.0305,0.0119,-0.0046,0.0112,0.0092,0.0103,0.0763,-0.0206,-0.0054,0.0136,-0.0324,0.0209,0.0281,-0.0186,-0.0412,0.0949,0.0101,-0.0426,-0.0165,0.0378,0.0117,-0.0067,-0.029,-0.0398,-0.0051,0.0313,-0.0054,0.0021,-0.0114,-0.0091,0.0181,-0.0093,0.0208,0.0107,-0.0062,-0.035,0.0157,-0.0182,0.0175,0.0045,-0.0219,0.0012,-0.0167,-0.0671,-0.0324,0.0458,0.0087,0.0243,-0.0217,0.0465,-0.0223,-0.191,-0.0397,0.0209,0.0416,-0.017,0.0007,0.0332,0.002,-0.0352,-0.0439,0.0602,0.0134,0.0512,-0.0124,-0.0414,-0.0124,-0.0182,-0.0307,-0.0257,0.0644,-0.0181,0.0464,-0.0087,0.0021,-0.0545,0.0422,-0.0282,0.0135,0.077,-0.0249,0.0248,-0.0557,0.1407,-0.0903,0.0714,0.0011,0.0289,0.0455,0.0025,0.0031,-0.018,0.0137,-0.0421,-0.0143,-0.0279,0.0287,0.0218,-0.0043,0.0074,-0.0433,0.0327,-0.0076,-0.0191,0.0552,0.0104,-0.0205,-0.0171,0.0278,0.006,-0.0197,-0.0253,0.0518,0.0028,0.0229,-0.01,-0.0159,0.0698,-0.0021,0.0005,-0.0404,-0.0349,0.1811,0.0746,0.0205,0.0475,0.126,0.0071,-0.0164,-0.0259,0.0177,-0.0072,-0.0533,-0.0415,0.0149,-0.0285,-0.0374,-0.0069,-0.0044,-0.0091,-0.0011,0.0135,0.0482,0.0124,-0.0854,0.0382,0.0499,-0.0322,-0.051,0.0247,0.0568,-0.0591,0.0011,0.0105,0.0321,-0.0053,-0.0227,-0.0066,0.0075,-0.0068,-0.011,0.0068,-0.0206,0.033,-0.0088,-0.0165,-0.0178,0.0308,-0.0084,0.0211,0.0045,-0.0134,0.0053,0.043,-0.0223,-0.0527,-0.0129,-0.0258,-0.0206,-0.0145,-0.047,-0.0041,0.0004,0.0247,-0.0247,-0.0117,-0.0295,-0.0401,0.017,0.0576,0.0414,0.0432,-0.0245,-0.0108,0.0217,0.0011,-0.0398,0.0241,0.0128,0.0418,-0.0422,0.0161,0.0137,0.0253,-0.022,0.0146],"samurai":[-0.0347,0.0075,0.0018,-0.0067,0.0228,-0.0431,-0.05,-0.0762,-0.009,-0.003,0.0348,-0.0581,0.0229,0.0156,-0.0155,-0.0332,0.051,-0.0409,0.0346,0.025,0.0442,0.0415,0.0173,-0.0223,-0.0343,-0.0196,-0.0225,0.0355,-0.0654,0.0331,-0.0193,0.0031,0.0388,0.0469,-0.0096,-0.0152,0.0139,-0.0521,-0.0199,0.0178,-0.0166,0.0067,0.0063,0.0081,0.0071,0.0202,-0.0111,0.0027,0.0219,-0.0027,0.0258,-0.0203,0.0022,-0.065,-0.0221,-0.0563,0.0515,0.0303,-0.0268,0.017,0.066,-0.0295,-0.0142,0.0369,-0.003,0.0086,0.0331,0.0232,-0.0171,0.0058,-0.0112,-0.0202,-0.0141,0.0354,0.0094,-0.0411,0.0157,0.0055,0.0476,-0.0562,-0.0007,-0.0304,0.0284,0.0164,0.0055,-0.0179,-0.0183,-0.0558,-0.0128,-0.0152,0.0058,-0.01,-0.1319,-0.0258,-0.0204,-0.0209,0.0193,-0.0108,-0.016,0.0279,-0.0321,0.0005,-0.0468,0.0211,0.0335,-0.0611,-0.0159,0.0315,0.0361,-0.0432,0.0173,-0.0251,0.0208,-0.0081,-0.0493,0.0338,-0.0302,0.0002,-0.0027,-0.0158,0.0213,-0.0701,-0.0158,-0.0184,-0.0012,-0.0259,0.0038,-0.0081,-0.0304,0.0319,0.0051,-0.0461,-0.0134,0.5484,0.0387,-0.0499,-0.0157,-0.0409,0.0364,-0.022,-0.0068,-0.0112,0.0036,0.0024,0.0444,0.0243,0.0087,-0.0331,-0.0037,-0.0227,0.0168,0.0232,0.0039,0.0129,0.0269,-0.0358,-0.0325,-0.0294,0.0496,-0.0013,-0.0444,-0.052,-0.0028,-0.055,0.0081,0.0015,0.0179,0.0135,0.0097,0.018,-0.0029,-0.0452,-0.002,0.0002,-0.0018,0.0346,-0.0185,0.0271,-0.0105,-0.0025,-0.0514,-0.0037,-0.0207,-0.0243,0.0136,0.0154,0.0169,-0.0029,-0.0128,-0.004,-0.0315,-0.0358,-0.0117,0.0244,0.0081,0.0284,-0.0138,-0.0027,0.0092,0.0227,0.0174,-0.0085,0.0035,0.0649,0.0249,-0.0209,0.0172,-0.0264,-0.0008,0.035,0.0211,0.0036,-0.0326,0.001,0.0059,0.0027,-0.0137,-0.0156,-0.0325,-0.0065,-0.0193,-0.0248,-0.0396,-0.022,-0.0043,0.0341,-0.0127,-0.0311,-0.0223,0.0162,0.0099,-0.0181,-0.006,0.0138,0.0441,-0.0084,0.0279,0.0078,-0.0553,0.0035,-0.0452,0.0183,-0.0149,-0.0537,-0.0288,-0.0316,-0.0066,-0.0302,-0.0027,-0.0119,-0.0067,-0.0014,0.0157,0.0503,-0.0034,0.0353,-0.0298,-0.0579,0.0043,0.0134,-0.0162,0.0282,0.0122,-0.0534,-0.0111,0.0139,0.0152,0.0461,-0.0344,0.005,-0.0214,-0.0009,0.0113,-0.0251,-0.0172,0.0341,0.0121,0.018,-0.013,0.0034,-0.0316,0.01,0.0245,0.0105,-0.0503,-0.0012,-0.0115,-0.0006,-0.0122,-0.0008,0.0324,-0.0095,-0.016,-0.0281,-0.0044,0.0402,0.0066,0.0068,-0.0229,-0.0273,0.0208,-0.0098,-0.0233,0.0045,-0.0015,-0.065,-0.0099,-0.063,0.0489,0.006,0.0364,0.0112,0.5474,-0.0376,-0.0038,0.0537,0.0074,0.0271,0.0011,-0.0391,-0.0122,0.0302,0.039,-0.0052,-0.0234,0.0289,-0.0094,-0.0149,-0.0157,-0.1035,0.0185,0.0335,-0.0047,-0.0238,-0.013,0.0093,0.0417,-0.0037,-0.01,-0.0176,0.0034,-0.0125,0.0231,-0.0015,0.0199,-0.0177,-0.0064,0.0026,-0.0225,0.0273,0.0204,-0.0171,0.0234,0.0296,-0.0227,-0.0011,-0.032,-0.0201,-0.0185,0.0121,0.0289,-0.0306,0.033,0.0734,0.077,-0.0608,-0.0479,-0.0141,0.0513,0.0053,-0.0098,-0.0053,-0.0005,0.0173,-0.0399,-0.0414,-0.0046,-0.0296,0.0057,-0.0162,-0.0009,-0.0285,-0.0005,-0.0111,0.0073,-0.0263,-0.0532,-0.0163,-0.0122,0.0094,-0.058,0.0455,-0.0207,0.0149,0.0021,0.0039,-0.015,0.0276,-0.0416,0.0709,0.0089,0.0029,0.0125,0.007,-0.0388,-0.0072,0.0293,-0.0141,0.036,0.0016,0.0429,-0.0138,-0.0056,0.0253,0.0182,0.0261,-0.0104,-0.0163,0.0697,-0.0085,0.0283,-0.0185,-0.0277,-0.0095,0.0095,0.0007,0.0184,-0.0092,0.0237,-0.0215,-0.0003,-0.0244,0.0011,0.0152,-0.0085,-0.0526,0.0082,0.0108,-0.0179,0.0239,-0.0153,0.0364,-0.0071,0.0056,0.0311,0.0188,0.0014,-0.0438,0.0343,0.0102,-0.056,0.0141,0.0104,0.0274,0.0073,-0.0188,-0.0164,-0.0133,-0.0239,-0.0447,0.0052,0.0108,0.013,0.0009,0.0238,-0.0108,0.0127,-0.0143,-0.0063,-0.0261,-0.0052,-0.0095,0.0044,-0.0257,-0.0312,-0.0175,0.0096,0.0303,-0.0021,0.03,-0.0037,-0.03,0.0113,-0.0121,-0.0051,-0.0137,-0.0151,0.0215,-0.0316,-0.0084,-0.0212,0.0333,-0.0223,0.0229,0.0284,0.0329,0.0387,0.0017,-0.0248,-0.002,0.0473,-0.0081,-0.0061,0.0161,0.1025,0.0151,-0.0023,-0.0246,-0.0297,0.0008,0.0065,-0.0019],"bell":[-0.0816,0.0421,0.0406,-0.0162,0.0137,-0.0331,-0.0235,-0.0481,0.0116,0.02,-0.0233,-0.0378,0.0258,-0.0537,-0.0042,0.0161,-0.0837,0.0119,-0.0078,0.0296,0.0334,0.0315,-0.0052,-0.0612,0.0149,-0.0051,-0.0395,-0.0081,-0.0137,-0.0248,-0.0364,0.0267,0.0357,-0.0057,-0.1405,-0.0238,0.0262,-0.0336,-0.0482,-0.0107,-0.0027,0.0192,0.0329,-0.0278,0.0247,-0.0039,-0.0183,0.0518,-0.0012,-0.0312,0.0094,0.0025,0.0106,-0.0189,-0.0249,-0.0244,-0.0228,0.0317,0.0118,0.0147,-0.0269,-0.0147,0.01,-0.0253,0.0166,-0.0277,0.0052,0.022,0.004,0.0159,-0.0031,-0.0353,0.0437,0.0463,-0.0157,-0.0199,0.0385,0.0753,0.0249,-0.0556,-0.0284,-0.015,-0.0177,-0.058,-0.0074,0.0228,-0.0786,-0.0315,-0.0177,-0.0088,0.0247,-0.0185,-0.0685,0.0782,0.0079,-0.0401,-0.0258,0.0536,-0.0535,-0.036,-0.0308,0.0635,0.0061,0.0168,0.0148,-0.064,-0.0336,0.0089,0.0055,-0.0304,-0.0113,-0.1297,0.052,0.0208,-0.0329,0.0101,-0.0228,0.0346,0.0086,-0.0107,0.0277,-0.1217,0.0024,0.0102,-0.0548,-0.0373,0.0189,-0.0054,-0.0379,0.0416,-0.0052,-0.0092,0.0086,0.4918,0.0197,0.0064,-0.0454,-0.0108,-0.0128,-0.0192,-0.0447,-0.0052,-0.0549,0.0367,-0.0117,0.0032,-0.0019,-0.0408,0.0023,-0.0085,-0.0423,0.0211,-0.0132,0.0401,0.0212,-0.0441,-0.0032,-0.0251,0.003,0.0253,-0.0329,-0.0308,-0.0049,0.0007,-0.0211,0.0169,0.0048,-0.0049,-0.0201,-0.0184,0.0048,0.0239,-0.0468,0.0438,-0.0588,-0.0159,-0.0204,0.0167,0.0268,0.0321,-0.0446,0.0136,-0.0198,0.0216,-0.0172,-0.0178,0.0259,-0.0136,0.0165,0.0297,-0.0019,0.0453,-0.0387,-0.0008,-0.0589,-0.0368,0.0135,0.0184,0.0626,-0.0062,-0.0121,-0.0369,-0.0595,0.0062,0.021,-0.0779,0.0275,-0.0572,0.003,0.0161,0.04,0.0371,-0.0624,0.0153,-0.0049,-0.0116,0.0104,-0.0185,0.0258,-0.0325,-0.0334,-0.0102,-0.0092,-0.0212,-0.036,-0.0251,0.0322,-0.0301,-0.0092,-0.0055,-0.0418,0.0114,-0.0401,0.0122,0.0057,0.0016,-0.0053,0.025,0.037,-0.05,-0.0189,-0.0096,0.0306,-0.0236,-0.0141,-0.0165,0.0093,0.0608,0.0412,-0.0654,-0.0044,-0.0042,0.0262,-0.0179,0.0413,0.0234,0.011,-0.0083,0.0673,0.0386,0.0203,-0.0339,0.0008,-0.0516,-0.0039,-0.0136,0.012,-0.0128,0.0038,-0.0333,0.0174,-0.0092,0.0501,0.0013,-0.0197,0.021,-0.0019,-0.016,0.006,-0.0393,0.002,-0.0249,-0.0317,-0.0292,0.0227,0.006,-0.0332,-0.0346,0.0273,-0.0052,0.0081,0.0319,-0.0019,-0.027,-0.015,-0.0103,0.0474,-0.0221,-0.0391,-0.034,-0.0082,-0.0413,0.0005,0.0205,-0.0197,-0.0201,0.0276,0.0116,0.0168,0.0399,-0.005,0.0532,0.4909,-0.0247,0.0009,0.0244,0.0328,-0.0732,0.0477,0.0746,-0.0183,0.0115,0.0267,-0.003,-0.0243,0.0185,0.0079,-0.0299,-0.0071,0.0021,0.0222,0.0217,0.0369,-0.0667,-0.0077,-0.0301,-0.0195,-0.0202,-0.0091,-0.0145,-0.0114,-0.033,0.0214,0.046,-0.0098,-0.0308,0.0205,0.0413,0.0118,-0.0022,0.0362,-0.0181,0.0398,0.0028,-0.087,0.023,-0.0084,-0.0177,-0.0414,-0.0029,0.0577,-0.0476,0.0076,0.0361,-0.0331,0.0133,-0.0306,0.0142,0.0269,-0.0089,-0.0011,-0.0053,0.0343,-0.0029,-0.0203,0.0002,0.0591,-0.0302,-0.0094,0.0225,0.0249,-0.0145,0.0295,-0.002,0.0065,0.0413,0.0011,-0.0292,-0.0752,0.0186,-0.1004,0.0403,-0.0383,0.0141,-0.0015,-0.0125,-0.0101,-0.0111,0.0257,0.0271,-0.0021,-0.0018,-0.0291,0.0016,-0.0285,-0.0106,0.014,-0.0235,0.0181,-0.0359,0.0358,-0.0008,-0.0455,0.0179,-0.0384,-0.0391,0.0268,-0.0566,0.0243,-0.012,0.0125,-0.0383,0.0062,0.0456,0.0218,-0.0256,-0.0089,-0.0162,0.0657,0.0106,-0.0095,0.0118,0.0554,-0.0149,-0.0343,0.0335,0.0354,0.0505,-0.0281,-0.0095,-0.0074,0.0165,0.0102,0.0135,-0.0148,0.0171,-0.0195,-0.0216,0.0261,-0.0138,-0.0625,-0.0312,-0.002,-0.0128,-0.008,-0.0106,0.0573,0.0311,-0.0048,-0.0037,0.0238,0.0196,0.0018,0.0482,0.0048,-0.023,0.0004,0.0197,-0.0104,0.0038,0.0082,0.0091,0.0178,-0.0348,-0.0183,-0.0146,0.0013,-0.0125,-0.0347,0.047,-0.0157,-0.0028,0.0054,0.0164,0.0335,0.0257,0.0151,0.0336,-0.0371,-0.0013,0.0059,0.0088,-0.0014,0.1229,0.0709,-0.027,0.0235,-0.0099,-0.0038,0.0255,0.0412,0.0116,-0.0174,0.0193,0.0216,0.0212,-0.0221,0.0264,-0.0257,-0.0167,-0.0119,-0.0048]};
+// The two lists for this photo: [label, Hebrew, share of the list, raw cosine]
+const LISTS = {"bell":[["a group of Bedouin people","קבוצת בדואים",0.982,0.3688],["Arab men with guns","גברים ערבים עם רובים",0.017,0.3282],["tribeswomen at an encampment","נשות שבט במחנה",0.001,0.2955],["a tribesman dressed in a robe","בן שבט לבוש גלימה",0,0.2773],["a sheikh seated in a tent","שייח׳ יושב באוהל",0,0.2857],["men seated in a tent, making coffee","גברים יושבים באוהל ומכינים קפה",0,0.2899]],"dumb":[["a samurai","סמוראי",0.802,0.2316],["a chef","שף",0.095,0.2103],["a clown","ליצן",0.087,0.2094],["an astronaut","אסטרונאוט",0.007,0.1843],["a football player","שחקן כדורגל",0.006,0.1827],["a ballerina","בלרינה",0.003,0.1748]]};
+const HE = {"Arab men with guns": "גברים ערבים עם רובים", "a group of Bedouin people": "קבוצת בדואים", "a tribesman dressed in a robe": "בן שבט לבוש גלימה", "tribeswomen at an encampment": "נשות שבט במחנה", "a sheikh seated in a tent": "שייח׳ יושב באוהל", "men seated in a tent, making coffee": "גברים יושבים באוהל ומכינים קפה", "a family at home in their tent": "משפחה בבית, באוהל שלה", "hosts making coffee for their guests": "מארחים מכינים קפה לאורחים", "a father and his son": "אב ובנו", "women of the family at their camp": "נשות המשפחה במחנה שלהן", "hunters with their rifles": "ציידים עם הרובים שלהם", "neighbours who came out to see a stranger": "שכנים שיצאו לראות זרה", "a samurai": "סמוראי", "an astronaut": "אסטרונאוט", "a clown": "ליצן", "a ballerina": "בלרינה", "a chef": "שף", "a football player": "שחקן כדורגל"};
+// Top answer (by raw similarity) for every model × phrasing × list × photo. Run 15.11.2026, unedited.
+// Full ranking (label, raw similarity) for every model × phrasing × list × photo, highest first. Run 15.11.2026, unedited.
+const FULL = {"Xenova/clip-vit-base-patch32":{"a photograph of {}":{"bell":{"223":[["a group of Bedouin people",0.3242],["tribeswomen at an encampment",0.2981],["Arab men with guns",0.2929],["a tribesman dressed in a robe",0.2703],["men seated in a tent, making coffee",0.2388],["a sheikh seated in a tent",0.2156]],"3124":[["a group of Bedouin people",0.3053],["Arab men with guns",0.2868],["a sheikh seated in a tent",0.2843],["men seated in a tent, making coffee",0.2569],["tribeswomen at an encampment",0.2514],["a tribesman dressed in a robe",0.2285]],"6930":[["a group of Bedouin people",0.3688],["Arab men with guns",0.3282],["tribeswomen at an encampment",0.2955],["men seated in a tent, making coffee",0.2899],["a sheikh seated in a tent",0.2857],["a tribesman dressed in a robe",0.2773]],"6931":[["men seated in a tent, making coffee",0.3471],["tribeswomen at an encampment",0.3358],["a group of Bedouin people",0.3326],["a sheikh seated in a tent",0.305],["Arab men with guns",0.2871],["a tribesman dressed in a robe",0.2861]],"7095":[["Arab men with guns",0.3765],["a group of Bedouin people",0.3348],["tribeswomen at an encampment",0.2989],["a tribesman dressed in a robe",0.2696],["a sheikh seated in a tent",0.2543],["men seated in a tent, making coffee",0.2255]],"8038":[["a tribesman dressed in a robe",0.3549],["a group of Bedouin people",0.3099],["a sheikh seated in a tent",0.3017],["Arab men with guns",0.2966],["tribeswomen at an encampment",0.2883],["men seated in a tent, making coffee",0.2039]]},"local":{"223":[["hunters with their rifles",0.2737],["women of the family at their camp",0.2692],["hosts making coffee for their guests",0.2562],["neighbours who came out to see a stranger",0.2482],["a family at home in their tent",0.2309],["a father and his son",0.2078]],"3124":[["a family at home in their tent",0.2569],["hunters with their rifles",0.2462],["women of the family at their camp",0.2434],["neighbours who came out to see a stranger",0.2371],["hosts making coffee for their guests",0.2292],["a father and his son",0.2126]],"6930":[["a family at home in their tent",0.2885],["women of the family at their camp",0.2862],["hunters with their rifles",0.2825],["hosts making coffee for their guests",0.274],["neighbours who came out to see a stranger",0.2543],["a father and his son",0.2272]],"6931":[["a family at home in their tent",0.3207],["women of the family at their camp",0.3021],["hunters with their rifles",0.2886],["hosts making coffee for their guests",0.2864],["a father and his son",0.256],["neighbours who came out to see a stranger",0.2497]],"7095":[["hunters with their rifles",0.3024],["women of the family at their camp",0.2798],["hosts making coffee for their guests",0.2634],["neighbours who came out to see a stranger",0.2442],["a family at home in their tent",0.2369],["a father and his son",0.2143]],"8038":[["women of the family at their camp",0.275],["hunters with their rifles",0.2526],["a father and his son",0.2484],["a family at home in their tent",0.2418],["neighbours who came out to see a stranger",0.2317],["hosts making coffee for their guests",0.226]]},"dumb":{"223":[["a samurai",0.2274],["a clown",0.2223],["a chef",0.1971],["an astronaut",0.1816],["a football player",0.1781],["a ballerina",0.1608]],"3124":[["a samurai",0.2325],["an astronaut",0.2189],["a chef",0.2163],["a clown",0.2099],["a football player",0.1846],["a ballerina",0.1669]],"6930":[["a samurai",0.2316],["a chef",0.2103],["a clown",0.2094],["an astronaut",0.1843],["a football player",0.1827],["a ballerina",0.1748]],"6931":[["a clown",0.2432],["a samurai",0.2341],["an astronaut",0.2234],["a chef",0.223],["a football player",0.2054],["a ballerina",0.2016]],"7095":[["a samurai",0.2375],["a clown",0.225],["a chef",0.2102],["a ballerina",0.1769],["an astronaut",0.1765],["a football player",0.17]],"8038":[["a clown",0.3216],["a samurai",0.3207],["a chef",0.297],["an astronaut",0.2855],["a football player",0.2777],["a ballerina",0.2713]]}},"a portrait of {}":{"bell":{"223":[["a group of Bedouin people",0.3059],["tribeswomen at an encampment",0.2904],["Arab men with guns",0.282],["a tribesman dressed in a robe",0.2448],["men seated in a tent, making coffee",0.2381],["a sheikh seated in a tent",0.2043]],"3124":[["a group of Bedouin people",0.2934],["Arab men with guns",0.2841],["a sheikh seated in a tent",0.2686],["men seated in a tent, making coffee",0.2558],["tribeswomen at an encampment",0.2495],["a tribesman dressed in a robe",0.217]],"6930":[["a group of Bedouin people",0.3645],["Arab men with guns",0.3224],["tribeswomen at an encampment",0.3117],["men seated in a tent, making coffee",0.2994],["a sheikh seated in a tent",0.2756],["a tribesman dressed in a robe",0.2729]],"6931":[["men seated in a tent, making coffee",0.3456],["tribeswomen at an encampment",0.3363],["a group of Bedouin people",0.3142],["a sheikh seated in a tent",0.2814],["Arab men with guns",0.2743],["a tribesman dressed in a robe",0.2699]],"7095":[["Arab men with guns",0.3476],["a group of Bedouin people",0.3072],["tribeswomen at an encampment",0.2801],["a tribesman dressed in a robe",0.2391],["a sheikh seated in a tent",0.2327],["men seated in a tent, making coffee",0.2199]],"8038":[["a tribesman dressed in a robe",0.347],["Arab men with guns",0.3114],["a group of Bedouin people",0.3104],["tribeswomen at an encampment",0.31],["a sheikh seated in a tent",0.3036],["men seated in a tent, making coffee",0.2181]]},"local":{"223":[["women of the family at their camp",0.2683],["hunters with their rifles",0.2544],["hosts making coffee for their guests",0.2345],["neighbours who came out to see a stranger",0.2277],["a family at home in their tent",0.2175],["a father and his son",0.1697]],"3124":[["a family at home in their tent",0.2483],["women of the family at their camp",0.2397],["hunters with their rifles",0.2394],["hosts making coffee for their guests",0.2251],["neighbours who came out to see a stranger",0.2231],["a father and his son",0.1885]],"6930":[["women of the family at their camp",0.2936],["hunters with their rifles",0.2853],["a family at home in their tent",0.269],["hosts making coffee for their guests",0.2587],["neighbours who came out to see a stranger",0.2366],["a father and his son",0.1873]],"6931":[["women of the family at their camp",0.3023],["a family at home in their tent",0.2926],["hunters with their rifles",0.2814],["hosts making coffee for their guests",0.271],["neighbours who came out to see a stranger",0.229],["a father and his son",0.2201]],"7095":[["hunters with their rifles",0.2747],["women of the family at their camp",0.2698],["hosts making coffee for their guests",0.2332],["neighbours who came out to see a stranger",0.2114],["a family at home in their tent",0.2068],["a father and his son",0.1648]],"8038":[["women of the family at their camp",0.288],["hunters with their rifles",0.2511],["a family at home in their tent",0.2286],["neighbours who came out to see a stranger",0.2112],["hosts making coffee for their guests",0.2102],["a father and his son",0.2076]]},"dumb":{"223":[["a samurai",0.1949],["a clown",0.1898],["a chef",0.1809],["a football player",0.1806],["an astronaut",0.1558],["a ballerina",0.1388]],"3124":[["a samurai",0.209],["a chef",0.2038],["an astronaut",0.2037],["a clown",0.186],["a football player",0.1845],["a ballerina",0.1474]],"6930":[["a samurai",0.2102],["a chef",0.2015],["a football player",0.2002],["a clown",0.1871],["an astronaut",0.1716],["a ballerina",0.1646]],"6931":[["a football player",0.2106],["a clown",0.2054],["an astronaut",0.2049],["a samurai",0.203],["a chef",0.1972],["a ballerina",0.1807]],"7095":[["a samurai",0.195],["a clown",0.1844],["a chef",0.1806],["a football player",0.1636],["a ballerina",0.1481],["an astronaut",0.1452]],"8038":[["a samurai",0.2916],["a clown",0.2824],["a football player",0.2709],["a chef",0.2673],["an astronaut",0.2629],["a ballerina",0.2454]]}},"{}":{"bell":{"223":[["a group of Bedouin people",0.3167],["tribeswomen at an encampment",0.2831],["Arab men with guns",0.2701],["a tribesman dressed in a robe",0.263],["men seated in a tent, making coffee",0.2366],["a sheikh seated in a tent",0.2049]],"3124":[["a group of Bedouin people",0.2863],["a sheikh seated in a tent",0.261],["Arab men with guns",0.2607],["men seated in a tent, making coffee",0.2436],["tribeswomen at an encampment",0.2358],["a tribesman dressed in a robe",0.2194]],"6930":[["a group of Bedouin people",0.355],["Arab men with guns",0.2934],["men seated in a tent, making coffee",0.2878],["tribeswomen at an encampment",0.2818],["a tribesman dressed in a robe",0.2725],["a sheikh seated in a tent",0.2687]],"6931":[["men seated in a tent, making coffee",0.3403],["tribeswomen at an encampment",0.3211],["a group of Bedouin people",0.3204],["a sheikh seated in a tent",0.2838],["a tribesman dressed in a robe",0.281],["Arab men with guns",0.2479]],"7095":[["Arab men with guns",0.3317],["a group of Bedouin people",0.3245],["tribeswomen at an encampment",0.283],["a tribesman dressed in a robe",0.2659],["a sheikh seated in a tent",0.2391],["men seated in a tent, making coffee",0.2206]],"8038":[["a tribesman dressed in a robe",0.3467],["a group of Bedouin people",0.2905],["a sheikh seated in a tent",0.2838],["tribeswomen at an encampment",0.27],["Arab men with guns",0.2684],["men seated in a tent, making coffee",0.2001]]},"local":{"223":[["women of the family at their camp",0.2698],["hunters with their rifles",0.2596],["a family at home in their tent",0.2293],["hosts making coffee for their guests",0.2219],["neighbours who came out to see a stranger",0.205],["a father and his son",0.1769]],"3124":[["a family at home in their tent",0.2393],["hunters with their rifles",0.2288],["women of the family at their camp",0.226],["neighbours who came out to see a stranger",0.2024],["hosts making coffee for their guests",0.1927],["a father and his son",0.1867]],"6930":[["women of the family at their camp",0.2793],["hunters with their rifles",0.2651],["a family at home in their tent",0.2646],["hosts making coffee for their guests",0.2393],["neighbours who came out to see a stranger",0.2089],["a father and his son",0.1822]],"6931":[["women of the family at their camp",0.2946],["a family at home in their tent",0.286],["hunters with their rifles",0.2771],["hosts making coffee for their guests",0.2585],["a father and his son",0.214],["neighbours who came out to see a stranger",0.2021]],"7095":[["hunters with their rifles",0.2844],["women of the family at their camp",0.2786],["hosts making coffee for their guests",0.2305],["a family at home in their tent",0.2151],["neighbours who came out to see a stranger",0.1964],["a father and his son",0.1727]],"8038":[["women of the family at their camp",0.2739],["hunters with their rifles",0.242],["a family at home in their tent",0.2211],["hosts making coffee for their guests",0.2084],["a father and his son",0.2017],["neighbours who came out to see a stranger",0.1911]]},"dumb":{"223":[["a samurai",0.1988],["a chef",0.1879],["a football player",0.1845],["a clown",0.1721],["an astronaut",0.155],["a ballerina",0.1457]],"3124":[["a samurai",0.2037],["a chef",0.1932],["an astronaut",0.1861],["a football player",0.177],["a clown",0.163],["a ballerina",0.1392]],"6930":[["a samurai",0.1967],["a chef",0.1892],["a football player",0.1808],["an astronaut",0.1456],["a ballerina",0.1449],["a clown",0.1411]],"6931":[["a football player",0.2035],["a samurai",0.2034],["a chef",0.2014],["an astronaut",0.1894],["a ballerina",0.1672],["a clown",0.1662]],"7095":[["a samurai",0.2102],["a chef",0.2017],["a clown",0.1715],["a football player",0.1666],["a ballerina",0.1545],["an astronaut",0.1487]],"8038":[["a samurai",0.2887],["a chef",0.2784],["a football player",0.2706],["an astronaut",0.2611],["a ballerina",0.2405],["a clown",0.2252]]}},"an old photo of {}":{"bell":{"223":[["a group of Bedouin people",0.3282],["tribeswomen at an encampment",0.2948],["Arab men with guns",0.2911],["a tribesman dressed in a robe",0.2817],["men seated in a tent, making coffee",0.2523],["a sheikh seated in a tent",0.2271]],"3124":[["a group of Bedouin people",0.3092],["a sheikh seated in a tent",0.2895],["Arab men with guns",0.2777],["tribeswomen at an encampment",0.257],["men seated in a tent, making coffee",0.2512],["a tribesman dressed in a robe",0.2394]],"6930":[["a group of Bedouin people",0.3773],["Arab men with guns",0.3249],["men seated in a tent, making coffee",0.2985],["tribeswomen at an encampment",0.2975],["a tribesman dressed in a robe",0.2947],["a sheikh seated in a tent",0.2932]],"6931":[["men seated in a tent, making coffee",0.3392],["a group of Bedouin people",0.3208],["tribeswomen at an encampment",0.3204],["a sheikh seated in a tent",0.2991],["a tribesman dressed in a robe",0.2884],["Arab men with guns",0.2661]],"7095":[["Arab men with guns",0.3765],["a group of Bedouin people",0.351],["tribeswomen at an encampment",0.3041],["a tribesman dressed in a robe",0.285],["a sheikh seated in a tent",0.2655],["men seated in a tent, making coffee",0.239]],"8038":[["a tribesman dressed in a robe",0.3562],["a group of Bedouin people",0.3062],["a sheikh seated in a tent",0.2996],["tribeswomen at an encampment",0.2849],["Arab men with guns",0.2824],["men seated in a tent, making coffee",0.208]]},"local":{"223":[["hunters with their rifles",0.27],["women of the family at their camp",0.2662],["neighbours who came out to see a stranger",0.2528],["hosts making coffee for their guests",0.2487],["a family at home in their tent",0.2266],["a father and his son",0.2055]],"3124":[["a family at home in their tent",0.2572],["hunters with their rifles",0.2435],["women of the family at their camp",0.2386],["neighbours who came out to see a stranger",0.2352],["hosts making coffee for their guests",0.234],["a father and his son",0.2206]],"6930":[["hunters with their rifles",0.2884],["women of the family at their camp",0.2815],["a family at home in their tent",0.2754],["hosts making coffee for their guests",0.2694],["neighbours who came out to see a stranger",0.2566],["a father and his son",0.219]],"6931":[["a family at home in their tent",0.2957],["women of the family at their camp",0.2818],["hunters with their rifles",0.2755],["hosts making coffee for their guests",0.2743],["a father and his son",0.2402],["neighbours who came out to see a stranger",0.2392]],"7095":[["hunters with their rifles",0.3036],["women of the family at their camp",0.2829],["hosts making coffee for their guests",0.2663],["neighbours who came out to see a stranger",0.2554],["a family at home in their tent",0.2326],["a father and his son",0.2153]],"8038":[["women of the family at their camp",0.2681],["hunters with their rifles",0.2431],["a father and his son",0.2357],["a family at home in their tent",0.2277],["neighbours who came out to see a stranger",0.2224],["hosts making coffee for their guests",0.2093]]},"dumb":{"223":[["a clown",0.2346],["a samurai",0.2291],["a chef",0.2141],["a football player",0.2118],["an astronaut",0.2046],["a ballerina",0.1742]],"3124":[["an astronaut",0.2413],["a chef",0.238],["a samurai",0.2322],["a clown",0.2185],["a football player",0.208],["a ballerina",0.1825]],"6930":[["a chef",0.2322],["a samurai",0.2317],["a clown",0.2232],["a football player",0.2198],["an astronaut",0.207],["a ballerina",0.1875]],"6931":[["a clown",0.2356],["an astronaut",0.2316],["a chef",0.2271],["a samurai",0.2262],["a football player",0.2189],["a ballerina",0.1995]],"7095":[["a clown",0.2468],["a samurai",0.2422],["a chef",0.2347],["a football player",0.2049],["an astronaut",0.2047],["a ballerina",0.1973]],"8038":[["a clown",0.3203],["a samurai",0.3143],["a chef",0.2978],["a football player",0.2954],["an astronaut",0.2887],["a ballerina",0.2704]]}}},"Xenova/clip-vit-base-patch16":{"a photograph of {}":{"bell":{"223":[["a group of Bedouin people",0.3314],["tribeswomen at an encampment",0.2894],["Arab men with guns",0.2672],["a tribesman dressed in a robe",0.2654],["men seated in a tent, making coffee",0.2306],["a sheikh seated in a tent",0.2166]],"3124":[["a group of Bedouin people",0.3548],["a sheikh seated in a tent",0.3268],["men seated in a tent, making coffee",0.3189],["Arab men with guns",0.3143],["tribeswomen at an encampment",0.2744],["a tribesman dressed in a robe",0.26]],"6930":[["a group of Bedouin people",0.3812],["Arab men with guns",0.3232],["tribeswomen at an encampment",0.3193],["men seated in a tent, making coffee",0.3041],["a sheikh seated in a tent",0.2824],["a tribesman dressed in a robe",0.2673]],"6931":[["a group of Bedouin people",0.3499],["men seated in a tent, making coffee",0.345],["tribeswomen at an encampment",0.3121],["a sheikh seated in a tent",0.2952],["Arab men with guns",0.2781],["a tribesman dressed in a robe",0.2569]],"7095":[["a group of Bedouin people",0.3389],["Arab men with guns",0.3285],["tribeswomen at an encampment",0.3039],["men seated in a tent, making coffee",0.2373],["a tribesman dressed in a robe",0.2138],["a sheikh seated in a tent",0.2102]],"8038":[["a tribesman dressed in a robe",0.3076],["a sheikh seated in a tent",0.296],["a group of Bedouin people",0.2943],["Arab men with guns",0.2808],["tribeswomen at an encampment",0.2623],["men seated in a tent, making coffee",0.2104]]},"local":{"223":[["women of the family at their camp",0.2809],["a family at home in their tent",0.2664],["neighbours who came out to see a stranger",0.2605],["hunters with their rifles",0.2493],["hosts making coffee for their guests",0.2389],["a father and his son",0.2012]],"3124":[["a family at home in their tent",0.2944],["women of the family at their camp",0.2604],["neighbours who came out to see a stranger",0.2601],["hunters with their rifles",0.2537],["hosts making coffee for their guests",0.2463],["a father and his son",0.2183]],"6930":[["women of the family at their camp",0.3075],["a family at home in their tent",0.3052],["hunters with their rifles",0.2797],["hosts making coffee for their guests",0.2714],["neighbours who came out to see a stranger",0.2567],["a father and his son",0.1928]],"6931":[["a family at home in their tent",0.3081],["women of the family at their camp",0.2835],["hosts making coffee for their guests",0.2807],["hunters with their rifles",0.2449],["neighbours who came out to see a stranger",0.2388],["a father and his son",0.215]],"7095":[["hunters with their rifles",0.2933],["women of the family at their camp",0.2832],["hosts making coffee for their guests",0.2778],["neighbours who came out to see a stranger",0.2665],["a family at home in their tent",0.2624],["a father and his son",0.1763]],"8038":[["women of the family at their camp",0.2437],["a family at home in their tent",0.236],["hunters with their rifles",0.2347],["hosts making coffee for their guests",0.2215],["a father and his son",0.2162],["neighbours who came out to see a stranger",0.21]]},"dumb":{"223":[["a chef",0.2019],["a clown",0.1984],["a football player",0.194],["a ballerina",0.189],["a samurai",0.1856],["an astronaut",0.1722]],"3124":[["a samurai",0.2222],["a chef",0.2183],["a football player",0.2095],["an astronaut",0.2062],["a clown",0.2041],["a ballerina",0.1752]],"6930":[["a chef",0.2153],["a samurai",0.2034],["a football player",0.2017],["a clown",0.1943],["an astronaut",0.1873],["a ballerina",0.1698]],"6931":[["a chef",0.2119],["a samurai",0.1841],["a football player",0.1825],["a clown",0.1783],["an astronaut",0.1777],["a ballerina",0.1644]],"7095":[["a samurai",0.2171],["a chef",0.2161],["a clown",0.2068],["a ballerina",0.1789],["a football player",0.1776],["an astronaut",0.1774]],"8038":[["a samurai",0.2831],["an astronaut",0.2771],["a chef",0.2657],["a clown",0.2641],["a football player",0.2599],["a ballerina",0.245]]}},"a portrait of {}":{"bell":{"223":[["a group of Bedouin people",0.3119],["tribeswomen at an encampment",0.279],["Arab men with guns",0.2531],["a tribesman dressed in a robe",0.2465],["men seated in a tent, making coffee",0.2309],["a sheikh seated in a tent",0.206]],"3124":[["a group of Bedouin people",0.3513],["men seated in a tent, making coffee",0.3181],["a sheikh seated in a tent",0.3135],["Arab men with guns",0.3133],["tribeswomen at an encampment",0.2777],["a tribesman dressed in a robe",0.255]],"6930":[["a group of Bedouin people",0.365],["tribeswomen at an encampment",0.3232],["men seated in a tent, making coffee",0.3079],["Arab men with guns",0.3023],["a sheikh seated in a tent",0.2721],["a tribesman dressed in a robe",0.2584]],"6931":[["a group of Bedouin people",0.3444],["men seated in a tent, making coffee",0.3441],["tribeswomen at an encampment",0.3232],["a sheikh seated in a tent",0.2829],["Arab men with guns",0.2712],["a tribesman dressed in a robe",0.2488]],"7095":[["a group of Bedouin people",0.3157],["Arab men with guns",0.2984],["tribeswomen at an encampment",0.2942],["men seated in a tent, making coffee",0.2381],["a sheikh seated in a tent",0.1989],["a tribesman dressed in a robe",0.1956]],"8038":[["a tribesman dressed in a robe",0.2995],["a sheikh seated in a tent",0.2984],["a group of Bedouin people",0.2942],["Arab men with guns",0.2835],["tribeswomen at an encampment",0.2681],["men seated in a tent, making coffee",0.2135]]},"local":{"223":[["women of the family at their camp",0.265],["a family at home in their tent",0.2387],["neighbours who came out to see a stranger",0.2291],["hunters with their rifles",0.225],["hosts making coffee for their guests",0.1968],["a father and his son",0.1811]],"3124":[["a family at home in their tent",0.2774],["women of the family at their camp",0.2554],["hunters with their rifles",0.2545],["neighbours who came out to see a stranger",0.2456],["hosts making coffee for their guests",0.2342],["a father and his son",0.2115]],"6930":[["women of the family at their camp",0.3005],["a family at home in their tent",0.2794],["hunters with their rifles",0.2646],["hosts making coffee for their guests",0.2335],["neighbours who came out to see a stranger",0.2283],["a father and his son",0.1762]],"6931":[["a family at home in their tent",0.286],["women of the family at their camp",0.2808],["hosts making coffee for their guests",0.2571],["hunters with their rifles",0.2415],["neighbours who came out to see a stranger",0.2341],["a father and his son",0.2065]],"7095":[["women of the family at their camp",0.2674],["hunters with their rifles",0.2641],["hosts making coffee for their guests",0.2354],["a family at home in their tent",0.2309],["neighbours who came out to see a stranger",0.2202],["a father and his son",0.1518]],"8038":[["women of the family at their camp",0.2446],["hunters with their rifles",0.2251],["a family at home in their tent",0.2124],["a father and his son",0.1995],["neighbours who came out to see a stranger",0.198],["hosts making coffee for their guests",0.1862]]},"dumb":{"223":[["a clown",0.1808],["a chef",0.1772],["a football player",0.1744],["a samurai",0.1663],["a ballerina",0.1643],["an astronaut",0.1555]],"3124":[["a samurai",0.2128],["a chef",0.2053],["a football player",0.2016],["an astronaut",0.1948],["a clown",0.192],["a ballerina",0.1658]],"6930":[["a samurai",0.1959],["a chef",0.1891],["a football player",0.1856],["a clown",0.1845],["an astronaut",0.1796],["a ballerina",0.1624]],"6931":[["a chef",0.1917],["an astronaut",0.1766],["a samurai",0.1743],["a football player",0.1738],["a clown",0.1676],["a ballerina",0.1567]],"7095":[["a chef",0.1867],["a samurai",0.1856],["a clown",0.1835],["a football player",0.1589],["an astronaut",0.1586],["a ballerina",0.1513]],"8038":[["an astronaut",0.2629],["a samurai",0.2592],["a clown",0.2472],["a football player",0.2471],["a chef",0.2465],["a ballerina",0.2264]]}},"{}":{"bell":{"223":[["a group of Bedouin people",0.3304],["tribeswomen at an encampment",0.2787],["a tribesman dressed in a robe",0.267],["men seated in a tent, making coffee",0.2443],["Arab men with guns",0.2381],["a sheikh seated in a tent",0.2224]],"3124":[["a group of Bedouin people",0.3399],["men seated in a tent, making coffee",0.3239],["a sheikh seated in a tent",0.3229],["Arab men with guns",0.2823],["tribeswomen at an encampment",0.2588],["a tribesman dressed in a robe",0.2555]],"6930":[["a group of Bedouin people",0.372],["tribeswomen at an encampment",0.3151],["men seated in a tent, making coffee",0.313],["a sheikh seated in a tent",0.2842],["Arab men with guns",0.2828],["a tribesman dressed in a robe",0.2681]],"6931":[["men seated in a tent, making coffee",0.3559],["a group of Bedouin people",0.3451],["tribeswomen at an encampment",0.311],["a sheikh seated in a tent",0.2967],["a tribesman dressed in a robe",0.2581],["Arab men with guns",0.2471]],"7095":[["a group of Bedouin people",0.3305],["tribeswomen at an encampment",0.3064],["Arab men with guns",0.2947],["men seated in a tent, making coffee",0.2496],["a sheikh seated in a tent",0.2207],["a tribesman dressed in a robe",0.2182]],"8038":[["a tribesman dressed in a robe",0.3068],["a sheikh seated in a tent",0.2924],["a group of Bedouin people",0.2811],["Arab men with guns",0.264],["tribeswomen at an encampment",0.2542],["men seated in a tent, making coffee",0.2173]]},"local":{"223":[["women of the family at their camp",0.2646],["a family at home in their tent",0.25],["hunters with their rifles",0.2151],["neighbours who came out to see a stranger",0.21],["hosts making coffee for their guests",0.1996],["a father and his son",0.1844]],"3124":[["a family at home in their tent",0.2725],["women of the family at their camp",0.2334],["hunters with their rifles",0.2198],["neighbours who came out to see a stranger",0.2084],["hosts making coffee for their guests",0.2038],["a father and his son",0.2023]],"6930":[["women of the family at their camp",0.291],["a family at home in their tent",0.2839],["hunters with their rifles",0.2467],["hosts making coffee for their guests",0.2301],["neighbours who came out to see a stranger",0.2134],["a father and his son",0.1756]],"6931":[["a family at home in their tent",0.2904],["women of the family at their camp",0.2697],["hosts making coffee for their guests",0.2483],["hunters with their rifles",0.2183],["neighbours who came out to see a stranger",0.2084],["a father and his son",0.2009]],"7095":[["women of the family at their camp",0.273],["hunters with their rifles",0.2665],["a family at home in their tent",0.2443],["hosts making coffee for their guests",0.237],["neighbours who came out to see a stranger",0.2208],["a father and his son",0.1546]],"8038":[["women of the family at their camp",0.2341],["hunters with their rifles",0.2162],["a family at home in their tent",0.2121],["hosts making coffee for their guests",0.1944],["a father and his son",0.1871],["neighbours who came out to see a stranger",0.1821]]},"dumb":{"223":[["a football player",0.1757],["a samurai",0.1702],["a chef",0.164],["a ballerina",0.162],["a clown",0.1603],["an astronaut",0.1486]],"3124":[["a samurai",0.1977],["a football player",0.1934],["a chef",0.1825],["a clown",0.1769],["an astronaut",0.1684],["a ballerina",0.1555]],"6930":[["a samurai",0.1955],["a football player",0.1874],["a chef",0.1777],["an astronaut",0.1665],["a clown",0.1617],["a ballerina",0.1522]],"6931":[["a chef",0.1747],["a samurai",0.1693],["a football player",0.1673],["an astronaut",0.1613],["a clown",0.1527],["a ballerina",0.1426]],"7095":[["a samurai",0.1998],["a chef",0.1825],["a clown",0.1764],["a football player",0.1647],["a ballerina",0.1599],["an astronaut",0.158]],"8038":[["a samurai",0.2593],["an astronaut",0.2558],["a football player",0.242],["a ballerina",0.2248],["a chef",0.2165],["a clown",0.2047]]}},"an old photo of {}":{"bell":{"223":[["a group of Bedouin people",0.3366],["a tribesman dressed in a robe",0.2802],["Arab men with guns",0.2794],["tribeswomen at an encampment",0.2778],["men seated in a tent, making coffee",0.2456],["a sheikh seated in a tent",0.2288]],"3124":[["a group of Bedouin people",0.3574],["a sheikh seated in a tent",0.3385],["men seated in a tent, making coffee",0.331],["Arab men with guns",0.3243],["a tribesman dressed in a robe",0.2687],["tribeswomen at an encampment",0.2644]],"6930":[["a group of Bedouin people",0.3774],["Arab men with guns",0.3221],["men seated in a tent, making coffee",0.3064],["tribeswomen at an encampment",0.3014],["a sheikh seated in a tent",0.284],["a tribesman dressed in a robe",0.2687]],"6931":[["men seated in a tent, making coffee",0.3477],["a group of Bedouin people",0.3457],["a sheikh seated in a tent",0.3023],["tribeswomen at an encampment",0.2916],["Arab men with guns",0.2833],["a tribesman dressed in a robe",0.2612]],"7095":[["a group of Bedouin people",0.3411],["Arab men with guns",0.3288],["tribeswomen at an encampment",0.2951],["men seated in a tent, making coffee",0.2469],["a sheikh seated in a tent",0.227],["a tribesman dressed in a robe",0.2239]],"8038":[["a tribesman dressed in a robe",0.3218],["a sheikh seated in a tent",0.2992],["a group of Bedouin people",0.2946],["Arab men with guns",0.276],["tribeswomen at an encampment",0.2413],["men seated in a tent, making coffee",0.2215]]},"local":{"223":[["women of the family at their camp",0.2826],["neighbours who came out to see a stranger",0.2652],["a family at home in their tent",0.2624],["hosts making coffee for their guests",0.2362],["hunters with their rifles",0.2341],["a father and his son",0.2181]],"3124":[["a family at home in their tent",0.2968],["women of the family at their camp",0.2673],["neighbours who came out to see a stranger",0.253],["hosts making coffee for their guests",0.2511],["hunters with their rifles",0.2442],["a father and his son",0.2385]],"6930":[["women of the family at their camp",0.3059],["a family at home in their tent",0.2897],["hosts making coffee for their guests",0.2684],["hunters with their rifles",0.255],["neighbours who came out to see a stranger",0.255],["a father and his son",0.2021]],"6931":[["a family at home in their tent",0.303],["hosts making coffee for their guests",0.2802],["women of the family at their camp",0.2802],["neighbours who came out to see a stranger",0.2307],["a father and his son",0.2271],["hunters with their rifles",0.2236]],"7095":[["women of the family at their camp",0.2842],["hunters with their rifles",0.2761],["hosts making coffee for their guests",0.2754],["neighbours who came out to see a stranger",0.2736],["a family at home in their tent",0.2554],["a father and his son",0.1844]],"8038":[["women of the family at their camp",0.2427],["a father and his son",0.23],["a family at home in their tent",0.2282],["hosts making coffee for their guests",0.2237],["hunters with their rifles",0.2048],["neighbours who came out to see a stranger",0.2014]]},"dumb":{"223":[["a chef",0.2162],["a clown",0.2099],["a football player",0.2038],["a samurai",0.1917],["a ballerina",0.1909],["an astronaut",0.1727]],"3124":[["a chef",0.2355],["a samurai",0.2284],["a football player",0.227],["an astronaut",0.2117],["a clown",0.2087],["a ballerina",0.177]],"6930":[["a chef",0.2261],["a football player",0.2106],["a samurai",0.2074],["a clown",0.2042],["an astronaut",0.1864],["a ballerina",0.1734]],"6931":[["a chef",0.2246],["a football player",0.1893],["a samurai",0.1892],["a clown",0.1858],["an astronaut",0.1752],["a ballerina",0.1664]],"7095":[["a chef",0.2223],["a samurai",0.22],["a clown",0.218],["an astronaut",0.1865],["a football player",0.1862],["a ballerina",0.1828]],"8038":[["a samurai",0.2821],["a chef",0.2753],["a clown",0.2743],["an astronaut",0.2737],["a football player",0.2726],["a ballerina",0.2467]]}}},"Xenova/clip-vit-large-patch14":{"a photograph of {}":{"bell":{"223":[["a group of Bedouin people",0.2944],["men seated in a tent, making coffee",0.2422],["Arab men with guns",0.2341],["tribeswomen at an encampment",0.2308],["a sheikh seated in a tent",0.1829],["a tribesman dressed in a robe",0.1698]],"3124":[["a group of Bedouin people",0.2814],["a sheikh seated in a tent",0.2639],["Arab men with guns",0.2336],["men seated in a tent, making coffee",0.2196],["tribeswomen at an encampment",0.1977],["a tribesman dressed in a robe",0.1802]],"6930":[["a group of Bedouin people",0.3344],["Arab men with guns",0.2679],["men seated in a tent, making coffee",0.2632],["tribeswomen at an encampment",0.2618],["a sheikh seated in a tent",0.2351],["a tribesman dressed in a robe",0.2199]],"6931":[["men seated in a tent, making coffee",0.3175],["a group of Bedouin people",0.3116],["a sheikh seated in a tent",0.2853],["Arab men with guns",0.2675],["a tribesman dressed in a robe",0.2131],["tribeswomen at an encampment",0.2069]],"7095":[["Arab men with guns",0.279],["a group of Bedouin people",0.2659],["tribeswomen at an encampment",0.253],["a tribesman dressed in a robe",0.1677],["men seated in a tent, making coffee",0.1674],["a sheikh seated in a tent",0.1273]],"8038":[["a tribesman dressed in a robe",0.3226],["a group of Bedouin people",0.269],["a sheikh seated in a tent",0.2572],["Arab men with guns",0.2387],["tribeswomen at an encampment",0.1927],["men seated in a tent, making coffee",0.1599]]},"local":{"223":[["women of the family at their camp",0.2383],["hosts making coffee for their guests",0.2374],["a family at home in their tent",0.2092],["neighbours who came out to see a stranger",0.1969],["hunters with their rifles",0.1812],["a father and his son",0.155]],"3124":[["a family at home in their tent",0.1982],["neighbours who came out to see a stranger",0.1796],["women of the family at their camp",0.1715],["hosts making coffee for their guests",0.1557],["hunters with their rifles",0.1512],["a father and his son",0.1506]],"6930":[["women of the family at their camp",0.2668],["hunters with their rifles",0.2373],["a family at home in their tent",0.2328],["hosts making coffee for their guests",0.2249],["neighbours who came out to see a stranger",0.188],["a father and his son",0.1369]],"6931":[["a family at home in their tent",0.2386],["hosts making coffee for their guests",0.2277],["hunters with their rifles",0.1868],["women of the family at their camp",0.1867],["a father and his son",0.1776],["neighbours who came out to see a stranger",0.1397]],"7095":[["women of the family at their camp",0.2319],["hunters with their rifles",0.2269],["hosts making coffee for their guests",0.2013],["neighbours who came out to see a stranger",0.1638],["a family at home in their tent",0.1597],["a father and his son",0.1176]],"8038":[["women of the family at their camp",0.1782],["a family at home in their tent",0.1763],["hosts making coffee for their guests",0.1705],["neighbours who came out to see a stranger",0.1686],["a father and his son",0.168],["hunters with their rifles",0.1647]]},"dumb":{"223":[["a clown",0.1584],["a chef",0.1561],["a samurai",0.1224],["a ballerina",0.1199],["a football player",0.1196],["an astronaut",0.1068]],"3124":[["a clown",0.1458],["a samurai",0.1417],["a chef",0.1322],["an astronaut",0.1231],["a football player",0.106],["a ballerina",0.0992]],"6930":[["a samurai",0.1519],["a chef",0.145],["a clown",0.1446],["an astronaut",0.1397],["a ballerina",0.1178],["a football player",0.1122]],"6931":[["a chef",0.143],["a samurai",0.1298],["a clown",0.1246],["an astronaut",0.1059],["a football player",0.0931],["a ballerina",0.0803]],"7095":[["a clown",0.1317],["a samurai",0.1246],["a chef",0.1166],["an astronaut",0.0929],["a ballerina",0.0839],["a football player",0.0649]],"8038":[["a clown",0.2324],["a samurai",0.2126],["an astronaut",0.1965],["a chef",0.1944],["a ballerina",0.1869],["a football player",0.183]]}},"a portrait of {}":{"bell":{"223":[["a group of Bedouin people",0.2781],["tribeswomen at an encampment",0.2215],["men seated in a tent, making coffee",0.2156],["Arab men with guns",0.1839],["a sheikh seated in a tent",0.1784],["a tribesman dressed in a robe",0.1471]],"3124":[["a group of Bedouin people",0.2762],["a sheikh seated in a tent",0.2578],["Arab men with guns",0.2243],["men seated in a tent, making coffee",0.2024],["tribeswomen at an encampment",0.2],["a tribesman dressed in a robe",0.1749]],"6930":[["a group of Bedouin people",0.3158],["tribeswomen at an encampment",0.2609],["men seated in a tent, making coffee",0.2468],["Arab men with guns",0.2242],["a sheikh seated in a tent",0.2214],["a tribesman dressed in a robe",0.1929]],"6931":[["a group of Bedouin people",0.3047],["men seated in a tent, making coffee",0.3002],["a sheikh seated in a tent",0.2705],["Arab men with guns",0.2411],["tribeswomen at an encampment",0.2114],["a tribesman dressed in a robe",0.196]],"7095":[["a group of Bedouin people",0.2416],["Arab men with guns",0.2291],["tribeswomen at an encampment",0.2124],["men seated in a tent, making coffee",0.1404],["a tribesman dressed in a robe",0.1283],["a sheikh seated in a tent",0.1114]],"8038":[["a tribesman dressed in a robe",0.2932],["a group of Bedouin people",0.2595],["a sheikh seated in a tent",0.2575],["Arab men with guns",0.2202],["tribeswomen at an encampment",0.1998],["men seated in a tent, making coffee",0.1481]]},"local":{"223":[["women of the family at their camp",0.2466],["a family at home in their tent",0.2155],["hosts making coffee for their guests",0.1898],["hunters with their rifles",0.1591],["neighbours who came out to see a stranger",0.1506],["a father and his son",0.135]],"3124":[["a family at home in their tent",0.2104],["women of the family at their camp",0.1878],["neighbours who came out to see a stranger",0.1658],["hunters with their rifles",0.1519],["a father and his son",0.1504],["hosts making coffee for their guests",0.1449]],"6930":[["women of the family at their camp",0.2683],["a family at home in their tent",0.2392],["hunters with their rifles",0.2222],["hosts making coffee for their guests",0.1866],["neighbours who came out to see a stranger",0.1514],["a father and his son",0.1256]],"6931":[["a family at home in their tent",0.2469],["hosts making coffee for their guests",0.2074],["women of the family at their camp",0.1985],["hunters with their rifles",0.1852],["a father and his son",0.172],["neighbours who came out to see a stranger",0.1328]],"7095":[["women of the family at their camp",0.22],["hunters with their rifles",0.1904],["a family at home in their tent",0.1684],["hosts making coffee for their guests",0.1637],["neighbours who came out to see a stranger",0.1286],["a father and his son",0.0881]],"8038":[["women of the family at their camp",0.1987],["a family at home in their tent",0.1914],["hunters with their rifles",0.1817],["hosts making coffee for their guests",0.1616],["a father and his son",0.157],["neighbours who came out to see a stranger",0.1419]]},"dumb":{"223":[["a chef",0.1348],["a clown",0.1296],["a football player",0.1239],["a ballerina",0.094],["an astronaut",0.0928],["a samurai",0.0895]],"3124":[["a chef",0.137],["a clown",0.1356],["a football player",0.1312],["an astronaut",0.1289],["a samurai",0.1174],["a ballerina",0.0879]],"6930":[["an astronaut",0.1278],["a chef",0.1255],["a football player",0.1209],["a samurai",0.1153],["a clown",0.1148],["a ballerina",0.0893]],"6931":[["a chef",0.134],["a samurai",0.1047],["a clown",0.1027],["an astronaut",0.1015],["a football player",0.1005],["a ballerina",0.0632]],"7095":[["a clown",0.0886],["a chef",0.0878],["an astronaut",0.0613],["a samurai",0.0594],["a football player",0.0571],["a ballerina",0.0387]],"8038":[["a clown",0.1994],["a football player",0.1918],["an astronaut",0.1773],["a chef",0.1747],["a samurai",0.1734],["a ballerina",0.1456]]}},"{}":{"bell":{"223":[["a group of Bedouin people",0.2908],["men seated in a tent, making coffee",0.2411],["tribeswomen at an encampment",0.2275],["Arab men with guns",0.2001],["a sheikh seated in a tent",0.1938],["a tribesman dressed in a robe",0.182]],"3124":[["a group of Bedouin people",0.2682],["a sheikh seated in a tent",0.2643],["men seated in a tent, making coffee",0.2182],["Arab men with guns",0.2057],["a tribesman dressed in a robe",0.1796],["tribeswomen at an encampment",0.1771]],"6930":[["a group of Bedouin people",0.3202],["men seated in a tent, making coffee",0.2621],["tribeswomen at an encampment",0.2572],["a sheikh seated in a tent",0.232],["Arab men with guns",0.2219],["a tribesman dressed in a robe",0.2117]],"6931":[["men seated in a tent, making coffee",0.3192],["a group of Bedouin people",0.3008],["a sheikh seated in a tent",0.2839],["Arab men with guns",0.2294],["a tribesman dressed in a robe",0.2082],["tribeswomen at an encampment",0.194]],"7095":[["a group of Bedouin people",0.2621],["tribeswomen at an encampment",0.2511],["Arab men with guns",0.2433],["a tribesman dressed in a robe",0.1668],["men seated in a tent, making coffee",0.1622],["a sheikh seated in a tent",0.128]],"8038":[["a tribesman dressed in a robe",0.3093],["a group of Bedouin people",0.2582],["a sheikh seated in a tent",0.2535],["Arab men with guns",0.2238],["tribeswomen at an encampment",0.1901],["men seated in a tent, making coffee",0.1592]]},"local":{"223":[["women of the family at their camp",0.2384],["a family at home in their tent",0.2103],["hosts making coffee for their guests",0.1949],["hunters with their rifles",0.1665],["neighbours who came out to see a stranger",0.1577],["a father and his son",0.1278]],"3124":[["a family at home in their tent",0.1959],["women of the family at their camp",0.1652],["neighbours who came out to see a stranger",0.1444],["hunters with their rifles",0.1329],["a father and his son",0.1295],["hosts making coffee for their guests",0.1214]],"6930":[["women of the family at their camp",0.2503],["a family at home in their tent",0.2203],["hunters with their rifles",0.1996],["hosts making coffee for their guests",0.1749],["neighbours who came out to see a stranger",0.1502],["a father and his son",0.1062]],"6931":[["a family at home in their tent",0.2233],["hosts making coffee for their guests",0.1906],["women of the family at their camp",0.1807],["hunters with their rifles",0.1718],["a father and his son",0.1484],["neighbours who came out to see a stranger",0.1199]],"7095":[["women of the family at their camp",0.2305],["hunters with their rifles",0.2041],["a family at home in their tent",0.1639],["hosts making coffee for their guests",0.1632],["neighbours who came out to see a stranger",0.1396],["a father and his son",0.0889]],"8038":[["hunters with their rifles",0.1773],["a family at home in their tent",0.1764],["women of the family at their camp",0.1764],["hosts making coffee for their guests",0.15],["a father and his son",0.1363],["neighbours who came out to see a stranger",0.1327]]},"dumb":{"223":[["a samurai",0.1236],["a chef",0.1233],["a ballerina",0.1209],["a football player",0.1165],["a clown",0.1059],["an astronaut",0.0971]],"3124":[["a clown",0.1057],["a football player",0.1055],["an astronaut",0.1054],["a samurai",0.1053],["a chef",0.1006],["a ballerina",0.0772]],"6930":[["a samurai",0.1278],["an astronaut",0.1254],["a chef",0.1083],["a football player",0.0994],["a ballerina",0.0896],["a clown",0.0873]],"6931":[["a chef",0.1158],["a samurai",0.1008],["an astronaut",0.0928],["a clown",0.0835],["a football player",0.0805],["a ballerina",0.0521]],"7095":[["a samurai",0.0983],["a chef",0.0947],["a clown",0.0942],["an astronaut",0.093],["a ballerina",0.0739],["a football player",0.0633]],"8038":[["an astronaut",0.2019],["a samurai",0.1871],["a football player",0.1811],["a chef",0.1716],["a ballerina",0.1594],["a clown",0.1582]]}},"an old photo of {}":{"bell":{"223":[["a group of Bedouin people",0.2834],["men seated in a tent, making coffee",0.247],["Arab men with guns",0.2347],["tribeswomen at an encampment",0.2245],["a sheikh seated in a tent",0.2072],["a tribesman dressed in a robe",0.1821]],"3124":[["a sheikh seated in a tent",0.2871],["a group of Bedouin people",0.282],["Arab men with guns",0.2435],["men seated in a tent, making coffee",0.2306],["tribeswomen at an encampment",0.209],["a tribesman dressed in a robe",0.2013]],"6930":[["a group of Bedouin people",0.3229],["men seated in a tent, making coffee",0.2712],["Arab men with guns",0.2675],["tribeswomen at an encampment",0.2515],["a sheikh seated in a tent",0.2487],["a tribesman dressed in a robe",0.2223]],"6931":[["men seated in a tent, making coffee",0.325],["a group of Bedouin people",0.2938],["a sheikh seated in a tent",0.2923],["Arab men with guns",0.2656],["a tribesman dressed in a robe",0.2135],["tribeswomen at an encampment",0.2049]],"7095":[["Arab men with guns",0.2843],["a group of Bedouin people",0.2684],["tribeswomen at an encampment",0.2549],["a tribesman dressed in a robe",0.1805],["men seated in a tent, making coffee",0.1695],["a sheikh seated in a tent",0.1452]],"8038":[["a tribesman dressed in a robe",0.314],["a sheikh seated in a tent",0.2577],["a group of Bedouin people",0.245],["Arab men with guns",0.2273],["tribeswomen at an encampment",0.183],["men seated in a tent, making coffee",0.1677]]},"local":{"223":[["hosts making coffee for their guests",0.2427],["women of the family at their camp",0.2325],["a family at home in their tent",0.2232],["neighbours who came out to see a stranger",0.1994],["hunters with their rifles",0.1817],["a father and his son",0.1525]],"3124":[["a family at home in their tent",0.2235],["neighbours who came out to see a stranger",0.1873],["women of the family at their camp",0.1802],["hosts making coffee for their guests",0.1688],["hunters with their rifles",0.166],["a father and his son",0.1583]],"6930":[["women of the family at their camp",0.253],["a family at home in their tent",0.2379],["hunters with their rifles",0.2317],["hosts making coffee for their guests",0.2288],["neighbours who came out to see a stranger",0.1867],["a father and his son",0.1275]],"6931":[["a family at home in their tent",0.2446],["hosts making coffee for their guests",0.2382],["hunters with their rifles",0.1867],["women of the family at their camp",0.1783],["a father and his son",0.1729],["neighbours who came out to see a stranger",0.1477]],"7095":[["hunters with their rifles",0.225],["women of the family at their camp",0.2235],["hosts making coffee for their guests",0.2098],["a family at home in their tent",0.1769],["neighbours who came out to see a stranger",0.175],["a father and his son",0.1149]],"8038":[["a family at home in their tent",0.1857],["hosts making coffee for their guests",0.1791],["women of the family at their camp",0.1692],["hunters with their rifles",0.1668],["neighbours who came out to see a stranger",0.1573],["a father and his son",0.1469]]},"dumb":{"223":[["a chef",0.1735],["a clown",0.1693],["an astronaut",0.1424],["a football player",0.1402],["a ballerina",0.1348],["a samurai",0.1237]],"3124":[["a clown",0.1735],["a chef",0.1693],["an astronaut",0.1553],["a samurai",0.1515],["a football player",0.1358],["a ballerina",0.114]],"6930":[["an astronaut",0.1672],["a chef",0.1626],["a clown",0.1522],["a samurai",0.1467],["a football player",0.131],["a ballerina",0.1189]],"6931":[["a chef",0.1671],["a clown",0.1398],["an astronaut",0.131],["a samurai",0.1273],["a football player",0.1101],["a ballerina",0.0841]],"7095":[["a clown",0.1456],["a chef",0.1417],["an astronaut",0.134],["a samurai",0.1294],["a ballerina",0.1026],["a football player",0.0819]],"8038":[["a clown",0.2286],["an astronaut",0.2059],["a chef",0.2022],["a football player",0.1957],["a samurai",0.1915],["a ballerina",0.1663]]}}},"Xenova/siglip-base-patch16-224":{"a photograph of {}":{"bell":{"223":[["tribeswomen at an encampment",0.1127],["a tribesman dressed in a robe",0.0969],["men seated in a tent, making coffee",0.0771],["a group of Bedouin people",0.0766],["Arab men with guns",0.0737],["a sheikh seated in a tent",0.0579]],"3124":[["a sheikh seated in a tent",0.1345],["a tribesman dressed in a robe",0.114],["Arab men with guns",0.095],["men seated in a tent, making coffee",0.0899],["a group of Bedouin people",0.0744],["tribeswomen at an encampment",0.0732]],"6930":[["tribeswomen at an encampment",0.1362],["men seated in a tent, making coffee",0.1171],["a sheikh seated in a tent",0.0996],["a tribesman dressed in a robe",0.0915],["a group of Bedouin people",0.0849],["Arab men with guns",0.0724]],"6931":[["a sheikh seated in a tent",0.1407],["men seated in a tent, making coffee",0.1294],["a tribesman dressed in a robe",0.1083],["tribeswomen at an encampment",0.1031],["Arab men with guns",0.0673],["a group of Bedouin people",0.0251]],"7095":[["Arab men with guns",0.1515],["tribeswomen at an encampment",0.1202],["a tribesman dressed in a robe",0.0911],["a group of Bedouin people",0.0689],["a sheikh seated in a tent",0.0669],["men seated in a tent, making coffee",0.0663]],"8038":[["a tribesman dressed in a robe",0.1633],["a sheikh seated in a tent",0.0769],["tribeswomen at an encampment",0.0566],["men seated in a tent, making coffee",0.0247],["Arab men with guns",0.0166],["a group of Bedouin people",-0.0083]]},"local":{"223":[["women of the family at their camp",0.0678],["hunters with their rifles",0.0516],["a family at home in their tent",0.032],["hosts making coffee for their guests",0.0279],["a father and his son",0.0199],["neighbours who came out to see a stranger",0.0151]],"3124":[["a father and his son",0.0609],["a family at home in their tent",0.0567],["women of the family at their camp",0.0442],["hunters with their rifles",0.0232],["hosts making coffee for their guests",0.0166],["neighbours who came out to see a stranger",0.0142]],"6930":[["women of the family at their camp",0.1116],["a family at home in their tent",0.072],["hunters with their rifles",0.0421],["a father and his son",0.0207],["neighbours who came out to see a stranger",0.0116],["hosts making coffee for their guests",0.0018]],"6931":[["a father and his son",0.0766],["women of the family at their camp",0.0749],["a family at home in their tent",0.0661],["hosts making coffee for their guests",0.0335],["neighbours who came out to see a stranger",0.0186],["hunters with their rifles",0.0038]],"7095":[["hunters with their rifles",0.1082],["women of the family at their camp",0.0787],["a family at home in their tent",0.0323],["neighbours who came out to see a stranger",0.0174],["a father and his son",0.0023],["hosts making coffee for their guests",-0.0055]],"8038":[["a father and his son",0.0355],["women of the family at their camp",0.0018],["a family at home in their tent",-0.0122],["neighbours who came out to see a stranger",-0.0329],["hunters with their rifles",-0.0345],["hosts making coffee for their guests",-0.0729]]},"dumb":{"223":[["a samurai",0.0453],["a clown",0.041],["a chef",0.0183],["an astronaut",0.0147],["a football player",0.0007],["a ballerina",-0.0043]],"3124":[["an astronaut",0.0591],["a samurai",0.057],["a chef",0.0484],["a clown",0.0411],["a ballerina",0.0409],["a football player",0.0377]],"6930":[["a samurai",0.019],["a clown",0.0042],["a ballerina",-0.0072],["a chef",-0.0101],["an astronaut",-0.011],["a football player",-0.0187]],"6931":[["a samurai",0.055],["a clown",0.0447],["an astronaut",0.0382],["a ballerina",0.0185],["a chef",0.0149],["a football player",0.0096]],"7095":[["a samurai",0.0563],["a clown",0.0176],["an astronaut",0.0013],["a chef",-0.0028],["a ballerina",-0.0071],["a football player",-0.0099]],"8038":[["an astronaut",0.1094],["a clown",0.0995],["a samurai",0.0954],["a ballerina",0.0678],["a football player",0.0646],["a chef",0.0506]]}},"a portrait of {}":{"bell":{"223":[["tribeswomen at an encampment",0.0818],["a tribesman dressed in a robe",0.0653],["men seated in a tent, making coffee",0.0644],["a group of Bedouin people",0.0551],["Arab men with guns",0.0497],["a sheikh seated in a tent",0.0395]],"3124":[["a sheikh seated in a tent",0.1168],["a tribesman dressed in a robe",0.087],["men seated in a tent, making coffee",0.0796],["Arab men with guns",0.0714],["tribeswomen at an encampment",0.0624],["a group of Bedouin people",0.0586]],"6930":[["tribeswomen at an encampment",0.1271],["men seated in a tent, making coffee",0.1113],["a sheikh seated in a tent",0.0955],["a tribesman dressed in a robe",0.0808],["a group of Bedouin people",0.0791],["Arab men with guns",0.0656]],"6931":[["a sheikh seated in a tent",0.133],["men seated in a tent, making coffee",0.1237],["tribeswomen at an encampment",0.0984],["a tribesman dressed in a robe",0.0953],["Arab men with guns",0.0625],["a group of Bedouin people",0.0173]],"7095":[["Arab men with guns",0.1202],["tribeswomen at an encampment",0.0915],["a tribesman dressed in a robe",0.0619],["men seated in a tent, making coffee",0.0541],["a sheikh seated in a tent",0.0508],["a group of Bedouin people",0.0494]],"8038":[["a tribesman dressed in a robe",0.1369],["tribeswomen at an encampment",0.0681],["a sheikh seated in a tent",0.0645],["men seated in a tent, making coffee",0.0353],["Arab men with guns",0.0271],["a group of Bedouin people",-0.0152]]},"local":{"223":[["women of the family at their camp",0.0613],["hunters with their rifles",0.0404],["a family at home in their tent",0.022],["hosts making coffee for their guests",0.008],["neighbours who came out to see a stranger",-0.0001],["a father and his son",-0.0125]],"3124":[["a family at home in their tent",0.0455],["women of the family at their camp",0.0426],["a father and his son",0.0272],["hunters with their rifles",0.0143],["hosts making coffee for their guests",0.0038],["neighbours who came out to see a stranger",-0.0021]],"6930":[["women of the family at their camp",0.1233],["a family at home in their tent",0.0762],["hunters with their rifles",0.0472],["neighbours who came out to see a stranger",0.0168],["hosts making coffee for their guests",0.0049],["a father and his son",0]],"6931":[["women of the family at their camp",0.0808],["a family at home in their tent",0.0655],["a father and his son",0.0605],["hosts making coffee for their guests",0.0364],["hunters with their rifles",0.0118],["neighbours who came out to see a stranger",0.0097]],"7095":[["hunters with their rifles",0.0957],["women of the family at their camp",0.0726],["a family at home in their tent",0.0254],["neighbours who came out to see a stranger",0.0044],["hosts making coffee for their guests",-0.0191],["a father and his son",-0.0278]],"8038":[["women of the family at their camp",0.0237],["a father and his son",0.0232],["a family at home in their tent",-0.0125],["hunters with their rifles",-0.0165],["neighbours who came out to see a stranger",-0.0258],["hosts making coffee for their guests",-0.082]]},"dumb":{"223":[["a samurai",0.009],["a clown",0.0029],["a chef",0.0011],["an astronaut",-0.0006],["a football player",-0.0231],["a ballerina",-0.0285]],"3124":[["an astronaut",0.0345],["a chef",0.024],["a samurai",0.0179],["a football player",0.0078],["a ballerina",0.0054],["a clown",-0.0029]],"6930":[["a samurai",-0.0029],["a chef",-0.0132],["an astronaut",-0.0152],["a clown",-0.0249],["a ballerina",-0.025],["a football player",-0.0302]],"6931":[["a samurai",0.0287],["an astronaut",0.0281],["a clown",0.012],["a chef",0.0083],["a ballerina",-0.0001],["a football player",-0.002]],"7095":[["a samurai",0.0119],["an astronaut",-0.018],["a chef",-0.0217],["a clown",-0.026],["a football player",-0.0379],["a ballerina",-0.0434]],"8038":[["an astronaut",0.0967],["a clown",0.0658],["a samurai",0.0553],["a football player",0.0477],["a ballerina",0.0432],["a chef",0.0376]]}},"{}":{"bell":{"223":[["tribeswomen at an encampment",0.0951],["a tribesman dressed in a robe",0.0898],["a group of Bedouin people",0.0628],["a sheikh seated in a tent",0.0579],["Arab men with guns",0.0558],["men seated in a tent, making coffee",0.0534]],"3124":[["a sheikh seated in a tent",0.126],["a tribesman dressed in a robe",0.0968],["Arab men with guns",0.0641],["a group of Bedouin people",0.0535],["men seated in a tent, making coffee",0.0521],["tribeswomen at an encampment",0.05]],"6930":[["tribeswomen at an encampment",0.1186],["a sheikh seated in a tent",0.0958],["a tribesman dressed in a robe",0.0849],["men seated in a tent, making coffee",0.0771],["a group of Bedouin people",0.0633],["Arab men with guns",0.0504]],"6931":[["a sheikh seated in a tent",0.1367],["men seated in a tent, making coffee",0.1103],["a tribesman dressed in a robe",0.0985],["tribeswomen at an encampment",0.0885],["Arab men with guns",0.0423],["a group of Bedouin people",0.0146]],"7095":[["Arab men with guns",0.1127],["tribeswomen at an encampment",0.1017],["a tribesman dressed in a robe",0.0829],["a sheikh seated in a tent",0.0625],["a group of Bedouin people",0.0518],["men seated in a tent, making coffee",0.0327]],"8038":[["a tribesman dressed in a robe",0.1373],["a sheikh seated in a tent",0.066],["tribeswomen at an encampment",0.0347],["Arab men with guns",0.0104],["men seated in a tent, making coffee",-0.0142],["a group of Bedouin people",-0.0163]]},"local":{"223":[["women of the family at their camp",0.0603],["hunters with their rifles",0.0315],["a father and his son",0.0214],["a family at home in their tent",0.0126],["hosts making coffee for their guests",0.0055],["neighbours who came out to see a stranger",-0.0305]],"3124":[["a father and his son",0.0466],["a family at home in their tent",0.0373],["women of the family at their camp",0.0291],["hunters with their rifles",-0.0018],["hosts making coffee for their guests",-0.0062],["neighbours who came out to see a stranger",-0.0367]],"6930":[["women of the family at their camp",0.0937],["a family at home in their tent",0.0529],["hunters with their rifles",0.0211],["a father and his son",0.0157],["hosts making coffee for their guests",-0.0143],["neighbours who came out to see a stranger",-0.0355]],"6931":[["a father and his son",0.0708],["women of the family at their camp",0.063],["a family at home in their tent",0.0533],["hosts making coffee for their guests",0.0232],["hunters with their rifles",-0.0152],["neighbours who came out to see a stranger",-0.0351]],"7095":[["hunters with their rifles",0.0783],["women of the family at their camp",0.0641],["a family at home in their tent",0.0128],["a father and his son",-0.0023],["hosts making coffee for their guests",-0.0245],["neighbours who came out to see a stranger",-0.0314]],"8038":[["a father and his son",0.0305],["women of the family at their camp",-0.0129],["a family at home in their tent",-0.0319],["hunters with their rifles",-0.0459],["neighbours who came out to see a stranger",-0.0797],["hosts making coffee for their guests",-0.0848]]},"dumb":{"223":[["a samurai",0.0328],["a clown",0.0216],["a chef",0.0152],["an astronaut",0.0052],["a ballerina",-0.0076],["a football player",-0.0123]],"3124":[["an astronaut",0.0349],["a chef",0.0332],["a samurai",0.0305],["a ballerina",0.0222],["a football player",0.0183],["a clown",0.0073]],"6930":[["a samurai",0.0068],["a chef",-0.0079],["a ballerina",-0.0169],["an astronaut",-0.0187],["a clown",-0.0207],["a football player",-0.0217]],"6931":[["a samurai",0.0397],["an astronaut",0.0245],["a clown",0.0168],["a chef",0.014],["a ballerina",0.0091],["a football player",0.0066]],"7095":[["a samurai",0.0393],["a chef",-0.0023],["a clown",-0.0097],["an astronaut",-0.0117],["a football player",-0.0151],["a ballerina",-0.017]],"8038":[["an astronaut",0.0909],["a samurai",0.0671],["a clown",0.0661],["a football player",0.0481],["a ballerina",0.0473],["a chef",0.0359]]}},"an old photo of {}":{"bell":{"223":[["tribeswomen at an encampment",0.1089],["a tribesman dressed in a robe",0.1001],["men seated in a tent, making coffee",0.0859],["a group of Bedouin people",0.0741],["Arab men with guns",0.0698],["a sheikh seated in a tent",0.0627]],"3124":[["a sheikh seated in a tent",0.1344],["a tribesman dressed in a robe",0.1147],["men seated in a tent, making coffee",0.1002],["Arab men with guns",0.0838],["tribeswomen at an encampment",0.0791],["a group of Bedouin people",0.0698]],"6930":[["tribeswomen at an encampment",0.1298],["men seated in a tent, making coffee",0.1137],["a sheikh seated in a tent",0.1035],["a tribesman dressed in a robe",0.1016],["a group of Bedouin people",0.0834],["Arab men with guns",0.0655]],"6931":[["a sheikh seated in a tent",0.1427],["men seated in a tent, making coffee",0.124],["a tribesman dressed in a robe",0.1138],["tribeswomen at an encampment",0.1004],["Arab men with guns",0.0604],["a group of Bedouin people",0.0164]],"7095":[["Arab men with guns",0.1354],["tribeswomen at an encampment",0.1165],["a tribesman dressed in a robe",0.0985],["a group of Bedouin people",0.0722],["men seated in a tent, making coffee",0.0714],["a sheikh seated in a tent",0.0687]],"8038":[["a tribesman dressed in a robe",0.1449],["a sheikh seated in a tent",0.0668],["tribeswomen at an encampment",0.0504],["men seated in a tent, making coffee",0.0235],["Arab men with guns",0.0042],["a group of Bedouin people",-0.0243]]},"local":{"223":[["women of the family at their camp",0.0658],["hunters with their rifles",0.0626],["hosts making coffee for their guests",0.0537],["a family at home in their tent",0.0331],["a father and his son",0.0202],["neighbours who came out to see a stranger",0.0154]],"3124":[["a family at home in their tent",0.0592],["a father and his son",0.056],["hosts making coffee for their guests",0.0476],["women of the family at their camp",0.0402],["hunters with their rifles",0.0371],["neighbours who came out to see a stranger",0.0185]],"6930":[["women of the family at their camp",0.0965],["a family at home in their tent",0.0669],["hunters with their rifles",0.0507],["hosts making coffee for their guests",0.0246],["a father and his son",0.0155],["neighbours who came out to see a stranger",0.007]],"6931":[["a father and his son",0.0707],["a family at home in their tent",0.0611],["women of the family at their camp",0.0609],["hosts making coffee for their guests",0.0526],["hunters with their rifles",0.017],["neighbours who came out to see a stranger",0.008]],"7095":[["hunters with their rifles",0.1178],["women of the family at their camp",0.0684],["a family at home in their tent",0.0302],["hosts making coffee for their guests",0.0213],["neighbours who came out to see a stranger",0.0168],["a father and his son",0.0044]],"8038":[["a father and his son",0.0145],["women of the family at their camp",-0.0169],["a family at home in their tent",-0.0272],["hunters with their rifles",-0.0358],["neighbours who came out to see a stranger",-0.0381],["hosts making coffee for their guests",-0.058]]},"dumb":{"223":[["a samurai",0.0455],["a clown",0.0412],["a chef",0.0236],["an astronaut",0.021],["a football player",0.0071],["a ballerina",-0.0031]],"3124":[["an astronaut",0.0633],["a samurai",0.0595],["a chef",0.0471],["a ballerina",0.0425],["a clown",0.0401],["a football player",0.0393]],"6930":[["a samurai",0.0228],["a clown",0.0036],["a ballerina",-0.0095],["a chef",-0.0117],["an astronaut",-0.0147],["a football player",-0.0155]],"6931":[["a samurai",0.0594],["a clown",0.0422],["an astronaut",0.0379],["a ballerina",0.0205],["a chef",0.0158],["a football player",0.0116]],"7095":[["a samurai",0.0574],["a clown",0.0214],["a chef",-0.0007],["an astronaut",-0.0017],["a football player",-0.0038],["a ballerina",-0.0063]],"8038":[["an astronaut",0.1021],["a clown",0.0943],["a samurai",0.0867],["a football player",0.0611],["a ballerina",0.0601],["a chef",0.0378]]}}}};
 
-const PHOTOS = [
-  {id:"3124", place:"נמרוד, עיראק", date:"27.4.1909",
-   he:"שייח׳ אל-עסכר משבט ג׳בור יושב עם גברים באוהל ומכין קפה.",
-   en:"Sheikh el Askar of the Jebur tribe seated with other men in tent, making coffee."},
-  {id:"6931", place:"א-טובייק, ערב הסעודית", date:"1.1914",
-   he:"שייח׳ חרב מהחווייטאת ובנו קאסם יושבים באוהל.",
-   en:"Sheikh Harb of the Howaitat and his son Qasim seated in tent at encampment of the Howaitat."},
-  {id:"6930", place:"א-טובייק, ערב הסעודית", date:"1.1914",
-   he:"אשתו של חרב ובנו קאסם, עם נשות השבט במחנה.",
-   en:"Harb's wife and son Qasim, with tribeswomen at the encampment of Sheikh Harb of the Howaitat."},
-  {id:"8038", place:"מקום לא מצוין", date:"4.1914",
-   he:"בן שבט הסלובה בגלימה מעור צבי.",
-   en:"Slubba Tribesman dressed in robe made from gazelle skin."},
-  {id:"7095", place:"ליד בטן, ערב הסעודית", date:"17.3.1914",
-   he:"גברים משבט בני חסן עם רובים.",
-   en:"Arab men of the Beni Hassan tribe with guns."},
-  {id:"223", place:"עין מוסא, ירדן", date:"21.3.1900",
-   he:"קבוצת בדואים.",
-   en:"Group of Bedouin people."}
-];
-
-// CLIP ViT-B/32 output, run 15.11.2026, unedited
-const RESULTS = {"223":{"officer":[["armed tribesmen",0.742],["primitive natives",0.175],["beggars",0.068],["desert raiders",0.012],["servants",0.002],["soldiers in military uniform",0.0]],"local":[["men wearing a keffiyeh and a cloak",0.953],["hunters with their rifles",0.037],["hosts making coffee for their guests",0.006],["neighbours who came out to see a stranger",0.003],["a family at home in their tent",0.001],["a father and his son",0.0]]},"3124":{"officer":[["desert raiders",0.413],["armed tribesmen",0.321],["beggars",0.208],["servants",0.043],["primitive natives",0.013],["soldiers in military uniform",0.003]],"local":[["men wearing a keffiyeh and a cloak",0.994],["a family at home in their tent",0.004],["hunters with their rifles",0.001],["neighbours who came out to see a stranger",0.001],["hosts making coffee for their guests",0.0],["a father and his son",0]]},"6930":{"officer":[["desert raiders",0.422],["armed tribesmen",0.325],["beggars",0.221],["primitive natives",0.031],["servants",0.001],["soldiers in military uniform",0.0]],"local":[["men wearing a keffiyeh and a cloak",0.966],["a family at home in their tent",0.019],["hunters with their rifles",0.01],["hosts making coffee for their guests",0.004],["neighbours who came out to see a stranger",0.001],["a father and his son",0]]},"6931":{"officer":[["beggars",0.69],["desert raiders",0.216],["armed tribesmen",0.054],["primitive natives",0.035],["servants",0.003],["soldiers in military uniform",0.003]],"local":[["a family at home in their tent",0.561],["men wearing a keffiyeh and a cloak",0.397],["hunters with their rifles",0.022],["hosts making coffee for their guests",0.018],["a father and his son",0.001],["neighbours who came out to see a stranger",0.001]]},"7095":{"officer":[["armed tribesmen",0.934],["desert raiders",0.058],["beggars",0.004],["primitive natives",0.003],["servants",0.001],["soldiers in military uniform",0.0]],"local":[["men wearing a keffiyeh and a cloak",0.896],["hunters with their rifles",0.102],["hosts making coffee for their guests",0.002],["neighbours who came out to see a stranger",0.0],["a family at home in their tent",0.0],["a father and his son",0]]},"8038":{"officer":[["beggars",0.491],["armed tribesmen",0.334],["desert raiders",0.138],["primitive natives",0.033],["servants",0.004],["soldiers in military uniform",0.001]],"local":[["men wearing a keffiyeh and a cloak",0.998],["hunters with their rifles",0.001],["a father and his son",0.001],["a family at home in their tent",0.0],["neighbours who came out to see a stranger",0.0],["hosts making coffee for their guests",0.0]]}};
-
-for (const id in DUMB) RESULTS[id].dumb = DUMB[id];
-const pct = s => (s*100 < 1 && s > 0) ? "<1%" : Math.round(s*100) + "%";
+const f4 = x => (x < 0 ? "−" : "") + Math.abs(x).toFixed(4);
+const pct = s => s === 0 ? "0%" : (s < .01 ? (s*100).toFixed(1) + "%" : Math.round(s*100) + "%");
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const word = en => HE[en] ? esc(HE[en]) : `<span lang="en">${esc(en)}</span>`;
 
-document.getElementById("listOfficer").innerHTML = LISTS.officer.map(([en,he]) => `<li>${he}</li>`).join("");
-document.getElementById("listLocal").innerHTML = LISTS.local.map(([en,he]) => `<li>${he}</li>`).join("");
+document.getElementById("vImg").textContent = BOX.img.map(f4).join(" ");
+document.getElementById("vSam").textContent = BOX.samurai.map(f4).join(" ");
+document.getElementById("vBell").textContent = BOX.bell.map(f4).join(" ");
 
-function resHTML(title, rows){
-  const [topEn, topS] = rows[0];
-  const rest = rows.slice(1, 3).map(([en,s]) => `${word(en)} ${pct(s)}`).join(" · ");
-  return `<div class="res">
-    <div class="k">${title}</div>
-    <div class="top">${word(topEn)}<small>${pct(topS)}</small></div>
-    <div class="meter"><i style="width:${(topS*100).toFixed(1)}%"></i></div>
-    <div class="rest">אחריה: ${rest}</div>
-  </div>`;
-}
+const terms = (a, b) => a.slice(0, 3).map((x, i) => `(${f4(x)} × ${f4(b[i])})`).join(" + ") + " + … 509 more";
+const dot = (a, b) => a.reduce((s, x, i) => s + x * b[i], 0);
+document.getElementById("sumSam").innerHTML = `<span class="t">samurai</span>  ${terms(BOX.img, BOX.samurai)}  =  ${dot(BOX.img, BOX.samurai).toFixed(4)}`;
+document.getElementById("sumBell").innerHTML = `<span class="t">Bell</span>  ${terms(BOX.img, BOX.bell)}  =  ${dot(BOX.img, BOX.bell).toFixed(4)}`;
 
-function pairHTML(title, [en, sc]){
-  return `<div class="pair"><div class="k">${title}</div><div class="w">${word(en)}<small>${pct(sc)}</small></div></div>`;
-}
+const table = (title, rows, mark) => `<table><caption>${title}</caption>${rows.map(([en, he, sh, c]) =>
+  `<tr class="${en === mark ? "mark" : ""}"><td>${esc(he)}</td><td class="r">${c.toFixed(2)}</td><td class="p">${pct(sh)}</td></tr>`).join("")}</table>`;
+document.getElementById("lists").innerHTML =
+  table("שש דמויות. התאמה, ואז האחוז שהכלל נותן", LISTS.dumb, "a samurai") +
+  table("המילים של בל. התאמה, ואז האחוז שהכלל נותן", LISTS.bell, "tribeswomen at an encampment");
 
-document.getElementById("rows").innerHTML = PHOTOS.map(p => `
-  <div class="row">
-    <div class="lab">${p.place}<br>${p.date}<br>צילום: גרטרוד בל</div>
-    <div class="txt">
-      <div class="truth"><div class="k">מה באמת קורה בתמונה (לפי הארכיון):</div>${p.he}</div>
-      ${pairHTML("המודל בחר מתוך רשימה א׳ (מילים של קצין):", RESULTS[p.id].officer[0])}
-      ${pairHTML("המודל בחר מתוך רשימה ב׳ (מילים של מקומי):", RESULTS[p.id].local[0])}
-    </div>
-    <figure class="bw"><img src="img/bell-${p.id}.jpg" alt="${esc(p.en)}" loading="lazy">
-      <figcaption>בארכיון: ״${esc(p.he)}״</figcaption></figure>
-  </div>`).join("");
-
-document.getElementById("dumbList").innerHTML = LISTS.dumb.map(([en,he]) => `<li class="${en==="a samurai"?"hit":""}">${he}</li>`).join("");
-document.getElementById("samurai").innerHTML = PHOTOS.map(p => `
-  <figure><div class="det"><img src="img/bell-${p.id}.jpg" alt="${esc(p.he)}" loading="lazy"><div class="box" style="inset:16% 18% 6% 18%"><span class="tag">${word(DUMB[p.id][0][0])}<small>${pct(DUMB[p.id][0][1])}</small></span></div></div>
-    <div class="cap">בארכיון: ${esc(p.he)}<br>במקום השני: ${word(DUMB[p.id][1][0])} ${pct(DUMB[p.id][1][1])}</div>
-  </figure>`).join("");
-
-// one orchestrated moment: the six photos get stamped "samurai", one after another
+const PHOTOS_HE = {"3124":"שייח׳ אל-עסכר משבט ג׳בור יושב עם גברים באוהל ומכין קפה.","6931":"שייח׳ חרב מהחווייטאת ובנו קאסם יושבים באוהל.","6930":"אשתו של חרב ובנו קאסם, עם נשות השבט במחנה.","8038":"בן שבט הסלובה בגלימה מעור צבי.","7095":"גברים משבט בני חסן עם רובים.","223":"קבוצת בדואים."};
+const PHOTOS_REF = {"3124":"נמרוד, עיראק, 1909. GB/3/1/12/1/205","6931":"ערב הסעודית, 1914. GB/3/1/25/1/203","6930":"ערב הסעודית, 1914. GB/3/1/25/1/202","8038":"1914. GB/PERS/S/010","7095":"ערב הסעודית, 1914. GB/3/1/25/1/367–373","223":"עין מוסא, ירדן, 1900. GB/3/1/1/1/219"};
+// the map: every answer, one cell per run
 (() => {
-  const band = document.getElementById("band"), figs = [...band.querySelectorAll(".samurai figure")], cnt = document.getElementById("cnt");
-  const finish = () => { figs.forEach(f => f.classList.add("hit")); cnt.textContent = figs.length; band.classList.add("done"); };
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return finish();
-  const io = new IntersectionObserver(es => {
-    if (!es.some(e => e.isIntersecting)) return;
-    io.disconnect();
-    figs.forEach((f, k) => setTimeout(() => {
-      f.classList.add("hit"); cnt.textContent = k + 1;
-      if (k === figs.length - 1) band.classList.add("done");
-    }, 400 + k * 550));
-  }, { threshold: .3 });
-  io.observe(document.getElementById("samurai"));
-})();
-
-// play: pick a photo, flip the list
-let current = "3124", list = "officer", clf = null;
-const strip = document.getElementById("strip"), toggle = document.getElementById("toggle");
-strip.innerHTML = PHOTOS.map(p => `<button aria-pressed="${p.id===current}" data-id="${p.id}" aria-label="${esc(p.he)}"><img src="img/bell-${p.id}.jpg" alt=""></button>`).join("");
-
-function render(){
-  const p = PHOTOS.find(x => x.id === current);
-  const [en, s] = RESULTS[current][list][0];
-  document.getElementById("playImg").src = `img/bell-${current}.jpg`;
-  document.getElementById("vWord").innerHTML = word(en);
-  document.getElementById("vPc").textContent = `המודל בטוח ב-${pct(s)}`;
-  document.getElementById("vList").innerHTML = RESULTS[current][list].map(([w,sc],i) => `<li class="${i?"":"on"}"><span>${word(w)}</span><span>${pct(sc)}</span></li>`).join("");
-  document.getElementById("vOrig").innerHTML = `ומה באמת יש בתמונה, לפי הארכיון: ${esc(p.he)}`;
-  setTag(document.getElementById("playTag"), en, s);
-}
-function setTag(el, en, sc){
-  el.innerHTML = `${word(en)}<small>${pct(sc)}</small>`;
-  el.classList.remove("blink"); void el.offsetWidth; el.classList.add("blink");
-}
-
-// hero: the same photo, the label flips with the list
-(() => {
-  const states = [["officer","רשימה א׳: מילים של קצין"],["local","רשימה ב׳: מילים של מקומי"],["dumb","רשימה ג׳: מטופשת"]];
-  const tag = document.getElementById("heroTag"), ul = document.getElementById("heroLists");
-  ul.innerHTML = states.map(([,t]) => `<li>${t}</li>`).join("");
-  let i = 0;
-  const show = () => {
-    const [k] = states[i], [en, sc] = RESULTS["3124"][k][0];
-    setTag(tag, en, sc);
-    [...ul.children].forEach((li, j) => li.classList.toggle("on", j === i));
+  const PH = ["3124","6931","6930","8038","7095","223"];
+  const MODELS = [["Xenova/clip-vit-base-patch32","CLIP B/32"],["Xenova/clip-vit-base-patch16","CLIP B/16"],["Xenova/clip-vit-large-patch14","CLIP L/14"],["Xenova/siglip-base-patch16-224","SigLIP"]];
+  const TPL = ["a photograph of {}","a portrait of {}","{}","an old photo of {}"];
+  const ORDER = { dumb:["a samurai","a clown","a chef","an astronaut","a football player","a ballerina"],
+    bell:["a group of Bedouin people","Arab men with guns","a tribesman dressed in a robe","tribeswomen at an encampment","a sheikh seated in a tent","men seated in a tent, making coffee"],
+    local:["a family at home in their tent","women of the family at their camp","hunters with their rifles","a father and his son","hosts making coffee for their guests","neighbours who came out to see a stranger"] };
+  const COL = ["#8193e5","#e8b06a","#9ccf9a","#e48f8f","#c3a6e0","#8fd0d6"];
+  const map = document.getElementById("map"), legend = document.getElementById("legend");
+  let cur = "dumb", sel = "6930";
+  const showStage = (k, id, c) => {
+    const runs = MODELS.flatMap(([m, n]) => TPL.map(t => ({ n, t, top: FULL[m][t][k][id][0] })));
+    const count = {}; runs.forEach(r => count[r.top[0]] = (count[r.top[0]] || 0) + 1);
+    const ranked = Object.entries(count).sort((a, b) => b[1] - a[1]);
+    document.getElementById("stage").innerHTML = `
+      <figure><img src="img/bell-${id}.jpg" alt="${esc(PHOTOS_HE[id])}">
+        <p class="bell">${esc(PHOTOS_HE[id])}</p><p class="cap">מה שבל כתבה. ${PHOTOS_REF[id]}</p></figure>
+      <div>
+        <p class="cap" style="margin:0 0 12px">${ranked.length === 1 ? "כל 16 הריצות נתנו אותה תשובה:" : `${ranked.length} תשובות שונות ב-16 ריצות:`}</p>
+        <div class="tally">${ranked.map(([w, n]) => `<div style="color:${c[w] === "#8193e5" ? "var(--blue)" : "var(--ink)"}"><i style="display:inline-block;width:12px;height:12px;background:${c[w]};margin-inline-end:8px"></i>${esc(HE[w])}<span>${n} מתוך 16</span></div>`).join("")}</div>
+        <table class="runs"><tr><th>מודל</th><th>ניסוח</th><th>התשובה</th><th>התאמה</th></tr>
+          ${runs.map(r => `<tr><td>${r.n}</td><td lang="en">${r.t === "{}" ? "(the word alone)" : r.t.replace("{}", "…")}</td><td class="w"><i style="background:${c[r.top[0]]}"></i>${esc(HE[r.top[0]])}</td><td class="r">${r.top[1].toFixed(2)}</td></tr>`).join("")}</table>
+      </div>`;
   };
-  show();
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
-    setInterval(() => { i = (i + 1) % states.length; show(); }, 2600);
+  const draw = k => {
+    cur = k;
+    const c = Object.fromEntries(ORDER[k].map((l, i) => [l, COL[i]]));
+    let h = `<tr><th></th>${MODELS.map(([, n]) => `<th class="m" colspan="4">${n}</th>`).join("")}</tr>`;
+    h += `<tr><th></th>${MODELS.map(() => TPL.map(t => `<th class="t">${t === "{}" ? "(the word alone)" : t.replace("{}", "…")}</th>`).join("")).join("")}</tr>`;
+    h += PH.map(id => `<tr class="row${id === sel ? " sel" : ""}" data-id="${id}" tabindex="0" aria-label="${esc(PHOTOS_HE[id])}"><td class="ph"><img src="img/bell-${id}.jpg" alt=""></td>${MODELS.map(([m]) => TPL.map(t => {
+      const w = FULL[m][t][k][id][0][0]; return `<td style="background:${c[w]}" title="${esc(HE[w])}">${esc(HE[w])}</td>`; }).join("")).join("")}</tr>`).join("");
+    map.innerHTML = h;
+    showStage(k, sel, c);
+    legend.innerHTML = ORDER[k].map(l => `<li><i style="background:${c[l]}"></i>${esc(HE[l])}</li>`).join("");
+  };
+  const pick = tr => { sel = tr.dataset.id; draw(cur); document.getElementById("stage").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }); };
+  map.addEventListener("click", e => { const tr = e.target.closest("tr.row"); if (tr) pick(tr); });
+  map.addEventListener("keydown", e => { const tr = e.target.closest("tr.row"); if (tr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); pick(tr); } });
+  document.getElementById("tabs").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    document.querySelectorAll("#tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
+    draw(b.dataset.k);
+  });
+  draw("dumb");
 })();
-strip.addEventListener("click", e => {
-  const b = e.target.closest("button"); if(!b) return;
-  current = b.dataset.id;
-  strip.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x===b));
-  document.getElementById("ownOut").innerHTML = "";
-  render();
-});
-toggle.addEventListener("click", e => {
-  const b = e.target.closest("button"); if(!b) return;
-  list = b.dataset.list;
-  toggle.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x===b));
-  render();
-});
-render();
 
-// own list (live model)
+// try it: share and raw similarity, live in the browser
+let M = null;
 const go = document.getElementById("go"), status = document.getElementById("status");
+const unit = v => { let n = 0; for (const x of v) n += x * x; n = Math.sqrt(n); return Array.from(v, x => x / n); };
 go.addEventListener("click", async () => {
   const labels = document.getElementById("labels").value.split("\n").map(s => s.trim()).filter(Boolean);
   if (labels.length < 2) { status.textContent = "צריך לפחות שתי מילים. המודל רק בוחר, הוא לא ממציא."; return; }
   go.disabled = true;
   try {
-    if (!clf) {
-      status.textContent = "מוריד את המודל, זה לוקח רגע…";
-      const { pipeline } = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2");
-      clf = await pipeline("zero-shot-image-classification", "Xenova/clip-vit-base-patch32");
+    if (!M) {
+      status.textContent = "מוריד את המודל, זה לוקח כמה שניות…";
+      const T = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2");
+      const id = "Xenova/clip-vit-base-patch32";
+      M = { tok: await T.AutoTokenizer.from_pretrained(id), proc: await T.AutoProcessor.from_pretrained(id),
+        text: await T.CLIPTextModelWithProjection.from_pretrained(id, { model_file_name: "text_model" }),
+        vision: await T.CLIPVisionModelWithProjection.from_pretrained(id, { model_file_name: "vision_model" }) };
+      const img = await T.RawImage.read(new URL("img/bell-6930.jpg", location.href).href);
+      M.img = unit((await M.vision(await M.proc(img))).image_embeds.data);
     }
     status.textContent = "מריץ…";
-    const img = new URL(`img/bell-${current}.jpg`, location.href).href;
-    const r = await clf(img, labels, { hypothesis_template: "a photograph of {}" });
-    document.getElementById("ownOut").innerHTML = `<div class="verdict"><div class="k">המודל בחר מתוך הרשימה שלכם:</div><div class="word" lang="en">${esc(r[0].label)}</div><div class="pc">בטוח ב-${pct(r[0].score)}</div><ul class="choices">${r.map((x,i)=>`<li class="${i?"":"on"}"><span lang="en">${esc(x.label)}</span><span>${pct(x.score)}</span></li>`).join("")}</ul></div>`;
+    const cos = [];
+    for (const l of labels) {
+      const t = unit((await M.text(M.tok(["a photograph of " + l], { padding: true, truncation: true }))).text_embeds.data);
+      cos.push(t.reduce((s, x, i) => s + x * M.img[i], 0));
+    }
+    const mx = Math.max(...cos), ex = cos.map(c => Math.exp(100 * (c - mx))), Z = ex.reduce((a, b) => a + b);
+    const r = labels.map((l, i) => ({ label: l, share: ex[i] / Z, raw: cos[i] })).sort((a, b) => b.share - a.share);
+    document.getElementById("ownWord").textContent = r[0].label;
+    document.getElementById("ownPc").textContent = r.map(x => `${x.label}: התאמה ${x.raw.toFixed(2)}, ${pct(x.share)}`).join(" / ");
     status.textContent = "";
   } catch (err) {
-    status.textContent = "לא הצליח לטעון את המודל. צריך חיבור לאינטרנט, ולפתוח את הדף משרת (GitHub Pages), לא מקובץ מקומי.";
+    status.textContent = "לא הצליח לטעון את המודל. צריך חיבור לאינטרנט, ולפתוח את הדף מהאתר, לא מקובץ מקומי.";
     console.error(err);
   } finally { go.disabled = false; }
 });
