@@ -103,18 +103,30 @@
   .flow .arr{align-self:center;font-size:20px}
   .truth{font-size:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--soft)}
   .truth .k{font-size:11px;color:var(--mute);letter-spacing:.06em}
-  .dumbwords{font-size:clamp(20px,2.4vw,26px);line-height:1.4;margin-bottom:12px}
-  .samurai{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:28px}
-  .samurai figure{position:relative}
-  .samurai img{aspect-ratio:4/3;object-fit:cover;filter:grayscale(1)}
-  .samurai .tag{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--ink);margin-top:8px;padding-top:6px}
-  .samurai .tag b{font-weight:300;font-size:28px;line-height:1.1}
-  .samurai .tag span{font-size:13px;color:var(--mute)}
-  .samurai .cap{font-size:11px;color:var(--mute);margin-top:2px}
-  .punch{display:grid;grid-template-columns:1fr 2fr;gap:24px;margin-top:56px;border-top:1px solid var(--rule);padding-top:20px}
-  .punch p{grid-column:2;max-width:52ch;font-size:16px}
-  .punch .big{font-size:clamp(34px,5vw,60px);line-height:1.05;margin-bottom:22px;max-width:none}
-  .punch .big b{font-weight:500}
+  /* the samurai band: the one dark moment on the page */
+  html{overflow-x:clip}
+  .band{background:#000;color:#fff;margin:140px calc(50% - 50vw) 0;padding:110px max(16px,calc(50vw - 488px)) 120px}
+  .band .num{color:#8a8a8a}
+  .band h2{font-size:clamp(36px,5vw,60px);margin:10px 0 40px}
+  .dumb{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 14px;font-size:clamp(26px,3.6vw,44px);line-height:1.2}
+  .dumb li{padding:2px 10px 4px;border:2px solid transparent;transition:color .5s,border-color .3s}
+  .band.done .dumb li{color:#3a3a3a}
+  .band.done .dumb li.hit{color:#fff;border-color:var(--machine)}
+  .band-q{color:#bdbdbd;font-size:17px;max-width:48ch;margin:28px 0 56px}
+  .counter{font-size:14px;color:#bdbdbd;border-top:1px solid #333;padding-top:12px;margin:0}
+  .counter b{color:var(--machine);font-weight:500;font-size:18px}
+  .samurai{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 24px;margin-top:28px}
+  .samurai img{aspect-ratio:4/3;object-fit:cover;filter:grayscale(1) brightness(.35);transition:filter .5s}
+  .samurai .box{opacity:0;transform:scale(1.3);transition:opacity .12s,transform .28s cubic-bezier(.2,.9,.25,1)}
+  .samurai figure.hit img{filter:grayscale(1) brightness(1)}
+  .samurai figure.hit .box{opacity:1;transform:none}
+  .samurai .cap{font-size:12px;color:#8a8a8a;margin-top:10px;line-height:1.5}
+  .huge{font-size:clamp(84px,17vw,230px);font-weight:300;line-height:.9;letter-spacing:-.02em;margin:110px 0 0}
+  .huge span{display:block;font-size:clamp(22px,2.6vw,32px);letter-spacing:0;color:#bdbdbd;margin-top:18px}
+  .punch{display:grid;grid-template-columns:1fr 2fr;gap:24px;margin-top:72px;border-top:1px solid #333;padding-top:22px}
+  .punch p{grid-column:2;max-width:52ch;font-size:17px;color:#d6d6d6}
+  .punch b{color:#fff;font-weight:500}
+  @media (prefers-reduced-motion:reduce){.samurai img,.samurai .box,.dumb li{transition:none}}
   .note{font-size:12px;color:var(--mute);max-width:70ch;margin-top:16px}
 
   /* last part */
@@ -171,7 +183,10 @@
     .det .tag{font-size:12px}
     .intro,.sec-head,.play .lead,.stage,.own,footer,.punch{grid-template-columns:1fr}
     .punch p{grid-column:auto}
-    .samurai{grid-template-columns:1fr 1fr;gap:16px}
+    .samurai{grid-template-columns:1fr 1fr;gap:20px 12px}
+    .band{padding:72px 16px 80px;margin-top:96px}
+    .huge{margin-top:72px}
+    .band-q{margin-bottom:40px}
     .flow{grid-template-columns:1fr}
     .flow .arr{justify-self:center;transform:rotate(-90deg)}
     .intro p,.play .lead p,.answer p,.answer .sec-head > div{grid-column:auto}
@@ -199,7 +214,6 @@
     .flow > div:not(.arr){flex-direction:row;align-items:baseline;gap:10px;flex-wrap:wrap;padding:10px 12px}
     .flow .arr{font-size:16px;line-height:1}
     /* samurai grid */
-    .samurai .tag b{font-size:22px}
     /* play section: buttons stacked, controls before the big photo */
     .stage{gap:28px}
     .stage > div:first-child{display:flex;flex-direction:column}
@@ -356,22 +370,19 @@
   <p class="note" style="margin:-8px 0 24px">ליד כל תמונה: מה באמת קורה בה (לפי הארכיון), ואיזו מילה המודל בחר מכל רשימה. המספר הקטן הוא כמה המודל היה בטוח.</p>
   <div class="rows" id="rows"></div>
 
-  <div class="sec-head" style="margin-top:120px"><span class="num">תוצאה 2</span><h2>ואז נתנו לו רשימה מטופשת</h2></div>
-  <div class="rows">
-    <div class="row wide">
-      <div class="lab">הרשימה</div>
-      <div class="txt">
-        <p class="dumbwords">פיצה · חללית · חתול · סמוראי · קבוצת כדורגל · עוגת חתונה</p>
-        <p>אף מילה לא מתאימה. מודל חכם היה אומר ״אף אחת מהן״. אבל CLIP לא יכול. אז מה הוא בחר?</p>
-      </div>
-    </div>
-  </div>
-  <div class="samurai" id="samurai"></div>
-  <div class="punch">
-    <p class="big">כל שש התמונות: <b>סמוראי.</b></p>
-    <p>שש תמונות, שש פעמים אותה מילה. בטוח עד 99%. בדיוק המילה שהמודל בעבודה של אלג׳ויסר בחר לגבר הבדואי. ושייח׳ אל-עסכר, שמכין קפה לאורחים שלו? המודל חשב שיש 21% שהוא <b>חללית</b>.</p>
+  <div class="band" id="band">
+    <span class="num">תוצאה 2</span>
+    <h2>ואז נתנו לו רשימה מטופשת</h2>
+    <ul class="dumb" id="dumbList"></ul>
+    <p class="band-q">אף מילה לא מתאימה. מודל חכם היה אומר ״אף אחת מהן״. CLIP לא יכול להגיד את זה. הוא חייב לבחור.</p>
+    <p class="counter" aria-live="polite">המודל בחר ״סמוראי״ ב-<b id="cnt">0</b> מתוך 6 תמונות</p>
+    <div class="samurai" id="samurai"></div>
+    <p class="huge">סמוראי.<span>שש תמונות. שש פעמים.</span></p>
+    <div class="punch">
+    <p>בטוח עד 99%. בדיוק המילה שהמודל בעבודה של אלג׳ויסר בחר לגבר הבדואי. ושייח׳ אל-עסכר, שמכין קפה לאורחים שלו? המודל חשב שיש 21% שהוא <b>חללית</b>.</p>
     <p>המודל לא ״ראה״ פה כלום. הוא בחר את המילה הכי פחות גרועה מרשימה שמישהו נתן לו, ואמר אותה בביטחון מלא. זה הכוח ה״לא-אנושי, הסטטיסטי״ שסומאיני מדבר עליו.</p>
     <p><b>והבעיה היא לא שהוא טועה. הבעיה היא שהוא נשמע בטוח.</b> ״סמוראי 99%״ נראה כמו מדע. מספר עם אחוזים מרגיש כמו עובדה, גם כשהוא מגיע מרשימה של פיצה וחללית. עכשיו תחשבו על מערכות כאלה שמסווגות אנשים במצלמות אבטחה, בגבולות או בשדות קרב. שם אף אחד לא רואה את הרשימה. רואים רק את התשובה ואת האחוזים.</p>
+</div>
   </div>
 
   <p class="note">כל מילה נכנסה למודל בתבנית ״תצלום של …״ (באנגלית, כי המודל מבין רק אנגלית). המודל: CLIP, הורץ ב-15.11.2026. התוצאות בדיוק כמו שיצאו, בלי שינוי.</p>
@@ -525,10 +536,27 @@ document.getElementById("rows").innerHTML = PHOTOS.map(p => `
       <figcaption>בארכיון: ״${esc(p.he)}״</figcaption></figure>
   </div>`).join("");
 
+document.getElementById("dumbList").innerHTML = LISTS.dumb.map(([en,he]) => `<li class="${en==="a samurai"?"hit":""}">${he}</li>`).join("");
 document.getElementById("samurai").innerHTML = PHOTOS.map(p => `
   <figure><div class="det"><img src="img/bell-${p.id}.jpg" alt="${esc(p.he)}" loading="lazy"><div class="box" style="inset:16% 18% 6% 18%"><span class="tag">${word(DUMB[p.id][0][0])}<small>${pct(DUMB[p.id][0][1])}</small></span></div></div>
-    <div class="cap" style="margin-top:8px">במקום השני: ${word(DUMB[p.id][1][0])} ${pct(DUMB[p.id][1][1])} · בארכיון: ${esc(p.he)}</div>
+    <div class="cap">בארכיון: ${esc(p.he)}<br>במקום השני: ${word(DUMB[p.id][1][0])} ${pct(DUMB[p.id][1][1])}</div>
   </figure>`).join("");
+
+// one orchestrated moment: the six photos get stamped "samurai", one after another
+(() => {
+  const band = document.getElementById("band"), figs = [...band.querySelectorAll(".samurai figure")], cnt = document.getElementById("cnt");
+  const finish = () => { figs.forEach(f => f.classList.add("hit")); cnt.textContent = figs.length; band.classList.add("done"); };
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return finish();
+  const io = new IntersectionObserver(es => {
+    if (!es.some(e => e.isIntersecting)) return;
+    io.disconnect();
+    figs.forEach((f, k) => setTimeout(() => {
+      f.classList.add("hit"); cnt.textContent = k + 1;
+      if (k === figs.length - 1) band.classList.add("done");
+    }, 400 + k * 550));
+  }, { threshold: .3 });
+  io.observe(document.getElementById("samurai"));
+})();
 
 // play: pick a photo, flip the list
 let current = "3124", list = "officer", clf = null;
