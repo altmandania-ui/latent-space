@@ -8,7 +8,7 @@
   @font-face{font-family:Atlas;src:url(fonts/atlas-light-aaa.otf) format("opentype");font-weight:300;font-display:swap}
   @font-face{font-family:Atlas;src:url(fonts/atlas-regular-aaa.otf) format("opentype");font-weight:400;font-display:swap}
   @font-face{font-family:Atlas;src:url(fonts/atlas-medium-aaa.otf) format("opentype");font-weight:500 700;font-display:swap}
-  :root{--bg:#fff;--ink:#111;--mute:#8a8a8a;--rule:#111;--soft:#e6e6e6}
+  :root{--bg:#fff;--ink:#111;--mute:#8a8a8a;--rule:#111;--soft:#e6e6e6;--machine:#22e11f}
   *{box-sizing:border-box}
   html{background:var(--bg)}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:Atlas,"Helvetica Neue",Arial,sans-serif;
@@ -31,12 +31,27 @@
   nav a:hover{text-decoration:underline;text-underline-offset:4px}
 
   /* hero */
-  .hero{padding:96px 0 0}
-  h1{font-weight:300;font-size:clamp(52px,9vw,104px);line-height:1;letter-spacing:-.01em;margin:0;
-    padding-bottom:28px;border-bottom:1px solid var(--rule);max-width:75%}
-  .intro{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;padding:28px 0 0}
-  .intro p{grid-column:2/4;max-width:44ch;font-size:16px}
-  .intro .by{grid-column:1;font-size:12px;color:var(--mute)}
+  .hero{padding:72px 0 0;display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:end}
+  h1{font-weight:300;font-size:clamp(52px,7vw,88px);line-height:.98;letter-spacing:-.01em;margin:0;
+    padding-bottom:28px;border-bottom:1px solid var(--rule)}
+  .intro{padding:22px 0 0}
+  .intro p{max-width:30ch;font-size:20px;line-height:1.4;margin-bottom:28px}
+  .intro .by{display:block;font-size:12px;color:var(--mute);max-width:40ch}
+  .hero-pic figure img{aspect-ratio:4/3;object-fit:cover}
+  .heroLists{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12px}
+  .heroLists li{border-top:2px solid var(--soft);padding-top:6px;color:var(--mute);transition:border-color .3s,color .3s}
+  .heroLists li.on{border-color:var(--ink);color:var(--ink)}
+  .heroCap{font-size:12px;color:var(--mute);margin-top:10px}
+
+  /* the machine's voice: Salaf-style detection box. Green is used ONLY for what the model says. */
+  .det{position:relative}
+  .det .box{position:absolute;border:2px solid var(--machine);pointer-events:none}
+  .det .tag{position:absolute;top:-2px;inset-inline-start:-2px;transform:translateY(-100%);
+    background:var(--machine);color:#000;font:500 13px/1.3 Atlas,sans-serif;padding:3px 7px 2px;white-space:nowrap}
+  .det .tag small{font-weight:400;margin-inline-start:6px;font-size:12px}
+  .det .tag.blink{animation:blink .35s steps(2,end)}
+  @keyframes blink{0%{opacity:0}100%{opacity:1}}
+  @media (prefers-reduced-motion:reduce){.det .tag.blink{animation:none}.heroLists li{transition:none}}
 
   /* sections */
   section{padding-top:120px}
@@ -113,7 +128,7 @@
   .strip button img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
   .strip button[aria-pressed=true],.strip button:hover{opacity:1}
   .toggle{display:flex;border:1px solid var(--ink);margin:6px 0 34px}
-  .toggle button{flex:1;font:400 13px Atlas,sans-serif;letter-spacing:.04em;padding:12px 8px;background:none;border:0;cursor:pointer;color:var(--ink)}
+  .toggle button{flex:1;font:400 13px Atlas,sans-serif;padding:12px 6px;white-space:nowrap;background:none;border:0;cursor:pointer;color:var(--ink)}
   .toggle button+button{border-inline-start:1px solid var(--ink)}
   .toggle button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
   .verdict .k{font-size:12px;color:var(--mute);letter-spacing:.06em}
@@ -151,6 +166,9 @@
     nav ul{display:none}
     .hero{padding-top:48px}
     h1{max-width:100%}
+    .hero{grid-template-columns:1fr;gap:36px;padding-top:36px}
+    .intro p{font-size:18px}
+    .det .tag{font-size:12px}
     .intro,.sec-head,.play .lead,.stage,.own,footer,.punch{grid-template-columns:1fr}
     .punch p{grid-column:auto}
     .samurai{grid-template-columns:1fr 1fr;gap:16px}
@@ -217,10 +235,20 @@
 </nav>
 
 <header class="hero">
-  <h1>מי כתב את הרשימה</h1>
-  <div class="intro">
-    <span class="by">דניה אלטמן<br>תגובה לאנטוניו סומאיני<br>״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, אוקטובר 196 (2026)</span>
-    <p>לקחתי מודל אחד ושש תמונות ישנות, ונתתי לו שתי רשימות מילים שונות. יצאו שתי היסטוריות שונות.</p>
+  <div class="hero-text">
+    <h1>מי כתב את הרשימה</h1>
+    <div class="intro">
+      <p>לקחנו מודל אחד ושש תמונות ישנות, ונתנו לו רשימות מילים שונות. יצאו היסטוריות שונות.</p>
+      <span class="by">דניה אלטמן ועידן ירחי<br>תגובה לאנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, אוקטובר 196 (2026)</span>
+    </div>
+  </div>
+  <div class="hero-pic">
+    <figure class="det bw">
+      <img src="img/bell-3124.jpg" alt="שייח׳ אל-עסכר יושב עם גברים באוהל ומכין קפה. גרטרוד בל, 1909">
+      <div class="box" style="inset:8% 30% 20% 25%"><span class="tag" id="heroTag"></span></div>
+    </figure>
+    <ul class="heroLists" id="heroLists"></ul>
+    <p class="heroCap">אותו שייח׳, אותו מודל. רק הרשימה מתחלפת.</p>
   </div>
 </header>
 
@@ -283,13 +311,13 @@
     <div class="row wide">
       <div class="lab">הטענה נגד סומאיני</div>
       <div class="txt">
-        <p>סומאיני כותב שמה שמארגן את המרחב הלטנטי זה כוח ״לא-אנושי, סטטיסטי״ (עמ׳ 39). אני לא מסכימה איתו. המילה ״סטטיסטי״ עושה פה עבודה פוליטית: היא מעלימה את מי שכתב. מישהו בחר מה ייכנס למודל, מישהו בחר איך לשאול אותו, ומישהו כתב את המילים שמותר לו לבחור מהן. כשקוראים לזה ״סטטיסטיקה״, אף אחד לא אחראי.</p>
+        <p>סומאיני כותב שמה שמארגן את המרחב הלטנטי זה כוח ״לא-אנושי, סטטיסטי״ (עמ׳ 39). אנחנו לא מסכימים איתו. המילה ״סטטיסטי״ עושה פה עבודה פוליטית: היא מעלימה את מי שכתב. מישהו בחר מה ייכנס למודל, מישהו בחר איך לשאול אותו, ומישהו כתב את המילים שמותר לו לבחור מהן. כשקוראים לזה ״סטטיסטיקה״, אף אחד לא אחראי.</p>
       </div>
     </div>
     <div class="row wide">
       <div class="lab">למה צריך לתת למודל רשימה?</div>
       <div class="txt">
-        <p>המודל שהשתמשתי בו נקרא CLIP (סומאיני מזכיר אותו במאמר). הוא <b>לא יודע לכתוב מילים בעצמו.</b> הוא לא יכול להסתכל על תמונה ולהגיד ״זה גבר שמכין קפה״. הדבר היחיד שהוא יודע לעשות זה לקבל תמונה ומילה, ולתת ציון כמה הן מתאימות.</p>
+        <p>המודל שהשתמשנו בו נקרא CLIP (סומאיני מזכיר אותו במאמר). הוא <b>לא יודע לכתוב מילים בעצמו.</b> הוא לא יכול להסתכל על תמונה ולהגיד ״זה גבר שמכין קפה״. הדבר היחיד שהוא יודע לעשות זה לקבל תמונה ומילה, ולתת ציון כמה הן מתאימות.</p>
         <div class="flow">
           <div><span class="small mute">1</span><b>תמונה</b></div>
           <div class="arr">+</div>
@@ -303,12 +331,12 @@
       </div>
     </div>
     <div class="row wide">
-      <div class="lab">מה עשיתי</div>
+      <div class="lab">מה עשינו</div>
       <div class="txt">
         <ol class="steps">
-          <li><b>שתי רשימות.</b> כתבתי שתי רשימות מילים לאותן תמונות. אחת במילים שקצין בריטי היה משתמש בהן ב-1920, ואחת במילים של מישהו שמכיר את האנשים. הקצין והמקומי לא אמיתיים, אלה שתי נקודות מבט שדרכן כתבתי. וחשוב להגיד: גם את הרשימה ״הטובה״ כתבתי אני, לא האנשים שבתמונות.</li>
-          <li><b>שש תמונות.</b> נתתי למודל שש תמונות של גרטרוד בל, פעם עם כל רשימה.</li>
-          <li><b>רשימה שלישית, מטופשת.</b> בסוף נתתי לו רשימה של מילים שאין להן שום קשר לתמונות, כדי לראות אם הוא יודה שהוא לא יודע.</li>
+          <li><b>שתי רשימות.</b> כתבנו שתי רשימות מילים לאותן תמונות. אחת במילים שקצין בריטי היה משתמש בהן ב-1920, ואחת במילים של מישהו שמכיר את האנשים. הקצין והמקומי לא אמיתיים, אלה שתי נקודות מבט שדרכן כתבנו. וחשוב להגיד: גם את הרשימה ״הטובה״ כתבנו אנחנו, לא האנשים שבתמונות.</li>
+          <li><b>שש תמונות.</b> נתנו למודל שש תמונות של גרטרוד בל, פעם עם כל רשימה.</li>
+          <li><b>רשימה שלישית, מטופשת.</b> בסוף נתנו לו רשימה של מילים שאין להן שום קשר לתמונות, כדי לראות אם הוא יודה שהוא לא יודע.</li>
         </ol>
       </div>
     </div>
@@ -328,7 +356,7 @@
   <p class="note" style="margin:-8px 0 24px">ליד כל תמונה: מה באמת קורה בה (לפי הארכיון), ואיזו מילה המודל בחר מכל רשימה. המספר הקטן הוא כמה המודל היה בטוח.</p>
   <div class="rows" id="rows"></div>
 
-  <div class="sec-head" style="margin-top:120px"><span class="num">תוצאה 2</span><h2>ואז נתתי לו רשימה מטופשת</h2></div>
+  <div class="sec-head" style="margin-top:120px"><span class="num">תוצאה 2</span><h2>ואז נתנו לו רשימה מטופשת</h2></div>
   <div class="rows">
     <div class="row wide">
       <div class="lab">הרשימה</div>
@@ -358,14 +386,14 @@
     <div>
       <span class="small mute">1. בחרו תמונה</span>
       <div class="strip" id="strip"></div>
-      <figure class="bw" style="margin-top:16px"><img id="playImg" src="img/bell-3124.jpg" alt=""></figure>
+      <figure class="bw det" style="margin-top:28px"><img id="playImg" src="img/bell-3124.jpg" alt=""><div class="box" style="inset:12% 16% 8% 16%"><span class="tag" id="playTag"></span></div></figure>
     </div>
     <div>
       <span class="small mute">2. בחרו איזו רשימה לתת למודל</span>
       <div class="toggle" id="toggle">
-        <button data-list="officer" aria-pressed="true">רשימה א׳ · מילים של קצין</button>
-        <button data-list="local" aria-pressed="false">רשימה ב׳ · מילים של מקומי</button>
-        <button data-list="dumb" aria-pressed="false">רשימה ג׳ · מטופשת</button>
+        <button data-list="officer" aria-pressed="true">א׳ · מילים של קצין</button>
+        <button data-list="local" aria-pressed="false">ב׳ · מילים של מקומי</button>
+        <button data-list="dumb" aria-pressed="false">ג׳ · רשימה מטופשת</button>
       </div>
       <div class="verdict" aria-live="polite">
         <div class="k">3. המודל בחר:</div>
@@ -399,15 +427,15 @@ a tourist attraction</textarea>
 <section class="answer" id="answer">
   <div class="sec-head"><span class="num">05 · איך העבודה עונה לסלף</span>
     <div>
-    <p>אלג׳ויסר מוחקת את האנשים כדי שהמודל לא ילמד מהם. אני עשיתי הפוך: השארתי את האנשים ואת המודל כמו שהם, ושיניתי רק את המילים. שייח׳ אל-עסכר מכין קפה באוהל שלו. עם מילים של קצין הוא ״שודד מדבר״. עם מילים של מקומי הוא ״גבר בכאפייה״. עם רשימה מטופשת הוא ״סמוראי״. המודל לא החליט מי האנשים האלה. מי שכתב את המילים החליט.</p>
-    <p>ועכשיו השאלה הקשה: מי כתב את הרשימה הראשונה? גרטרוד בל לא הייתה רק צלמת. היא עבדה בשביל המודיעין הבריטי, ועזרה לשרטט את הגבולות של עיראק (האוול, 2007). הכיתובים שלה, ״בני שבט עם רובים״, ״קבוצת בדואים״, הם גם רשימה. רשימה של מי ששולט, על מי שנשלט. מה שקראתי לו פה ״מה באמת יש בתמונה״ הוא בעצם עוד רשימה של מישהו מבחוץ.</p>
-    <p>האנשים בתמונות אף פעם לא קיבלו לכתוב רשימה. לא ב-1909, לא בארכיון, ולא במודל. גם לא בעבודה הזאת: את הרשימה ״שלהם״ כתבתי אני. סירוב, כמו אצל אלג׳ויסר, זו אולי התשובה היחידה שלא מחייבת לכתוב רשימה בשביל מישהו אחר.</p>
+    <p>אלג׳ויסר מוחקת את האנשים כדי שהמודל לא ילמד מהם. אנחנו עשינו הפוך: השארנו את האנשים ואת המודל כמו שהם, ושינינו רק את המילים. שייח׳ אל-עסכר מכין קפה באוהל שלו. עם מילים של קצין הוא ״שודד מדבר״. עם מילים של מקומי הוא ״גבר בכאפייה״. עם רשימה מטופשת הוא ״סמוראי״. המודל לא החליט מי האנשים האלה. מי שכתב את המילים החליט.</p>
+    <p>ועכשיו השאלה הקשה: מי כתב את הרשימה הראשונה? גרטרוד בל לא הייתה רק צלמת. היא עבדה בשביל המודיעין הבריטי, ועזרה לשרטט את הגבולות של עיראק (האוול, 2007). הכיתובים שלה, ״בני שבט עם רובים״, ״קבוצת בדואים״, הם גם רשימה. רשימה של מי ששולט, על מי שנשלט. מה שקראנו לו פה ״מה באמת יש בתמונה״ הוא בעצם עוד רשימה של מישהו מבחוץ.</p>
+    <p>האנשים בתמונות אף פעם לא קיבלו לכתוב רשימה. לא ב-1909, לא בארכיון, ולא במודל. גם לא בעבודה הזאת: את הרשימה ״שלהם״ כתבנו אנחנו. סירוב, כמו אצל אלג׳ויסר, זו אולי התשובה היחידה שלא מחייבת לכתוב רשימה בשביל מישהו אחר.</p>
     </div>
   </div>
 </section>
 
 <footer>
-  <p>מרחב לטנטי<br>דניה אלטמן, 2026<br><br>עבודת סטודנטית, לצורכי לימוד בלבד. לא למטרות מסחריות.<br>הפונטים (Atlas, AAA) משמשים במסגרת עבודה אקדמית ולא להפצה.</p>
+  <p>מרחב לטנטי<br>דניה אלטמן ועידן ירחי, 2026<br><br>עבודת סטודנטים, לצורכי לימוד בלבד. לא למטרות מסחריות.<br>הפונטים (Atlas, AAA) משמשים במסגרת עבודה אקדמית ולא להפצה.</p>
   <p>צילומים: גרטרוד בל, ארכיון גרטרוד בל, ספריית אוניברסיטת ניוקאסל. רישיון CC BY-SA 4.0<br>סלף: נוף אלג׳ויסר, 2020, באדיבות האמנית</p>
   <p>אנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, <i>אוקטובר</i> 196 (אביב 2026): 18–60.<br><br>
   <span lang="en">Alec Radford et al., “Learning Transferable Visual Models From Natural Language Supervision,” <i>ICML</i> 2021. arXiv:2103.00020</span> (המאמר שמציג את CLIP ואת 400 מיליון זוגות התמונה-טקסט שעליהם אומן).<br><br>
@@ -498,9 +526,8 @@ document.getElementById("rows").innerHTML = PHOTOS.map(p => `
   </div>`).join("");
 
 document.getElementById("samurai").innerHTML = PHOTOS.map(p => `
-  <figure><img src="img/bell-${p.id}.jpg" alt="${esc(p.he)}" loading="lazy">
-    <div class="tag"><b>${word(DUMB[p.id][0][0])}</b><span>${pct(DUMB[p.id][0][1])}</span></div>
-    <div class="cap">במקום השני: ${word(DUMB[p.id][1][0])} ${pct(DUMB[p.id][1][1])} · בארכיון: ${esc(p.he)}</div>
+  <figure><div class="det"><img src="img/bell-${p.id}.jpg" alt="${esc(p.he)}" loading="lazy"><div class="box" style="inset:16% 18% 6% 18%"><span class="tag">${word(DUMB[p.id][0][0])}<small>${pct(DUMB[p.id][0][1])}</small></span></div></div>
+    <div class="cap" style="margin-top:8px">במקום השני: ${word(DUMB[p.id][1][0])} ${pct(DUMB[p.id][1][1])} · בארכיון: ${esc(p.he)}</div>
   </figure>`).join("");
 
 // play: pick a photo, flip the list
@@ -516,7 +543,28 @@ function render(){
   document.getElementById("vPc").textContent = `המודל בטוח ב-${pct(s)}`;
   document.getElementById("vList").innerHTML = RESULTS[current][list].map(([w,sc],i) => `<li class="${i?"":"on"}"><span>${word(w)}</span><span>${pct(sc)}</span></li>`).join("");
   document.getElementById("vOrig").innerHTML = `ומה באמת יש בתמונה, לפי הארכיון: ${esc(p.he)}`;
+  setTag(document.getElementById("playTag"), en, s);
 }
+function setTag(el, en, sc){
+  el.innerHTML = `${word(en)}<small>${pct(sc)}</small>`;
+  el.classList.remove("blink"); void el.offsetWidth; el.classList.add("blink");
+}
+
+// hero: the same photo, the label flips with the list
+(() => {
+  const states = [["officer","רשימה א׳: מילים של קצין"],["local","רשימה ב׳: מילים של מקומי"],["dumb","רשימה ג׳: מטופשת"]];
+  const tag = document.getElementById("heroTag"), ul = document.getElementById("heroLists");
+  ul.innerHTML = states.map(([,t]) => `<li>${t}</li>`).join("");
+  let i = 0;
+  const show = () => {
+    const [k] = states[i], [en, sc] = RESULTS["3124"][k][0];
+    setTag(tag, en, sc);
+    [...ul.children].forEach((li, j) => li.classList.toggle("on", j === i));
+  };
+  show();
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
+    setInterval(() => { i = (i + 1) % states.length; show(); }, 2600);
+})();
 strip.addEventListener("click", e => {
   const b = e.target.closest("button"); if(!b) return;
   current = b.dataset.id;
