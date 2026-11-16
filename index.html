@@ -74,6 +74,7 @@
   .lists td.r{direction:ltr;text-align:left;color:var(--grey);font-feature-settings:"tnum" 1;white-space:nowrap;padding-inline:12px}
   .lists td.p{direction:ltr;text-align:left;color:var(--blue-ink);font-feature-settings:"tnum" 1;white-space:nowrap;width:4.5em}
   .lists tr.mark td{color:var(--ink);font-weight:400}
+  .lists .lnote{font-size:var(--cap);color:var(--grey);margin-top:10px}
   .lists tr.mark td.p{color:var(--blue);font-weight:500}
 
   .verdict{margin-top:160px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end}
@@ -237,7 +238,7 @@
   <div class="step">
     <div>
       <p class="k">מאה אחוז<span class="n">(4)</span></p>
-      <p>ואז אנשים כתבו כלל: כל ציון מושווה רק לשאר המילים ברשימה שלו, וההפרשים מוגדלים עד שהכול מסתכם ל-100%. ״סמוראי״ ניצח רשימה חלשה. הכיתוב של בל הפסיד לרשימה חזקה.</p>
+      <p>ואז נכנס כלל שאנשים בחרו: כל ציון מושווה רק לשאר המילים ברשימה שלו, וההפרשים מוגדלים (בכמה, המודל למד באימון) עד שהכול מסתכם ל-100%. ״סמוראי״ ניצח רשימה חלשה. הכיתוב של בל הפסיד לרשימה חזקה.</p>
     </div>
     <div class="lists" id="lists"></div>
   </div>
@@ -284,7 +285,7 @@
       <div><span dir="ltr">17/18</span><small>פעמים שהתשובה השתנתה כשהחלפנו מודל או ניסוח. רק ״בן שבט לבוש גלימה״ לא זז.</small></div>
       <div style="color:var(--ink)"><span dir="ltr">0–5</span><small>תמונות ש״סמוראי״ ניצח בהן, תלוי במודל ובניסוח</small></div>
     </div>
-    <p class="close">תשובה שמשתנה כשמשנים את הניסוח היא לא ידיעה על התמונה. אי אפשר לסמוך עליה: היא תלויה במי ששאל, באיזה מודל, ובאילו מילים.</p>
+    <p class="close">תשובה שמשתנה כשמשנים את הניסוח היא לא ידיעה על התמונה.</p>
   </div>
 
   <p class="cap" style="margin-top:80px;max-width:70ch">‏CLIP ViT-B/32 (<span lang="en">openai/clip-vit-base-patch32</span> דרך <span lang="en">Xenova/clip-vit-base-patch32</span>, fp32), תבנית <span lang="en">“a photograph of {}”</span>, הורץ ב-15.11.2026. במפה: ‏CLIP ViT-B/32, ViT-B/16, ViT-L/14 של OpenAI ו-SigLIP base של גוגל (גרסאות <span lang="en">Xenova</span>, fp32), ארבע תבניות, והתשובה היא המילה עם ההתאמה הגבוהה ביותר. המספרים מעוגלים ל-4 ספרות, ועדיין נותנים את אותה תוצאה. ״התאמה״ היא דמיון קוסינוס. האחוזים הם softmax על 100 × ההתאמה, בתוך כל רשימה. התוצאות כמו שיצאו, בלי עריכה.</p>
@@ -292,7 +293,7 @@
 
 <section class="answer" id="answer">
   <p class="cap" style="margin-bottom:16px">איך העבודה עונה לסלף</p>
-  <p>אלג׳ויסר מוחקת את האנשים כדי שהמודל לא ילמד מהם. אנחנו השארנו אותם ופתחנו את המודל: בפנים אין ״כוח לא-אנושי״, יש כפל וחיבור, רשימה שמישהו כתב וכלל של מאה אחוז. וכשמחליפים מודל או ניסוח, התשובה משתנה ב-17 מתוך 18 מקרים, כך שגם ״סמוראי״ של סלף הוא לא מה שהמודל ראה, אלא מה שההגדרות הוציאו.</p>
+  <p>אלג׳ויסר מוחקת את האנשים כדי שהמודל לא ילמד מהם. אנחנו השארנו אותם ופתחנו את המודל: בפנים אין ״כוח לא-אנושי״, יש כפל וחיבור, רשימה שמישהו כתב וכלל של מאה אחוז. וכשמחליפים מודל או ניסוח, התשובה משתנה ב-17 מתוך 18 מקרים, וכנראה שגם ״סמוראי״ של סלף הוא לא מה שהמודל ראה, אלא מה שההגדרות הוציאו.</p>
 </section>
 
 <section id="try">
@@ -319,7 +320,7 @@ a pizza</textarea>
 
 <footer>
   <p>מרחב לטנטי<br>דניה אלטמן ועידן ירחי, 2026<br><br>עבודת סטודנטים, לצורכי לימוד בלבד. לא למטרות מסחריות.<br>הפונטים משמשים במסגרת עבודה אקדמית בלבד.</p>
-  <p>צילומים: גרטרוד בל. ארכיון גרטרוד בל, ספריית אוניברסיטת ניוקאסל. רישיון CC BY-SA 4.0<br><span lang="en">GB/3/1/12/1/205, GB/3/1/25/1/203, GB/3/1/25/1/202, GB/PERS/S/010, GB/3/1/25/1/367–373, GB/3/1/1/1/219</span><br><br>סלף: נוף אלג׳ויסר, 2020. מתוך: סומאיני, אוקטובר 196 (2026), עמ׳ 47</p>
+  <p>צילומים: גרטרוד בל. ארכיון גרטרוד בל, ספריית אוניברסיטת ניוקאסל. רישיון CC BY-SA 4.0<br><span lang="en">GB/3/1/12/1/205, GB/3/1/25/1/203, GB/3/1/25/1/202, GB/PERS/S/010, GB/3/1/25/1/372, GB/3/1/1/1/219</span><br><br>סלף: נוף אלג׳ויסר, 2020. מתוך: סומאיני, אוקטובר 196 (2026), עמ׳ 47</p>
   <p>אנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, <i>אוקטובר</i> 196 (אביב 2026): 18–60.<br><br>
   <span lang="en">Alec Radford et al., “Learning Transferable Visual Models From Natural Language Supervision,” <i>ICML</i> 2021. arXiv:2103.00020</span><br><br>
   <span lang="en">Xiaohua Zhai et al., “Sigmoid Loss for Language Image Pre-Training,” <i>ICCV</i> 2023. arXiv:2303.15343</span></p>
@@ -350,14 +351,14 @@ const dot = (a, b) => a.reduce((s, x, i) => s + x * b[i], 0);
 document.getElementById("sumSam").innerHTML = `<span class="t">samurai</span>  ${terms(BOX.img, BOX.samurai)}  =  ${dot(BOX.img, BOX.samurai).toFixed(4)}`;
 document.getElementById("sumBell").innerHTML = `<span class="t">Bell</span>  ${terms(BOX.img, BOX.bell)}  =  ${dot(BOX.img, BOX.bell).toFixed(4)}`;
 
-const table = (title, rows, mark) => `<table><caption>${title}</caption>${rows.map(([en, he, sh, c]) =>
-  `<tr class="${en === mark ? "mark" : ""}"><td>${esc(he)}</td><td class="r">${c.toFixed(2)}</td><td class="p">${pct(sh)}</td></tr>`).join("")}</table>`;
+const table = (title, rows, mark, note = "") => `<div><table><caption>${title}</caption>${rows.slice().sort((a, b) => b[3] - a[3]).map(([en, he, sh, c]) =>
+  `<tr class="${en === mark ? "mark" : ""}"><td>${esc(he)}</td><td class="r">${c.toFixed(2)}</td><td class="p">${pct(sh)}</td></tr>`).join("")}</table>${note ? `<p class="lnote">${note}</p>` : ""}</div>`;
 document.getElementById("lists").innerHTML =
   table("שש דמויות. התאמה, ואז האחוז שהכלל נותן", LISTS.dumb, "a samurai") +
-  table("המילים של בל. התאמה, ואז האחוז שהכלל נותן", LISTS.bell, "tribeswomen at an encampment");
+  table("המילים של בל. התאמה, ואז האחוז שהכלל נותן", LISTS.bell, "tribeswomen at an encampment", "גם המילים של בל עצמה, ״נשות שבט במחנה״, מפסידות כאן ל״קבוצת בדואים״.");
 
 const PHOTOS_HE = {"3124":"שייח׳ אל-עסכר משבט ג׳בור יושב עם גברים באוהל ומכין קפה.","6931":"שייח׳ חרב מהחווייטאת ובנו קאסם יושבים באוהל.","6930":"אשתו של חרב ובנו קאסם, עם נשות השבט במחנה.","8038":"בן שבט הסלובה בגלימה מעור צבי.","7095":"גברים משבט בני חסן עם רובים.","223":"קבוצת בדואים."};
-const PHOTOS_REF = {"3124":"נמרוד, עיראק, 1909. GB/3/1/12/1/205","6931":"ערב הסעודית, 1914. GB/3/1/25/1/203","6930":"ערב הסעודית, 1914. GB/3/1/25/1/202","8038":"1914. GB/PERS/S/010","7095":"ערב הסעודית, 1914. GB/3/1/25/1/367–373","223":"עין מוסא, ירדן, 1900. GB/3/1/1/1/219"};
+const PHOTOS_REF = {"3124":"נמרוד, עיראק, 1909. GB/3/1/12/1/205","6931":"ערב הסעודית, 1914. GB/3/1/25/1/203","6930":"ערב הסעודית, 1914. GB/3/1/25/1/202","8038":"1914. GB/PERS/S/010","7095":"ערב הסעודית, 1914. GB/3/1/25/1/372","223":"עין מוסא, ירדן, 1900. GB/3/1/1/1/219"};
 // the map: every answer, one cell per run
 (() => {
   const PH = ["3124","6931","6930","8038","7095","223"];
