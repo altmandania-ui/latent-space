@@ -4,66 +4,94 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#4b1e86">
-<title>טלפון שבור: מילקי</title>
+<title>מאיפה זה הגיע?</title>
 <style>
   @font-face{font-family:Atlas;src:url(fonts/f-300.woff2) format("woff2");font-weight:300;font-display:swap}
   @font-face{font-family:Atlas;src:url(fonts/f-400.woff2) format("woff2");font-weight:400;font-display:swap}
   @font-face{font-family:Atlas;src:url(fonts/f-500.woff2) format("woff2");font-weight:500 700;font-display:swap}
 
-  /* the site's colours: Milky purple, cream, logo yellow */
   :root{
     --bg:#4b1e86; --fg:#fff6e9; --dim:rgba(255,246,233,.74); --yellow:#ffd426; --rule:rgba(255,246,233,.28);
     --cap:13px; --body:17px; --mid:clamp(23px,2.5vw,32px); --big:clamp(64px,13vw,210px);
     --gut:28px;
   }
   *{box-sizing:border-box}
-  html{background:var(--bg);overflow-x:clip}
+  html{background:var(--bg);overflow-x:clip;scroll-behavior:smooth}
   body{margin:0;color:var(--fg);font:400 var(--body)/1.6 Atlas,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
   img,video{display:block;max-width:100%;height:auto}
   figure{margin:0}
   p{margin:0 0 1em}
   a{color:inherit;text-underline-offset:4px;text-decoration-thickness:1px}
+  button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
   [lang=en]{direction:ltr;unicode-bidi:isolate}
+  [hidden]{display:none!important}
   .wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
   h1,h2{font-weight:300;margin:0;line-height:1;letter-spacing:-.01em;color:var(--yellow)}
   h1{font-size:var(--big)}
   h2{font-size:clamp(34px,5vw,72px);line-height:1.05}
-  h2 small{display:block;font-size:var(--mid);color:var(--fg);margin-bottom:8px}
+  b{font-weight:500;color:var(--yellow)}
   .cap{font-size:var(--cap);line-height:1.45;color:var(--dim);margin-top:10px}
-  section{margin-top:180px}
+  section{margin-top:140px}
 
-  .top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:24px 0;font-size:var(--cap);color:var(--dim)}
-  .top nav{display:flex;gap:20px;flex-wrap:wrap}
-  .top a{text-decoration:none}
-  .top a:hover,.top a:focus-visible{color:var(--yellow)}
+  .top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:20px 0;font-size:var(--cap);color:var(--dim)}
+  .top button:hover,.top button:focus-visible{color:var(--yellow)}
 
-  .open{padding:60px 0 0}
-  .open .lede{font-size:var(--mid);line-height:1.3;font-weight:300;max-width:44ch;margin:36px 0 0}
-  .open .how{color:var(--dim);max-width:600px;margin:28px 0 0}
+  /* the game: you start from the end and walk back */
+  .game{min-height:calc(100svh - 64px);display:flex;flex-direction:column;justify-content:center;padding:0 0 48px}
+  .bar{display:flex;justify-content:space-between;align-items:baseline;max-width:var(--fw);margin:0 auto 12px;width:100%;font-size:var(--cap);color:var(--dim);font-feature-settings:"tnum" 1}
+  .bar b{font-weight:400}
+  .game{--fw:min(100%,calc(46svh * 16 / 9))}
+  .frame{position:relative;width:var(--fw);aspect-ratio:16/9;margin:0 auto;background:#2f1159;overflow:hidden}
+  .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .4s,transform .7s cubic-bezier(.2,.7,.2,1),filter .4s}
+  .frame img.out{opacity:0;transform:scale(1.06);filter:blur(10px)}
+  .thumbs{display:flex;gap:6px;max-width:var(--fw);width:100%;margin:8px auto 0;min-height:0;flex-wrap:wrap}
+  .thumbs button{flex:0 0 64px;aspect-ratio:16/9;overflow:hidden;opacity:.55;outline:1px solid transparent;transition:opacity .2s}
+  .thumbs button img{width:100%;height:100%;object-fit:cover}
+  .thumbs button:hover,.thumbs button:focus-visible{opacity:1}
+  .thumbs button.on{opacity:1;outline:2px solid var(--yellow)}
+  .panel{max-width:var(--fw);width:100%;margin:16px auto 0;min-height:190px}
+  .panel .q{font-size:clamp(34px,4.4vw,56px);line-height:1.05;font-weight:300;color:var(--yellow);margin:0}
+  .panel .sub{font-size:var(--mid);line-height:1.25;font-weight:300;margin:8px 0 0}
+  .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
+  .opts.n{grid-template-columns:repeat(4,1fr)}
+  .opts button{border:1px solid var(--yellow);color:var(--yellow);border-radius:999px;padding:12px 18px;font-size:var(--body);line-height:1.3;transition:background .2s,color .2s,transform .1s}
+  .opts.n button{font-size:var(--mid);font-weight:300;font-feature-settings:"tnum" 1}
+  .opts button:hover,.opts button:focus-visible{background:var(--yellow);color:var(--bg)}
+  .opts button:active,.go:active{transform:scale(.97)}
+  .tag{font-size:var(--mid);line-height:1.2;font-weight:300;color:var(--yellow);margin:0}
+  .he{margin:8px 0 0;max-width:52ch}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}
+  .go{background:var(--yellow);color:var(--bg);border-radius:999px;padding:14px 28px;font-size:var(--mid);line-height:1.1;font-weight:400;transition:transform .1s}
+  .go:hover,.go:focus-visible{background:var(--fg)}
+  .count{font-size:var(--cap);color:var(--dim);font-feature-settings:"tnum" 1}
+  .verdict{font-size:clamp(30px,3.6vw,48px);line-height:1.05;font-weight:300;color:var(--yellow);margin:0}
+  .find{font-size:var(--mid);line-height:1.3;font-weight:300;max-width:38ch;margin:12px 0 0}
+  .desc{font-size:var(--cap);line-height:1.55;color:var(--dim);text-align:left;max-width:70ch}
 
+  /* words stay closed until clicked */
+  summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--yellow);color:var(--yellow);border-radius:999px;padding:7px 16px;font-size:var(--cap);line-height:1.4;user-select:none;transition:background .2s,color .2s}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-size:18px;line-height:1;transition:transform .2s}
+  summary:hover{background:rgba(255,212,38,.14)}
+  summary:focus-visible,button:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+  details[open]>summary{background:var(--yellow);color:var(--bg)}
+  details[open]>summary::after{transform:rotate(45deg)}
+  details.more{margin-top:14px}
+  details.more>p{margin-top:14px}
+  .qa{max-width:760px}
+  .qa details{border-top:1px solid var(--rule)}
+  .qa details:last-child{border-bottom:1px solid var(--rule)}
+  .qa summary{display:flex;justify-content:space-between;align-items:baseline;gap:20px;border:0;border-radius:0;padding:20px 0;font-size:var(--mid);line-height:1.25;font-weight:300;color:var(--fg)}
+  .qa summary::after{font-size:1.2em;color:var(--yellow)}
+  .qa summary:hover{background:none;color:var(--yellow)}
+  .qa details[open]>summary{background:none;color:var(--yellow)}
+  .qa details>p{max-width:600px;margin:0 0 24px}
+
+  /* the explanation, shown after the game */
+  #rest{padding-top:60px}
+  #rest .lede{font-size:var(--mid);line-height:1.3;font-weight:300;max-width:44ch;margin:36px 0 0}
   .film{margin-top:100px}
   .film video{width:100%;background:#000}
-  .ad{margin-top:100px}
-  .ad img{width:100%}
-
-  /* a chain: one row that scrolls sideways, always starting from the same original */
-  .how2{color:var(--dim);max-width:600px;margin:22px 0 0}
-  .chain{list-style:none;margin:44px 0 0;padding:0 0 22px;display:flex;gap:28px;align-items:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-color:var(--yellow) transparent}
-  .chain li{flex:0 0 min(520px,78vw);scroll-snap-align:start}
-  .chain img{width:100%}
-  .chain .rn{font-size:clamp(56px,6vw,88px);line-height:.9;font-weight:300;color:var(--yellow);margin:0 0 14px;font-feature-settings:"tnum" 1}
-  .chain .rn small{display:block;font-size:var(--body);line-height:1.4;color:var(--fg);margin-bottom:4px}
-  .chain .rn.model{font-size:clamp(34px,3.6vw,52px);line-height:1.1}
-  .chain .he{margin:14px 0 0}
-  .chain .desc{font-size:var(--cap);line-height:1.55;color:var(--dim);margin:12px 0 0;text-align:left}
-  .hint{margin:14px 0 0}
-  .find{font-size:var(--mid);line-height:1.3;font-weight:300;max-width:34ch;margin:56px 0 0}
-  .find b{display:block;font-size:var(--cap);font-weight:400;color:var(--yellow);margin-bottom:10px}
-  .man{margin-top:100px}
-  .man img{width:100%}
-  .man figcaption{font-size:var(--mid);line-height:1.3;font-weight:300;max-width:30ch;margin-top:24px}
-
-  b{font-weight:500;color:var(--yellow)}
   .text{max-width:600px}
   h2.h,.text h2,.work .meta h2{font-size:var(--mid);line-height:1.2;margin-bottom:.8em}
   .work img{width:100%}
@@ -71,21 +99,22 @@
   .work .meta h2,.work .meta p{margin:0}
   .answer p{font-size:var(--mid);line-height:1.35;font-weight:300;max-width:40ch}
   .answer p.cap{font-size:var(--cap);line-height:1.45;max-width:none;font-weight:400;color:var(--yellow)}
-  .find b{color:var(--yellow)}
-
-  footer{margin-top:180px;padding:28px 0 100px;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gut);border-top:1px solid var(--rule)}
+  .answer details.more>p{font-size:var(--body);line-height:1.6;font-weight:400;max-width:600px}
+  footer{margin-top:140px;padding:28px 0 100px;border-top:1px solid var(--rule)}
   footer p{font-size:var(--cap);color:var(--dim);line-height:1.6}
+  footer details>.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gut);margin-top:24px}
 
   @media (max-width:820px){
     :root{--gut:18px;--body:16px}
-    section{margin-top:110px}
-    .open{padding-top:30px}
-    .film,.ad,.man{margin-top:64px}
-    .chain{display:block;overflow:visible;padding:0}
-    .chain li{margin-top:48px}
-    .hint{display:none}
-    footer{grid-template-columns:1fr;gap:28px;margin-top:110px}
+    section{margin-top:90px}
+    .game{justify-content:flex-start;padding-top:8px}
+    .opts{grid-template-columns:1fr}
+    .opts.n{grid-template-columns:repeat(2,1fr)}
+    .thumbs button{flex-basis:48px}
+    footer{margin-top:90px}
+    footer details>.cols{grid-template-columns:1fr;gap:28px}
   }
+  @media (prefers-reduced-motion:reduce){.frame img{transition:opacity .2s}.frame img.out{transform:none;filter:none}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -93,19 +122,32 @@
 
 <div class="top">
   <span>דניה אלטמן ועידן ירחי</span>
-  <nav><a href="#work">העבודה</a><a href="#a">חלק א׳</a><a href="#partb">חלק ב׳</a><a href="#ca">א׳</a><a href="#cb">ב׳</a><a href="#cc">ג׳</a><a href="#cd">ד׳</a><a href="#answer">התשובה</a></nav>
+  <button type="button" id="skip">דלגו להסבר</button>
 </div>
 
-<header class="open">
-  <h1>טלפון שבור</h1>
-  <p class="lede">לקחנו פרסומת של מילקי ונתנו למכונה לתאר אותה, לצייר אותה מחדש, ושוב לתאר ולצייר. המודל לא מתקדם בקו ישר: בכל סבב הוא מנחש מחדש. רצינו לראות מה נשאר מהמעדן הכי ישראלי שיש אחרי כמה סבבים.</p>
-  <p class="how">ארבע שרשראות, כולן מתחילות מאותה פרסומת. כל סבב מקבל את התמונה של הסבב הקודם. לא בחרנו ולא הרצנו שוב.</p>
-</header>
+<main class="game" id="game">
+  <div class="bar"><span id="lvl"></span><span id="score"></span></div>
+  <div class="frame"><img id="pic" alt=""></div>
+  <div class="thumbs" id="thumbs"></div>
+  <div class="panel" id="panel" aria-live="polite"></div>
+</main>
 
-<!-- VIDEO SLOT: put the file at video/milky-edit.mp4. The block stays hidden until that file loads. -->
-<figure class="film" id="film" hidden>
-  <video src="video/milky-edit.mp4" controls muted playsinline preload="metadata"></video>
-</figure>
+<div id="rest" hidden>
+  <h1>טלפון שבור</h1>
+  <p class="lede">לקחנו פרסומת של מילקי ונתנו למכונה לתאר אותה, לצייר אותה מחדש, ושוב לתאר ולצייר. ארבע שרשראות, כולן מתחילות מאותה פרסומת. לא בחרנו ולא הרצנו שוב.</p>
+
+  <!-- VIDEO SLOT: put the file at video/milky-edit.mp4. The block stays hidden until that file loads. -->
+  <figure class="film" id="film" hidden>
+    <video src="video/milky-edit.mp4" controls muted playsinline preload="metadata"></video>
+  </figure>
+
+<section class="answer" id="answer">
+  <p class="cap" style="margin-bottom:16px">איך העבודה עונה ל-<span lang="en">xhairymutantx</span></p>
+  <p>הם עבדו קשה כדי להכניס זהות למודל. אנחנו בדקנו את הכיוון ההפוך: מה קורה לזהות שכבר נמצאת שם.</p>
+  <details class="more"><summary>התשובה המלאה</summary>
+  <p>הרנדון ודרייהרסט עבדו קשה כדי להכניס זהות למודל: אימנו מודל, ייצרו אלפי תמונות, והשתמשו באמינות של מוזיאון. אנחנו בדקנו את הכיוון ההפוך: מה קורה לזהות שכבר נמצאת שם. מילקי מוכר למודל כל כך טוב שהוא צייר את הלוגו בלי שביקשנו. בלי שום מאמץ מיוחד מצדנו, אחרי כמה סבבים הוא היה גלידה אמריקאית, ציור שמן במסגרת זהב, וגבר מזוקן ליד עץ זית.</p>
+  </details>
+</section>
 
 <section id="work" class="work">
   <div class="meta">
@@ -118,188 +160,140 @@
   </figure>
 </section>
 
-<section id="a" class="text" style="margin-inline:auto">
+<section id="a" class="text qa" style="margin-inline:auto">
   <h2>חלק א׳. שלוש שאלות</h2>
-  <p><b>איזה ארכיון העבודה משתמשת בו, ומה חסר בו?</b> הם אימנו מודל על תמונות של הולי הרנדון עצמה, בתחפושת ועם שיער אדום מוגזם. דאטה של אדם אחד, שבחר בעצמו מה נכנס. מה שחסר זה כל מי שאין לו מוזיאון. ויטני מעלה את התמונות לאתר שמודלים סומכים עליו, אז הולי יכולה לקבוע איך יזכרו אותה. לרוב האנשים אין ויטני.</p>
-  <p><b>מה המרחב הלטנטי חושף בעבודה, ומה הוא מעלים?</b> הוא חושף ששם של אדם בתוך מודל הוא רשימת תכונות: ג׳ינג׳ית, פוני, עיניים כחולות. מגזימים בהן, וההגזמה הופכת להולי הבאה. מה שמוסתר זה אם זה עבד. אף אחד לא בדק אם המודלים הבאים למדו את ההולי השעירה.</p>
-  <p><b>איזו אסטרטגיה: גליץ׳, הסתרה או סירוב?</b> גליץ׳, בכוונה. במקום לצאת מהדאטה הם נכנסים אליו ומשבשים אותו מבפנים. סומאיני מצטט אותם: <span lang="en">“all media is training data”</span> (עמ׳ 60). אם הכול יהפוך לדאטה בכל מקרה, לפחות שהם יבחרו איזה.</p>
+  <details><summary>איזה ארכיון העבודה משתמשת בו, ומה חסר בו?</summary><p>הם אימנו מודל על תמונות של הולי הרנדון עצמה, בתחפושת ועם שיער אדום מוגזם. דאטה של אדם אחד, שבחר בעצמו מה נכנס. מה שחסר זה כל מי שאין לו מוזיאון. ויטני מעלה את התמונות לאתר שמודלים סומכים עליו, אז הולי יכולה לקבוע איך יזכרו אותה. לרוב האנשים אין ויטני.</p></details>
+  <details><summary>מה המרחב הלטנטי חושף בעבודה, ומה הוא מעלים?</summary><p>הוא חושף ששם של אדם בתוך מודל הוא רשימת תכונות: ג׳ינג׳ית, פוני, עיניים כחולות. מגזימים בהן, וההגזמה הופכת להולי הבאה. מה שמוסתר זה אם זה עבד. אף אחד לא בדק אם המודלים הבאים למדו את ההולי השעירה.</p></details>
+  <details><summary>איזו אסטרטגיה: גליץ׳, הסתרה או סירוב?</summary><p>גליץ׳, בכוונה. במקום לצאת מהדאטה הם נכנסים אליו ומשבשים אותו מבפנים. סומאיני מצטט אותם: <span lang="en">“all media is training data”</span> (עמ׳ 60). אם הכול יהפוך לדאטה בכל מקרה, לפחות שהם יבחרו איזה.</p></details>
 </section>
 
-<section id="partb" class="text">
+<section id="partb" class="text qa">
   <h2 class="h">חלק ב׳. טלפון שבור, על מילקי</h2>
-  <p><b>המהלך:</b> להחליף ארכיון. הם עבדו על הולי. אנחנו לקחנו פרסומת של מילקי והעברנו אותה ממכונה למכונה, בארבע דרכים.</p>
-  <p><b>הכלים:</b> Claude (Opus 5.5) מתאר. Nano Banana 2.1, דרך Magnific, מצייר. בשרשרת ד׳ מציירים גם Z-Image, ‏Classic Fast ו-Ideogram.</p>
-</section>
-
-<figure class="ad">
-  <img src="img/milky/00-start.png" width="595" height="336" alt="הפרסומת המקורית: גביע מילקי על רקע סגול, כפית זהב ונקודות קצפת מסביב">
-  <figcaption class="cap">פרסומת מילקי, שטראוס</figcaption>
-</figure>
-
-<section id="ca">
-  <h2><small>שרשרת א׳</small>תיאור מלא</h2>
-  <p class="how2">תיאור מלא, 9 סבבים. בסבב הראשון המודל כתב ׳מילקי׳ בעצמו. בסבב השני כבר היה ׳מעדן קצפת׳. בסבב התשיעי, גלידה עם בראוניז.</p>
-  <ol class="chain" tabindex="0" aria-label="שרשרת א׳: המקור ותשעה סבבים">
-      <li>
-        <p class="rn"><small>המקור</small>0</p>
-        <img src="img/milky/00-start.png" width="595" height="336" loading="lazy" alt="הפרסומת המקורית: גביע מילקי על רקע סגול, כפית זהב ונקודות קצפת מסביב">
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>1</p>
-        <img src="img/milky/round-01.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 1">
-        <p class="he">המודל כתב ׳מילקי׳ בעצמו, עם לוגו כמעט זהה. בתיאור היה כתוב רק ״אותיות בעברית״.</p>
-        <p class="desc" lang="en">A glossy advertising image on a deep purple background with a soft lighter purple glow in the center. In the middle floats a clear plastic dessert cup: chocolate pudding in the bottom half, a thick layer of white whipped cream on top, a small swirl of cream peaking above the rim. On the cup, a large purple oval label tilted slightly, with bold yellow-and-white rounded letters in Hebrew and a small colorful star-burst emblem above them. A shiny gold spoon crosses in front of the cup diagonally, holding a dollop of whipped cream. Around it, dozens of small white whipped-cream swirls are scattered across the purple background like a pattern.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>2</p>
-        <img src="img/milky/round-02.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 2">
-        <p class="he">בסבב השני ׳מילקי׳ כבר לא היה שם. היה ׳מעדן קצפת׳.</p>
-        <p class="desc" lang="en">A glossy dessert advertisement on a rich purple background with a glowing violet light and tiny sparkles behind the center. A clear plastic cup with dark chocolate pudding at the bottom and a thick white whipped-cream layer on top, a cream swirl rising above the rim. On the front, a large rounded purple label with big yellow Hebrew letters outlined in white, and a small colorful flower-like emblem with tiny Hebrew text above them. A shiny gold spoon in front of the cup, its bowl full of whipped cream. Many white whipped-cream rosettes float all around, some sharp, some blurred in the foreground corners.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>3</p>
-        <img src="img/milky/round-03.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 3">
-        <p class="desc" lang="en">A glossy dessert advertisement on a deep purple background with a bright violet starburst glow and sparkles behind the center. A clear plastic cup of dark chocolate pudding topped with a tall, pointed swirl of white whipped cream overflowing the rim. On the cup, a round purple sticker with large yellow Hebrew text in two lines: "מעדן קצפת", and above it a small round multicolored flower badge with the tiny Hebrew words "טעים במיוחד". A gold spoon lies in front at the bottom right with a dollop of whipped cream. Big white meringue-like cream rosettes float everywhere, the ones near the edges blurred.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>4</p>
-        <img src="img/milky/round-04.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 4">
-        <p class="desc" lang="en">A dessert advertisement on a purple background with a strong violet starburst of light rays and glittering sparkles behind the product. A clear cup of chocolate pudding crowned with a very tall, pointed swirl of white whipped cream. On the cup, a round purple label with big yellow Hebrew letters in two lines, "מעדן קצפת", and a small rainbow-petal flower badge above with tiny Hebrew text. A gold spoon with a small dollop of cream lies diagonally at the bottom right. Large white cream swirls float around the frame, the closest ones big and out of focus.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>5</p>
-        <img src="img/milky/round-05.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 5">
-        <p class="desc" lang="en">A dramatic dessert advertisement on a dark purple background with an intense violet burst of light rays and glowing bokeh sparkles. In the center, a clear cup of dark chocolate pudding with a tall, sharp spiral of whipped cream on top. A large round lavender-purple label on the cup with bold yellow Hebrew text in two lines, "מעדן קצפת", and above it a small rainbow flower badge with tiny illegible text. A gold spoon with a dab of cream lies on a reflective surface at the bottom right. Huge blurred clouds of whipped cream fill the foreground corners, with splashes of cream flying at the edges.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>6</p>
-        <img src="img/milky/round-06.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 6">
-        <p class="desc" lang="en">A dramatic commercial image on a near-black purple background with an explosion of violet light rays, glitter and bokeh. A clear cup of dark chocolate pudding topped with a tall, creamy off-white soft-serve style swirl. A round pale lavender label with yellow Hebrew text outlined in purple, two lines, "מעדן קצפת", and a tiny rainbow flower logo with unreadable text above. A gold spoon with a little cream rests on a glossy reflective surface in front. Big blurry masses of cream in the lower corners, droplets and splashes of cream and small crumbs flying through the air.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>7</p>
-        <img src="img/milky/round-07.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 7">
-        <p class="desc" lang="en">A cinematic dessert commercial shot on a black background with a purple-violet light explosion, glitter, bokeh and flying chocolate crumbs and cream droplets. A clear cup of chocolate pudding with a tall vanilla soft-serve swirl on top. A round white-lilac sticker with yellow Hebrew letters outlined in purple, two lines, "מעדן קצפת", and a tiny rainbow flower above with a curved line of tiny text. A gold spoon with a dab of cream lies in front on a glossy black surface that reflects the cup upside down. Two huge blurred cream swirls frame the left and right edges.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>8</p>
-        <img src="img/milky/round-08.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 8">
-        <p class="desc" lang="en">A cinematic dessert commercial on a black background with a burst of purple light, glitter, warm orange and violet bokeh and flying chocolate cookie crumbs. A clear cup of chocolate pudding topped with a tall vanilla soft-serve swirl with a curled tip. A round white sticker with a purple rim: yellow Hebrew letters outlined in purple, two lines, "מעדן קצפת", a small rainbow flower and a curved line of tiny Hebrew text above. A gold spoon with cream lies in front on a black mirror surface reflecting the cup. Two giant out-of-focus soft-serve swirls fill the left and right edges.</p>
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>9</p>
-        <img src="img/milky/round-09.jpg" width="1024" height="572" loading="lazy" alt="שרשרת א׳, סבב 9">
-        <p class="desc" lang="en">A cinematic dessert commercial on a black background with a purple glitter cloud and warm orange and violet bokeh, chunks of chocolate brownie flying through the air. A clear glass of chocolate pudding topped with a tall vanilla soft-serve swirl ending in a curl. A round white sticker with a purple rim: yellow Hebrew letters outlined in purple, two lines, "מעדן קצפת", a small rainbow flower and a curved line of tiny Hebrew text. A gold spoon with cream lies in front on a black glossy surface reflecting the glass. Two giant blurred soft-serve swirls with curled tips frame the left and right edges.</p>
-      </li>
-  </ol>
-  <p class="cap hint">גללו הצידה. מתחת לכל תמונה: התיאור שממנו היא נוצרה.</p>
-  <p class="find"><b>הממצא</b>אחרי 9 סבבים הקצפת היא גלידה אמריקאית, הרקע שחור, ובאוויר עפים בראוניז. על הכוס עדיין כתוב ׳מעדן קצפת׳, בעברית תקינה.</p>
-  <p class="how2">גם Claude דחף. המילים <span lang="en">soft-serve</span>, <span lang="en">cinematic</span> ו-<span lang="en">brownie</span> נכנסו לתיאורים כשהדברים האלה רק התחילו להופיע בתמונה.</p>
-</section>
-
-<section id="cb">
-  <h2><small>שרשרת ב׳</small>תיאור שמתכווץ</h2>
-  <p class="how2">בכל סבב פחות מילים. מפרסומת לפוסטר, מפוסטר למסגרת זהב, ממסגרת זהב לציור שמן של עוגה. פחות מידע לא יצר בלגן. הוא יצר מוזיאון.</p>
-  <ol class="chain" tabindex="0" aria-label="שרשרת ב׳: המקור וחמישה סבבים">
-      <li>
-        <p class="rn"><small>המקור</small>0</p>
-        <img src="img/milky/00-start.png" width="595" height="336" loading="lazy" alt="הפרסומת המקורית: גביע מילקי על רקע סגול, כפית זהב ונקודות קצפת מסביב">
-      </li>
-      <li>
-        <p class="rn"><small>מילים</small>60</p>
-        <img src="img/milky/shrinking/round-01.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ב׳, סבב 1: המעדן כפוסטר">
-      </li>
-      <li>
-        <p class="rn"><small>מילים</small>40</p>
-        <img src="img/milky/shrinking/round-02.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ב׳, סבב 2: פוסטר של המעדן">
-      </li>
-      <li>
-        <p class="rn"><small>מילים</small>25</p>
-        <img src="img/milky/shrinking/round-03.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ב׳, סבב 3: פוסטר במסגרת זהב">
-      </li>
-      <li>
-        <p class="rn"><small>מילים</small>15</p>
-        <img src="img/milky/shrinking/round-04.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ב׳, סבב 4: ציור במסגרת זהב">
-      </li>
-      <li>
-        <p class="rn"><small>מילים</small>10</p>
-        <img src="img/milky/shrinking/round-05.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ב׳, סבב 5: ציור שמן של עוגת שוקולד במסגרת זהב, על טפט קטיפה סגול">
-      </li>
-  </ol>
-  <p class="cap hint">גללו הצידה. מעל כל תמונה: כמה מילים היו בתיאור.</p>
-  <p class="find"><b>הממצא</b>ב-60 מילים זה עוד היה מעדן. ב-10 מילים המודל צייר עוגת שוקולד בציור שמן, במסגרת זהב, על טפט קטיפה סגול. בדרך הוא המציא סלוגן: ׳הכי מתוק, הכי מפנק!׳</p>
-</section>
-
-<section id="cc">
-  <h2><small>שרשרת ג׳</small>תמונה לתמונה</h2>
-  <p class="how2">רק התמונה, בלי מילים. שלוש פעמים, שלוש העתקות מושלמות של מילקי. המותג שורד תמונות. הוא לא שורד תיאור.</p>
-  <ol class="chain" tabindex="0" aria-label="שרשרת ג׳: המקור ושלושה סבבים">
-      <li>
-        <p class="rn"><small>המקור</small>0</p>
-        <img src="img/milky/00-start.png" width="595" height="336" loading="lazy" alt="הפרסומת המקורית: גביע מילקי על רקע סגול, כפית זהב ונקודות קצפת מסביב">
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>1</p>
-        <img src="img/milky/i2i/round-01.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ג׳, סבב 1: הפרסומת מועתקת כמעט בלי שינוי">
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>2</p>
-        <img src="img/milky/i2i/round-02.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ג׳, סבב 2: הפרסומת מועתקת כמעט בלי שינוי">
-      </li>
-      <li>
-        <p class="rn"><small>סבב</small>3</p>
-        <img src="img/milky/i2i/round-03.jpg" width="1024" height="572" loading="lazy" alt="שרשרת ג׳, סבב 3: הפרסומת מועתקת כמעט בלי שינוי">
-      </li>
-  </ol>
-  <p class="find"><b>הממצא</b>בשלוש השרשראות האחרות עברו מילים בדרך. כאן לא, וכאן מילקי נשאר: השם, הלוגו והקצפת, שלושה סבבים.</p>
-</section>
-
-<section id="cd">
-  <h2><small>שרשרת ד׳</small>עברית, מודל אחר בכל סבב</h2>
-  <p class="how2">תיאורים בעברית, מודל אחר בכל סבב. מודל אחד כתב ׳ככה׳ על הכוס. הבא לא הבין עברית וצייר גבר מזוקן ליד חומת אבן. האיש הזה לא קיים.</p>
-  <ol class="chain" tabindex="0" aria-label="שרשרת ד׳: המקור ושלושה סבבים">
-      <li>
-        <p class="rn"><small>המקור</small>0</p>
-        <img src="img/milky/00-start.png" width="595" height="336" loading="lazy" alt="הפרסומת המקורית: גביע מילקי על רקע סגול, כפית זהב ונקודות קצפת מסביב">
-      </li>
-      <li>
-        <p class="rn model"><small>סבב 1</small><span lang="en">Z-Image</span></p>
-        <img src="img/milky/hebrew/round-01.jpg" width="1024" height="585" loading="lazy" alt="שרשרת ד׳, סבב 1: כוס עם שכבת שוקולד וקצפת מכוסה גרגרים, על רקע חום, ועליה כתוב ״ככה״">
-        <p class="he">הסגול נעלם. על הקצפת נשפכו גרגרים. על הכוס כתוב ׳ככה׳.</p>
-      </li>
-      <li>
-        <p class="rn model"><small>סבב 2</small><span lang="en">Classic Fast</span></p>
-        <img src="img/milky/hebrew/round-02.jpg" width="1024" height="585" loading="lazy" alt="שרשרת ד׳, סבב 2: גבר מזוקן בז׳קט כחול ליד חומת אבן, דרך עפר ועצי זית">
-        <p class="he">המודל הזה לא קורא עברית. הוא צייר גבר מזוקן, חומת אבן, דרך עפר ועצי זית.</p>
-      </li>
-      <li>
-        <p class="rn model"><small>סבב 3</small><span lang="en">Ideogram</span></p>
-        <img src="img/milky/hebrew/round-03.jpg" width="1024" height="574" loading="lazy" alt="שרשרת ד׳, סבב 3: גבר צעיר בז׳קט ג׳ינס ברחוב עירוני">
-        <p class="he">ביקשנו בעברית גבר עם זקן אפור, דרך עפר ועצי זית. קיבלנו גבר צעיר בז׳קט ג׳ינס, ברחוב בעיר.</p>
-      </li>
-  </ol>
-  <p class="find"><b>הממצא</b>מודל שלא קורא עברית לא מחזיר שגיאה. הוא מחזיר גבר, אבן, זית ושמש. התחלנו ממעדן שוקולד.</p>
-  <figure class="man">
-    <img src="img/milky/hebrew/round-02.jpg" width="1024" height="585" loading="lazy" alt="גבר מזוקן בז׳קט כחול ליד חומת אבן, דרך עפר ועצי זית. האיש הומצא על ידי המודל.">
-    <figcaption>האיש הזה לא קיים. כך נראית עברית בעיני מודל שלא קורא עברית.</figcaption>
-  </figure>
-</section>
-
-<section class="answer" id="answer">
-  <p class="cap" style="margin-bottom:16px">איך העבודה עונה ל-<span lang="en">xhairymutantx</span></p>
-  <p>הרנדון ודרייהרסט עבדו קשה כדי להכניס זהות למודל: אימנו מודל, ייצרו אלפי תמונות, והשתמשו באמינות של מוזיאון. אנחנו בדקנו את הכיוון ההפוך: מה קורה לזהות שכבר נמצאת שם. מילקי מוכר למודל כל כך טוב שהוא צייר את הלוגו בלי שביקשנו. בלי שום מאמץ מיוחד מצדנו, אחרי כמה סבבים הוא היה גלידה אמריקאית, ציור שמן במסגרת זהב, וגבר מזוקן ליד עץ זית.</p>
+  <details><summary>המהלך</summary><p>להחליף ארכיון. הם עבדו על הולי. אנחנו לקחנו פרסומת של מילקי והעברנו אותה ממכונה למכונה, בארבע דרכים.</p></details>
+  <details><summary>הכלים</summary><p>Claude (Opus 5.5) מתאר. Nano Banana 2.1, דרך Magnific, מצייר. בשרשרת ד׳ מציירים גם Z-Image, ‏Classic Fast ו-Ideogram.</p></details>
 </section>
 
 <footer>
+  <details><summary>קרדיטים ומקורות</summary><div class="cols">
   <p>טלפון שבור<br>דניה אלטמן ועידן ירחי, 2026<br><br>עבודת סטודנטים, לצורכי לימוד בלבד. לא למטרות מסחריות.<br>הפונטים משמשים במסגרת עבודה אקדמית בלבד.</p>
   <p>מתאר: Claude Opus 5.5.<br>מודלים: Nano Banana 2.1, ‏Z-Image, ‏Classic Fast, ‏Ideogram, דרך Magnific.<br>16.11.2026. בלי הרצות חוזרות ובלי בחירה.</p>
   <p>התמונה המקורית: פרסומת מילקי, שטראוס.<br><br><span lang="en">Holly Herndon &amp; Mat Dryhurst, xhairymutantx, 2024. Courtesy Whitney Museum of American Art.</span><br><br>אנטוניו סומאיני, ״מרחבים לטנטיים: בינה מלאכותית, אמנות והארכיון״, <i>אוקטובר</i> 196 (אביב 2026): 18–60.</p>
+  </div></details>
 </footer>
+</div>
 
 </div>
 <script>
+const M = "img/milky/";
+const ORIGIN = {src: M + "00-start.png", tag: "המקור: פרסומת מילקי, שטראוס"};
+const DESCS = ["A glossy advertising image on a deep purple background with a soft lighter purple glow in the center. In the middle floats a clear plastic dessert cup: chocolate pudding in the bottom half, a thick layer of white whipped cream on top, a small swirl of cream peaking above the rim. On the cup, a large purple oval label tilted slightly, with bold yellow-and-white rounded letters in Hebrew and a small colorful star-burst emblem above them. A shiny gold spoon crosses in front of the cup diagonally, holding a dollop of whipped cream. Around it, dozens of small white whipped-cream swirls are scattered across the purple background like a pattern.", "A glossy dessert advertisement on a rich purple background with a glowing violet light and tiny sparkles behind the center. A clear plastic cup with dark chocolate pudding at the bottom and a thick white whipped-cream layer on top, a cream swirl rising above the rim. On the front, a large rounded purple label with big yellow Hebrew letters outlined in white, and a small colorful flower-like emblem with tiny Hebrew text above them. A shiny gold spoon in front of the cup, its bowl full of whipped cream. Many white whipped-cream rosettes float all around, some sharp, some blurred in the foreground corners.", "A glossy dessert advertisement on a deep purple background with a bright violet starburst glow and sparkles behind the center. A clear plastic cup of dark chocolate pudding topped with a tall, pointed swirl of white whipped cream overflowing the rim. On the cup, a round purple sticker with large yellow Hebrew text in two lines: \"מעדן קצפת\", and above it a small round multicolored flower badge with the tiny Hebrew words \"טעים במיוחד\". A gold spoon lies in front at the bottom right with a dollop of whipped cream. Big white meringue-like cream rosettes float everywhere, the ones near the edges blurred.", "A dessert advertisement on a purple background with a strong violet starburst of light rays and glittering sparkles behind the product. A clear cup of chocolate pudding crowned with a very tall, pointed swirl of white whipped cream. On the cup, a round purple label with big yellow Hebrew letters in two lines, \"מעדן קצפת\", and a small rainbow-petal flower badge above with tiny Hebrew text. A gold spoon with a small dollop of cream lies diagonally at the bottom right. Large white cream swirls float around the frame, the closest ones big and out of focus.", "A dramatic dessert advertisement on a dark purple background with an intense violet burst of light rays and glowing bokeh sparkles. In the center, a clear cup of dark chocolate pudding with a tall, sharp spiral of whipped cream on top. A large round lavender-purple label on the cup with bold yellow Hebrew text in two lines, \"מעדן קצפת\", and above it a small rainbow flower badge with tiny illegible text. A gold spoon with a dab of cream lies on a reflective surface at the bottom right. Huge blurred clouds of whipped cream fill the foreground corners, with splashes of cream flying at the edges.", "A dramatic commercial image on a near-black purple background with an explosion of violet light rays, glitter and bokeh. A clear cup of dark chocolate pudding topped with a tall, creamy off-white soft-serve style swirl. A round pale lavender label with yellow Hebrew text outlined in purple, two lines, \"מעדן קצפת\", and a tiny rainbow flower logo with unreadable text above. A gold spoon with a little cream rests on a glossy reflective surface in front. Big blurry masses of cream in the lower corners, droplets and splashes of cream and small crumbs flying through the air.", "A cinematic dessert commercial shot on a black background with a purple-violet light explosion, glitter, bokeh and flying chocolate crumbs and cream droplets. A clear cup of chocolate pudding with a tall vanilla soft-serve swirl on top. A round white-lilac sticker with yellow Hebrew letters outlined in purple, two lines, \"מעדן קצפת\", and a tiny rainbow flower above with a curved line of tiny text. A gold spoon with a dab of cream lies in front on a glossy black surface that reflects the cup upside down. Two huge blurred cream swirls frame the left and right edges.", "A cinematic dessert commercial on a black background with a burst of purple light, glitter, warm orange and violet bokeh and flying chocolate cookie crumbs. A clear cup of chocolate pudding topped with a tall vanilla soft-serve swirl with a curled tip. A round white sticker with a purple rim: yellow Hebrew letters outlined in purple, two lines, \"מעדן קצפת\", a small rainbow flower and a curved line of tiny Hebrew text above. A gold spoon with cream lies in front on a black mirror surface reflecting the cup. Two giant out-of-focus soft-serve swirls fill the left and right edges.", "A cinematic dessert commercial on a black background with a purple glitter cloud and warm orange and violet bokeh, chunks of chocolate brownie flying through the air. A clear glass of chocolate pudding topped with a tall vanilla soft-serve swirl ending in a curl. A round white sticker with a purple rim: yellow Hebrew letters outlined in purple, two lines, \"מעדן קצפת\", a small rainbow flower and a curved line of tiny Hebrew text. A gold spoon with cream lies in front on a black glossy surface reflecting the glass. Two giant blurred soft-serve swirls with curled tips frame the left and right edges."];
+const A_HE = {1: "המודל כתב ׳מילקי׳ בעצמו, עם לוגו כמעט זהה. בתיאור היה כתוב רק ״אותיות בעברית״.", 2: "׳מילקי׳ כבר לא שם. עכשיו כתוב ׳מעדן קצפת׳."};
+
+// every level starts from its last image and walks back to the same ad
+const L = [
+  { q: "מאיפה זה הגיע?", sub: "מה זה היה לפני 3 סבבים?",
+    opts: ["תמונת פרופיל", "פרסומת לבנק", "מעדן שוקולד", "כרזת בחירות"], right: 2,
+    yes: "נכון. מעדן שוקולד.", no: "לא. זה היה מעדן שוקולד.",
+    how: "תיאורים בעברית, מודל אחר בכל סבב.",
+    find: "מודל שלא קורא עברית לא מחזיר שגיאה. הוא מחזיר גבר, אבן, זית ושמש.",
+    steps: [ORIGIN,
+      {src: M + "hebrew/round-01.jpg", tag: "Z-Image", he: "הסגול נעלם. על הקצפת נשפכו גרגרים. על הכוס כתוב ׳ככה׳."},
+      {src: M + "hebrew/round-02.jpg", tag: "Classic Fast", he: "המודל הזה לא קורא עברית. הוא צייר גבר מזוקן, חומת אבן, דרך עפר ועצי זית. האיש הזה לא קיים."},
+      {src: M + "hebrew/round-03.jpg", tag: "Ideogram", he: "ביקשנו בעברית גבר עם זקן אפור, דרך עפר ועצי זית. קיבלנו גבר צעיר בז׳קט ג׳ינס, ברחוב בעיר."}] },
+  { q: "גם זה היה מילקי.", sub: "כמה סבבים עברו?", opts: ["2", "5", "12", "30"], right: 1, num: true,
+    how: "בכל סבב פחות מילים בתיאור.",
+    find: "ב-60 מילים זה עוד היה מעדן. ב-10 מילים המודל צייר עוגת שוקולד בציור שמן, במסגרת זהב. פחות מידע לא יצר בלגן. הוא יצר מוזיאון.",
+    steps: [ORIGIN, ...[60, 40, 25, 15, 10].map((w, i) => ({src: M + "shrinking/round-0" + (i + 1) + ".jpg", tag: w + " מילים בתיאור"}))] },
+  { q: "וגם זה.", sub: "כמה סבבים עברו?", opts: ["3", "9", "25", "100"], right: 1, num: true,
+    how: "תיאור מלא בכל סבב. Claude מתאר, Nano Banana מצייר.",
+    find: "אחרי 9 סבבים הקצפת היא גלידה אמריקאית, הרקע שחור, ובאוויר עפים בראוניז. על הכוס עדיין כתוב ׳מעדן קצפת׳, בעברית תקינה.",
+    steps: [ORIGIN, ...DESCS.map((d, i) => ({src: M + "round-0" + (i + 1) + ".jpg", tag: "סבב " + (i + 1), he: A_HE[i + 1], desc: d}))] },
+  { q: "וזה?", sub: "כמה סבבים עברו?", opts: ["0", "1", "3", "9"], right: 2, num: true,
+    how: "רק התמונה, בלי מילים.",
+    find: "שלושה סבבים, ושום דבר לא זז. כאן לא עברו מילים בדרך. המותג שורד תמונות. הוא לא שורד תיאור.",
+    steps: [ORIGIN, ...[1, 2, 3].map(i => ({src: M + "i2i/round-0" + i + ".jpg", tag: "סבב " + i}))] }
+];
+
+const $ = id => document.getElementById(id);
+const pic = $("pic"), panel = $("panel"), thumbs = $("thumbs");
+let li = 0, pos = 0, low = 0, phase = "guess", guess = null, score = 0;
+
+function show(src) {
+  if (pic.dataset.src === src) return;
+  pic.dataset.src = src;
+  pic.classList.add("out");
+  const im = new Image();
+  const swap = () => { if (pic.dataset.src !== src) return; pic.src = src; requestAnimationFrame(() => pic.classList.remove("out")); };
+  im.onload = im.onerror = () => setTimeout(swap, 180);
+  im.src = src;
+}
+
+function start(i) {
+  li = i; const l = L[i];
+  pos = low = l.steps.length - 1; phase = "guess"; guess = null;
+  l.steps.forEach(s => { new Image().src = s.src; });
+  draw();
+}
+
+function draw() {
+  const l = L[li], s = l.steps[pos], last = l.steps.length - 1;
+  show(s.src);
+  pic.alt = phase === "guess" ? "התמונה שצריך לנחש מאיפה היא הגיעה" : s.tag;
+  $("lvl").textContent = (li + 1) + " / " + L.length;
+  $("score").textContent = score ? "ניחשתם " + score : "";
+
+  // only the rounds already walked through get a thumbnail, so the strip never gives the answer away
+  thumbs.innerHTML = "";
+  if (phase !== "guess") for (let k = low; k <= last; k++) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = k === pos ? "on" : ""; b.title = l.steps[k].tag;
+    b.innerHTML = '<img src="' + l.steps[k].src + '" alt="' + l.steps[k].tag + '">';
+    b.onclick = () => { pos = k; draw(); };
+    thumbs.appendChild(b);
+  }
+
+  let h = "";
+  if (phase === "guess") {
+    h = '<p class="q">' + l.q + '</p><p class="sub">' + l.sub + '</p><div class="opts' + (l.num ? " n" : "") + '">' +
+        l.opts.map((o, k) => '<button type="button" data-o="' + k + '">' + o + "</button>").join("") + "</div>";
+  } else {
+    const atOrigin = pos === 0 && low === 0;
+    if (atOrigin) {
+      const ok = guess === l.right, n = last;
+      const v = l.num ? (ok ? "בדיוק. " : "לא. ") + n + " סבבים." : (ok ? l.yes : l.no);
+      h = '<p class="verdict">' + v + '</p><p class="find">' + l.find + "</p>" +
+          '<details class="more"><summary>איך זה עבד</summary><p>' + l.how + " לחצו על התמונות הקטנות כדי לעבור בין הסבבים.</p></details>" +
+          '<div class="row"><button type="button" class="go" id="next">' + (li < L.length - 1 ? "הבא" : "אז מה עשינו פה?") + "</button></div>";
+    } else {
+      h = '<p class="tag"' + (/^[A-Za-z]/.test(s.tag) ? ' lang="en"' : "") + ">" + s.tag + "</p>" +
+          (s.he ? '<p class="he">' + s.he + "</p>" : "") +
+          (s.desc ? '<details class="more"><summary>התיאור שממנו התמונה נוצרה</summary><p class="desc" lang="en">' + s.desc + "</p></details>" : "") +
+          (low > 0 ? '<div class="row"><button type="button" class="go" id="back">סבב אחורה</button><span class="count">חזרתם ' + (last - low) + "</span></div>" : "");
+    }
+  }
+  panel.innerHTML = h;
+}
+
+panel.addEventListener("click", e => {
+  const t = e.target.closest("button"); if (!t) return;
+  const l = L[li];
+  if (t.dataset.o !== undefined) { guess = +t.dataset.o; phase = "rewind"; draw(); }
+  else if (t.id === "back") {
+    low--; pos = low;
+    if (low === 0 && guess === l.right) score++;
+    draw();
+  }
+  else if (t.id === "next") { if (li < L.length - 1) start(li + 1); else reveal(); }
+  const f = panel.querySelector(".go"); if (f) f.focus({preventScroll: true});
+});
+
+function reveal() { const r = $("rest"); r.hidden = false; r.scrollIntoView(); $("skip").hidden = true; }
+$("skip").onclick = reveal;
+
+start(0);
+
 // the video slot shows itself only if video/milky-edit.mp4 is really there
-(() => { const f = document.getElementById("film"), v = f.querySelector("video"); const show = () => f.hidden = false; if (v.readyState >= 1) show(); else v.addEventListener("loadedmetadata", show); })();
+(() => { const f = $("film"), v = f.querySelector("video"); const on = () => f.hidden = false; if (v.readyState >= 1) on(); else v.addEventListener("loadedmetadata", on); })();
 </script>
 </body>
 </html>
