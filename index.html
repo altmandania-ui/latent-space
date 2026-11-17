@@ -263,10 +263,10 @@ T.forEach((t, i) => {
 });
 
 // flip one tile through its frames, from index a to index b, in ms
-function play(t, a, b, ms) {
+function play(t, a, b, ms, each) {
   return new Promise(done => {
     const d = a < b ? 1 : -1, n = Math.abs(b - a); let k = a;
-    const tick = () => { t.img.src = t.f[k]; if (k === b) return done(); k += d; setTimeout(tick, ms / n); };
+    const tick = () => { t.img.src = t.f[k]; if (each) each(k); if (k === b) return done(); k += d; setTimeout(tick, ms / n); };
     tick();
   });
 }
@@ -285,10 +285,11 @@ async function all(i) {
 // later clicks: one tile runs forward again, with what happened to it
 async function one(i) {
   const t = T[i];
-  T.forEach(o => { o.b.classList.toggle("on", o === t); if (o !== t) o.img.src = ORIGIN; });
+  T.forEach(o => { o.b.classList.toggle("on", o === t); if (o !== t) { o.img.src = ORIGIN; o.b.lastChild.textContent = o.f.length - 1; } });
   grid.classList.add("one", "run");
   q.textContent = t.n; sub.textContent = t.find;
-  await play(t, 0, t.f.length - 1, 380 * (t.f.length - 1));
+  const n = t.f.length - 1;
+  await play(t, 0, n, 800 * n, k => { t.b.lastChild.textContent = k ? "סבב " + k + " מתוך " + n : "המקור"; });
   grid.classList.remove("run");
 }
 
